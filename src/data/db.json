@@ -1,0 +1,356 @@
+{
+  "branches": [
+    {
+      "id": "jeddah",
+      "name": "Jeddah Branch",
+      "nameAr": "فرع جدة",
+      "code": "JED-01",
+      "status": "Active",
+      "timeZone": "Asia/Riyadh",
+      "currency": "SAR",
+      "address": "Jeddah Tower, King Abdulaziz Rd, Jeddah",
+      "addressAr": "برج جدة، طريق الملك عبدالعزيز، جدة",
+      "gps": "21.5433, 39.1728"
+    },
+    {
+      "id": "riyadh",
+      "name": "Riyadh Branch",
+      "nameAr": "فرع الرياض",
+      "code": "RUH-01",
+      "status": "Coming Soon",
+      "timeZone": "Asia/Riyadh",
+      "currency": "SAR",
+      "address": "Olaya Towers, Olaya District, Riyadh",
+      "addressAr": "أبراج العليا، حي العليا، الرياض",
+      "gps": "24.7136, 46.6753"
+    }
+  ],
+  "resources": [
+    {
+      "id": "office-a101",
+      "branchId": "jeddah",
+      "name": "Private Office A-101",
+      "nameAr": "مكتب خاص A-101",
+      "slug": "private-office-a-101",
+      "category": "private_office",
+      "floor": "Floor 1",
+      "capacity": 4,
+      "size": 24,
+      "rate": 4800,
+      "status": "Available",
+      "amenities": ["High-Speed Wi-Fi", "Ergonomic Chairs", "Whiteboard", "Keyless Entry"],
+      "amenitiesAr": ["إنترنت فائق السرعة", "كراسي مريحة", "سبورة بيضاء", "دخول بدون مفتاح"],
+      "image": "/assets/photo-glass-offices.jpg",
+      "gallery": [
+        "/assets/photo-glass-offices.jpg",
+        "/assets/photo-coworking.jpg",
+        "/assets/photo-lounge-velvet.jpg"
+      ]
+    },
+    {
+      "id": "office-b203",
+      "branchId": "jeddah",
+      "name": "Private Office B-203",
+      "nameAr": "مكتب خاص B-203",
+      "slug": "private-office-b-203",
+      "category": "private_office",
+      "floor": "Floor 2",
+      "capacity": 6,
+      "size": 36,
+      "rate": 6500,
+      "status": "Occupied",
+      "amenities": ["High-Speed Wi-Fi", "Ergonomic Chairs", "Whiteboard", "City View"],
+      "amenitiesAr": ["إنترنت فائق السرعة", "كراسي مريحة", "سبورة بيضاء", "إطلالة على المدينة"],
+      "image": "/assets/photo-glass-offices.jpg",
+      "gallery": ["/assets/photo-glass-offices.jpg"]
+    },
+    {
+      "id": "room-alpha",
+      "branchId": "jeddah",
+      "name": "Meeting Room Alpha",
+      "nameAr": "قاعة اجتماعات ألفا",
+      "slug": "meeting-room-alpha",
+      "category": "meeting_room",
+      "floor": "Floor 1",
+      "capacity": 8,
+      "size": 20,
+      "rate": 80,
+      "status": "Available",
+      "amenities": ["65\" Smart TV", "Whiteboard", "Video Conference Camera", "Coffee Service"],
+      "amenitiesAr": ["شاشة ذكية 65 بوصة", "سبورة بيضاء", "كاميرا اتصالات مرئية", "خدمة القهوة"],
+      "image": "/assets/photo-community-cinema.jpg",
+      "gallery": [
+        "/assets/photo-community-cinema.jpg",
+        "/assets/photo-vip-lounge.jpg"
+      ]
+    },
+    {
+      "id": "room-beta",
+      "branchId": "jeddah",
+      "name": "Meeting Room Beta",
+      "nameAr": "قاعة اجتماعات بيتا",
+      "slug": "meeting-room-beta",
+      "category": "meeting_room",
+      "floor": "Floor 1",
+      "capacity": 12,
+      "size": 30,
+      "rate": 120,
+      "status": "Available",
+      "amenities": ["Projector", "Whiteboard", "Video Conference System", "Premium Coffee Included"],
+      "amenitiesAr": ["جهاز عرض ضوئي", "سبورة بيضاء", "نظام اتصالات مرئية", "قهوة فاخرة متضمنة"],
+      "image": "/assets/photo-community-cinema.jpg",
+      "gallery": ["/assets/photo-community-cinema.jpg"]
+    },
+    {
+      "id": "hall-jeddah",
+      "branchId": "jeddah",
+      "name": "Community Hall",
+      "nameAr": "قاعة المجتمع",
+      "slug": "community-hall",
+      "category": "community_hall",
+      "floor": "Floor 1",
+      "capacity": 120,
+      "size": 150,
+      "rate": 1200,
+      "status": "Available",
+      "amenities": ["Sound System", "Projector & Stage", "Catering Space", "Flexible Seating Layouts"],
+      "amenitiesAr": ["نظام صوتي متكامل", "جهاز عرض ومسرح", "مساحة لتقديم الطعام", "ترتيبات جلوس مرنة"],
+      "image": "/assets/photo-vip-lounge.jpg",
+      "gallery": ["/assets/photo-vip-lounge.jpg"]
+    }
+  ],
+  "membership_plans": [
+    {
+      "id": "day-pass",
+      "name": "Day Pass",
+      "nameAr": "بطاقة يومية",
+      "price": 75,
+      "billing": "Day",
+      "bullets": [
+        "Full-day access to coworking",
+        "High-speed Wi-Fi",
+        "Coffee & tea included",
+        "Lounge access"
+      ],
+      "bulletsAr": [
+        "دخول كامل اليوم لمنطقة العمل المشتركة",
+        "إنترنت فائق السرعة",
+        "شاي وقهوة متضمنة",
+        "دخول إلى منطقة الاستراحة"
+      ]
+    },
+    {
+      "id": "hot-desk",
+      "name": "Coworking Flex (Hot Desk)",
+      "nameAr": "عضوية مكتب مرن",
+      "price": 799,
+      "billing": "Month",
+      "bullets": [
+        "Unlimited coworking access",
+        "10 meeting room hours / month",
+        "Community events access",
+        "Coffee & utilities included"
+      ],
+      "bulletsAr": [
+        "دخول غير محدود لمنطقة العمل المشتركة",
+        "10 ساعات قاعات اجتماعات شهرياً",
+        "حضور فعاليات مجتمع مارس",
+        "شامل القهوة والخدمات العامة"
+      ],
+      "isFeatured": true
+    },
+    {
+      "id": "dedicated-desk",
+      "name": "Dedicated Desk",
+      "nameAr": "مكتب مخصص",
+      "price": 1200,
+      "billing": "Month",
+      "bullets": [
+        "Reserved workstation & locker",
+        "15 meeting room hours / month",
+        "Mail & package handling",
+        "24/7 branch access"
+      ],
+      "bulletsAr": [
+        "مكتب مخصص وصندوق أمانات خاص",
+        "15 ساعة قاعات اجتماعات شهرياً",
+        "استلام وإدارة البريد والطرود",
+        "وصول للفرع على مدار الساعة 24/7"
+      ]
+    },
+    {
+      "id": "private-office",
+      "name": "Private Office",
+      "nameAr": "مكتب خاص",
+      "price": 4800,
+      "billing": "Month",
+      "bullets": [
+        "Fully furnished lockable suite",
+        "30 meeting room credits / month",
+        "Company registration support",
+        "1 assigned parking space"
+      ],
+      "bulletsAr": [
+        "مكتب مغلق ومؤثث بالكامل",
+        "30 رصيد قاعات اجتماعات شهرياً",
+        "دعم ترخيص وتجارة الشركة",
+        "موقف سيارات مخصص"
+      ]
+    }
+  ],
+  "users": [
+    {
+      "id": "usr-01",
+      "name": "Ahmed Alharbi",
+      "nameAr": "أحمد الحربي",
+      "email": "ahmed@example.com",
+      "mobile": "0501234567",
+      "role": "Company Admin",
+      "membership": "Premium Membership",
+      "company": "Mars Technologies",
+      "memberSince": "March 2025",
+      "status": "Active",
+      "credits": {
+        "meeting": 18,
+        "printing": 50,
+        "parking": 1
+      }
+    },
+    {
+      "id": "usr-02",
+      "name": "Sarah Khan",
+      "nameAr": "سارة خان",
+      "email": "sarah@example.com",
+      "mobile": "0507654321",
+      "role": "Standard Member",
+      "membership": "Coworking Flex",
+      "company": "Mars Technologies",
+      "memberSince": "June 2025",
+      "status": "Active",
+      "credits": {
+        "meeting": 8,
+        "printing": 20,
+        "parking": 0
+      }
+    },
+    {
+      "id": "staff-01",
+      "name": "Noura Al-Sudairi",
+      "nameAr": "نورة السديري",
+      "email": "noura@mars.space",
+      "role": "Receptionist",
+      "status": "Active"
+    }
+  ],
+  "bookings": [
+    {
+      "id": "bk-1001",
+      "reference": "MS-BK-1001",
+      "customerId": "usr-01",
+      "customerName": "Ahmed Alharbi",
+      "resourceId": "room-alpha",
+      "resourceName": "Meeting Room Alpha",
+      "date": "2026-07-20",
+      "startTime": "14:00",
+      "endTime": "16:00",
+      "duration": 2,
+      "status": "Confirmed",
+      "paymentStatus": "Paid",
+      "totalAmount": 160,
+      "createdAt": "2026-07-19T10:00:00Z"
+    }
+  ],
+  "invoices": [
+    {
+      "id": "inv-2026-001245",
+      "invoiceNumber": "INV-2026-001245",
+      "customerId": "usr-01",
+      "customerName": "Ahmed Alharbi",
+      "companyName": "Mars Technologies",
+      "date": "2026-06-28",
+      "dueDate": "2026-07-05",
+      "type": "Membership",
+      "description": "Mars Premium Membership - Business Plan",
+      "amount": 2400,
+      "status": "Paid",
+      "items": [
+        { "item": "Premium Membership", "qty": 1, "unitPrice": 2400, "total": 2400 }
+      ],
+      "subtotal": 2086.96,
+      "vat": 313.04,
+      "total": 2400
+    }
+  ],
+  "contracts": [
+    {
+      "id": "con-5001",
+      "contractNumber": "MS-CON-2026-5001",
+      "customerId": "usr-01",
+      "company": "Mars Technologies",
+      "plan": "Business Plan",
+      "status": "Active",
+      "startDate": "2026-01-01",
+      "endDate": "2026-12-31",
+      "renewalDate": "2026-12-28",
+      "monthlyFee": 2400,
+      "deposit": 2400,
+      "billingCycle": "Monthly",
+      "autoRenewal": true
+    }
+  ],
+  "events": [
+    {
+      "id": "ev-01",
+      "title": "Startup Networking Night",
+      "titleAr": "ليلة تواصل الشركات الناشئة",
+      "category": "Networking",
+      "date": "2026-07-23",
+      "time": "7:00 PM",
+      "duration": "2 Hours",
+      "venue": "Community Hall",
+      "speaker": "Abeer Al-Shoraim",
+      "seatsRemaining": 52,
+      "price": "Free for Members",
+      "priceAr": "مجاني للأعضاء",
+      "image": "/assets/photo-community-cinema.jpg"
+    },
+    {
+      "id": "ev-02",
+      "title": "AI Startup Workshop",
+      "titleAr": "ورشة عمل الذكاء الاصطناعي للشركات",
+      "category": "Workshops",
+      "date": "2026-07-25",
+      "time": "5:00 PM",
+      "duration": "3 Hours",
+      "venue": "Mars Hall",
+      "speaker": "Dr. Fahad Al-Otaibi",
+      "seatsRemaining": 18,
+      "price": "Free for Members",
+      "priceAr": "مجاني للأعضاء",
+      "image": "/assets/photo-vip-lounge.jpg"
+    }
+  ],
+  "faqs": [
+    {
+      "id": "faq-1",
+      "question": "Can I work for one day?",
+      "questionAr": "هل يمكنني العمل ليوم واحد فقط؟",
+      "answer": "Yes, you can purchase a Day Pass which gives you full-day access to our coworking zone and premium coffee lounge from 8:00 AM to 10:00 PM.",
+      "answerAr": "نعم، يمكنك شراء بطاقة دخول يومية تمنحك إمكانية الوصول الكامل لمناطق العمل المشتركة واستراحة القهوة من الساعة 8 صباحاً حتى 10 مساءً."
+    },
+    {
+      "id": "faq-2",
+      "question": "Is high-speed internet included?",
+      "questionAr": "هل تتوفر خدمة الإنترنت فائق السرعة؟",
+      "answer": "Absolutely. High-speed fiber internet (up to 1 Gbps) is included with all passes, desk memberships, and private offices.",
+      "answerAr": "بالتأكيد. خدمة الإنترنت عبر الألياف البصرية فائق السرعة (يصل إلى 1 جيجابت) متضمنة مع جميع الاشتراكات والمكاتب الخاصة."
+    },
+    {
+      "id": "faq-3",
+      "question": "Can I upgrade my membership later?",
+      "questionAr": "هل يمكنني ترقية عضويتي لاحقاً؟",
+      "answer": "Yes, you can request an upgrade at any time through the Member Portal. The system will automatically calculate the prorated price difference.",
+      "answerAr": "نعم، يمكنك طلب ترقية عضويتك في أي وقت من خلال بوابة الأعضاء. سيقوم النظام تلقائياً بحساب الفروق المالية بشكل نسبي."
+    }
+  ]
+}
