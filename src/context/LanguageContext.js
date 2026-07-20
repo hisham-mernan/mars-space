@@ -7,13 +7,15 @@ const LanguageContext = createContext(null);
 
 export function LanguageProvider({ children }) {
   const [language, setLanguage] = useState('en');
+  const [theme, setTheme] = useState('dark');
   const [mounted, setMounted] = useState(false);
 
-  // Initialize language from localStorage or default to Arabic (per spec: "Arabic as primary market language")
+  // Initialize configs from localStorage
   useEffect(() => {
     const savedLanguage = localStorage.getItem('mars-lang') || 'ar';
-    // eslint-disable-next-line react-hooks/set-state-in-effect
+    const savedTheme = localStorage.getItem('mars-theme') || 'dark';
     setLanguage(savedLanguage);
+    setTheme(savedTheme);
     setMounted(true);
   }, []);
 
@@ -25,15 +27,26 @@ export function LanguageProvider({ children }) {
     localStorage.setItem('mars-lang', language);
   }, [language, mounted]);
 
+  // Update HTML theme class when theme changes
+  useEffect(() => {
+    if (!mounted) return;
+    document.documentElement.className = theme === 'light' ? 'theme-light' : '';
+    localStorage.setItem('mars-theme', theme);
+  }, [theme, mounted]);
+
   const toggleLanguage = () => {
     setLanguage((prev) => (prev === 'en' ? 'ar' : 'en'));
+  };
+
+  const toggleTheme = () => {
+    setTheme((prev) => (prev === 'light' ? 'dark' : 'light'));
   };
 
   const t = translations[language] || translations.en;
 
   // Render children once mounted to prevent SSR hydration mismatches
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, t, mounted }}>
+    <LanguageContext.Provider value={{ language, setLanguage, toggleLanguage, theme, toggleTheme, t, mounted }}>
       {children}
     </LanguageContext.Provider>
   );

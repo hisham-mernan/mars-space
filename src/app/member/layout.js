@@ -7,7 +7,7 @@ import { useLanguage } from '@/context/LanguageContext';
 export default function MemberLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
-  const { language, toggleLanguage, t, mounted } = useLanguage();
+  const { language, toggleLanguage, theme, toggleTheme, t, mounted } = useLanguage();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -78,6 +78,23 @@ export default function MemberLayout({ children }) {
 
         {/* Right Side Controls */}
         <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
+          {/* Theme Toggle */}
+          <button
+            onClick={toggleTheme}
+            style={{
+              background: 'none',
+              border: '1px solid var(--line-dark)',
+              borderRadius: '999px',
+              padding: '6px 12px',
+              color: 'var(--text-muted-dark)',
+              fontSize: '12px',
+              fontWeight: 600,
+              cursor: 'pointer'
+            }}
+          >
+            {theme === 'light' ? '🌙' : '☀️'}
+          </button>
+
           {/* Lang Toggle */}
           <button
             onClick={toggleLanguage}
@@ -185,8 +202,8 @@ export default function MemberLayout({ children }) {
           flex: 1,
           padding: '32px 24px 120px',
           boxSizing: 'border-box',
-          marginInlineStart: language === 'ar' ? 0 : '240px',
-          marginInlineEnd: language === 'ar' ? '240px' : 0,
+          marginLeft: language === 'ar' ? '0' : '240px',
+          marginRight: language === 'ar' ? '240px' : '0',
           transition: 'all 200ms ease'
         }} className="member-main-content">
           {children}
