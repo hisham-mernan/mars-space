@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function ErpOperations() {
-  const { language, t, mounted } = useLanguage();
+  const { language, theme, mounted } = useLanguage();
   const [user, setUser] = useState(null);
   
   // Seeded Activity Feed timeline logs
@@ -37,15 +37,28 @@ export default function ErpOperations() {
     );
   };
 
+  const glassStyle = {
+    background: theme === 'light'
+      ? 'linear-gradient(135deg, rgba(11, 11, 15, 0.03) 0%, rgba(11, 11, 15, 0.01) 100%)'
+      : 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
+    border: theme === 'light'
+      ? '1px solid rgba(11, 11, 15, 0.08)'
+      : '1px solid rgba(255, 255, 255, 0.08)',
+    backdropFilter: 'blur(12px)',
+    borderRadius: '12px',
+    padding: '28px',
+    boxSizing: 'border-box'
+  };
+
   return (
     <div style={{ display: 'grid', gap: '32px' }}>
       
       {/* Page Title */}
-      <div>
-        <h1 style={{ fontSize: '28px', color: '#FFFFFF', fontWeight: 300, margin: 0 }}>
+      <div style={{ textAlign: 'start' }}>
+        <h1 style={{ fontSize: '28px', color: 'var(--text-primary)', fontWeight: 300, margin: 0 }}>
           {language === 'ar' ? 'لوحة قيادة العمليات الموحدة' : 'Operations Command Cockpit'}
         </h1>
-        <p style={{ margin: '6px 0 0', color: 'var(--text-muted-dark)', fontSize: '14px' }}>
+        <p style={{ margin: '6px 0 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
           {language === 'ar' ? 'متابعة العمليات اليومية للفرع والتحقق من مؤشرات الأداء والتقارير المالية.' : 'Jeddah Towers branch live activity feed, executive KPIs, and urgent task lists.'}
         </p>
       </div>
@@ -58,27 +71,25 @@ export default function ErpOperations() {
       }}>
         {[
           { label: language === 'ar' ? 'الأعضاء النشطين' : 'Active Members', val: '642', sub: '▲ 18% this month', color: 'var(--copper-400)' },
-          { label: language === 'ar' ? 'نسبة إشغال المكاتب' : 'Office Occupancy', val: '94%', sub: '45/48 Private Suites occupied', color: '#FFFFFF' },
-          { label: language === 'ar' ? 'قاعات الاجتماعات المحجوزة' : 'Rooms Booked Today', val: '31 / 36', sub: '86% capacity utilization', color: '#FFFFFF' },
+          { label: language === 'ar' ? 'نسبة إشغال المكاتب' : 'Office Occupancy', val: '94%', sub: '45/48 Private Suites occupied', color: 'var(--text-primary)' },
+          { label: language === 'ar' ? 'قاعات الاجتماعات المحجوزة' : 'Rooms Booked Today', val: '31 / 36', sub: '86% capacity utilization', color: 'var(--text-primary)' },
           { label: language === 'ar' ? 'إيرادات اليوم' : "Today's Revenue", val: '18,450 SAR', sub: '12 invoices processed', color: 'var(--copper-400)' },
-          { label: language === 'ar' ? 'التذاكر المفتوحة' : 'Open Support Tickets', val: '8 Open', sub: '3 waiting for customer replies', color: '#FFFFFF' }
+          { label: language === 'ar' ? 'التذاكر المفتوحة' : 'Open Support Tickets', val: '8 Open', sub: '3 waiting for customer replies', color: 'var(--text-primary)' }
         ].map((kpi, idx) => (
           <div
             key={idx}
             style={{
-              background: 'var(--mars-slate)',
-              padding: '24px',
-              borderRadius: '8px',
-              border: '1px solid var(--line-dark)',
+              ...glassStyle,
               cursor: 'pointer',
               transition: 'transform 120ms ease',
+              textAlign: 'start'
             }}
             onMouseEnter={(e) => e.currentTarget.style.transform = 'translateY(-2px)'}
             onMouseLeave={(e) => e.currentTarget.style.transform = 'none'}
           >
-            <div style={{ fontSize: '12px', color: 'var(--text-muted-dark)', fontWeight: 600 }}>{kpi.label}</div>
+            <div style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: 600 }}>{kpi.label}</div>
             <div style={{ fontSize: '26px', fontWeight: 700, color: kpi.color, marginTop: '8px' }}>{kpi.val}</div>
-            <div style={{ fontSize: '11px', color: 'var(--text-muted-dark)', marginTop: '4px' }}>{kpi.sub}</div>
+            <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '4px' }}>{kpi.sub}</div>
           </div>
         ))}
       </div>
@@ -94,12 +105,12 @@ export default function ErpOperations() {
         {/* Left column: Live Activity Feed */}
         <div style={{ gridColumn: 'span 2', display: 'grid', gap: '32px' }}>
           
-          <div style={{ background: 'var(--mars-slate)', padding: '32px', borderRadius: '8px', border: '1px solid var(--line-dark)' }}>
-            <h3 style={{ margin: '0 0 24px', fontSize: '20px', fontWeight: 600, color: '#FFFFFF' }}>
+          <div style={glassStyle}>
+            <h3 style={{ margin: '0 0 24px', fontSize: '20px', fontWeight: 600, color: 'var(--text-primary)', textAlign: 'start' }}>
               {language === 'ar' ? 'شريط العمليات والنشاط المباشر' : 'Live Operations Activity Feed'}
             </h3>
 
-            <div style={{ display: 'grid', gap: '20px', position: 'relative' }}>
+            <div style={{ display: 'grid', gap: '24px', position: 'relative' }}>
               {/* Vertical timeline rule */}
               <div style={{
                 position: 'absolute',
@@ -108,7 +119,7 @@ export default function ErpOperations() {
                 left: language === 'ar' ? 'auto' : '20px',
                 right: language === 'ar' ? '20px' : 'auto',
                 width: '1px',
-                background: 'rgba(245, 245, 245, 0.08)'
+                background: 'var(--border-color)'
               }} />
 
               {activities.map((act) => (
@@ -120,7 +131,8 @@ export default function ErpOperations() {
                     position: 'relative',
                     paddingLeft: language === 'ar' ? 0 : '40px',
                     paddingRight: language === 'ar' ? '40px' : 0,
-                    boxSizing: 'border-box'
+                    boxSizing: 'border-box',
+                    textAlign: 'start'
                   }}
                 >
                   {/* Timeline dot */}
@@ -137,10 +149,10 @@ export default function ErpOperations() {
                   }} />
 
                   <div>
-                    <span style={{ fontSize: '11px', fontWeight: 600, color: 'var(--copper-400)', background: 'var(--mars-void)', padding: '2px 8px', borderRadius: '4px' }}>
+                    <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--copper-400)', background: theme === 'light' ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)', padding: '4px 10px', borderRadius: '4px' }}>
                       {act.time}
                     </span>
-                    <p style={{ margin: '6px 0 0', fontSize: '14px', color: '#FFFFFF', lineHeight: 1.5 }}>
+                    <p style={{ margin: '8px 0 0', fontSize: '14px', color: 'var(--text-primary)', lineHeight: 1.6 }}>
                       {language === 'ar' ? act.descAr : act.desc}
                     </p>
                   </div>
@@ -155,8 +167,8 @@ export default function ErpOperations() {
         <div style={{ display: 'grid', gap: '32px' }}>
           
           {/* Urgent Checklist Widget */}
-          <div style={{ background: 'var(--mars-slate)', padding: '32px', borderRadius: '8px', border: '1px solid var(--line-dark)' }}>
-            <h3 style={{ margin: '0 0 20px', fontSize: '18px', fontWeight: 600, color: '#FFFFFF' }}>
+          <div style={glassStyle}>
+            <h3 style={{ margin: '0 0 20px', fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', textAlign: 'start' }}>
               {language === 'ar' ? 'تنبيهات وقائمة المهام العاجلة' : 'Urgent Checklist Alerts'}
             </h3>
 
@@ -166,10 +178,10 @@ export default function ErpOperations() {
                   key={task.id}
                   onClick={() => toggleTask(task.id)}
                   style={{
-                    background: 'var(--mars-void)',
+                    background: theme === 'light' ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.02)',
                     padding: '16px',
-                    borderRadius: '6px',
-                    border: '1px solid var(--line-dark)',
+                    borderRadius: '8px',
+                    border: '1px solid var(--border-color)',
                     cursor: 'pointer',
                     display: 'flex',
                     alignItems: 'start',
@@ -185,12 +197,12 @@ export default function ErpOperations() {
                     readOnly
                     style={{ marginTop: '3px', cursor: 'pointer' }}
                   />
-                  <div style={{ display: 'grid', gap: '4px', fontSize: '13px' }}>
-                    <div style={{ fontWeight: 500, color: '#FFFFFF' }}>{task.label}</div>
-                    <div style={{ display: 'flex', gap: '8px', fontSize: '11px', color: 'var(--text-muted-dark)' }}>
+                  <div style={{ display: 'grid', gap: '4px', fontSize: '13px', textAlign: 'start' }}>
+                    <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{task.label}</div>
+                    <div style={{ display: 'flex', gap: '8px', fontSize: '11px', color: 'var(--text-secondary)' }}>
                       <span>{task.category}</span>
                       <span>·</span>
-                      <span style={{ color: task.priority === 'High' ? '#FF4A4A' : 'var(--text-muted-dark)' }}>
+                      <span style={{ color: task.priority === 'High' ? '#FF4A4A' : 'var(--text-secondary)' }}>
                         {task.priority} Priority
                       </span>
                     </div>
@@ -201,12 +213,12 @@ export default function ErpOperations() {
           </div>
 
           {/* Quick Reports Shortcuts */}
-          <div style={{ background: 'var(--mars-slate)', padding: '32px', borderRadius: '8px', border: '1px solid var(--line-dark)' }}>
-            <h3 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 600, color: '#FFFFFF' }}>
+          <div style={glassStyle}>
+            <h3 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', textAlign: 'start' }}>
               {language === 'ar' ? 'روابط التقارير السريعة' : 'Reports Quick Access'}
             </h3>
             
-            <div style={{ display: 'grid', gap: '10px' }}>
+            <div style={{ display: 'grid', gap: '12px' }}>
               {[
                 { name: language === 'ar' ? 'تقرير إشغال المساحات' : 'Occupancy & Utilization Report' },
                 { name: language === 'ar' ? 'مؤشرات الأداء المالي' : 'Financial Statement Analysis' },
@@ -216,20 +228,20 @@ export default function ErpOperations() {
                   key={idx}
                   onClick={() => alert(`Generating ${rep.name} PDF...`)}
                   style={{
-                    background: 'var(--mars-void)',
-                    border: '1px solid var(--line-dark)',
-                    borderRadius: '6px',
-                    padding: '12px 16px',
-                    color: '#FFFFFF',
+                    background: theme === 'light' ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.02)',
+                    border: '1px solid var(--border-color)',
+                    borderRadius: '8px',
+                    padding: '14px 20px',
+                    color: 'var(--text-primary)',
                     fontSize: '13px',
-                    fontWeight: 500,
+                    fontWeight: 600,
                     textAlign: 'start',
                     cursor: 'pointer',
                     outline: 'none',
                     transition: 'all 120ms ease'
                   }}
                   onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--copper-400)'}
-                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--line-dark)'}
+                  onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
                 >
                   {rep.name}
                 </button>
