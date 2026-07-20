@@ -27,7 +27,7 @@ export default function Login() {
       if (email === 'ahmed@example.com' && password === 'password') {
         // Success
         localStorage.setItem('mars-user', JSON.stringify({ id: 'usr-01', name: 'Ahmed Alharbi', email: 'ahmed@example.com' }));
-        window.location.href = '/';
+        window.location.href = '/member';
       } else {
         setErrorMsg(language === 'ar' ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة' : 'Invalid email or password');
       }

@@ -92,7 +92,7 @@ export default function Register() {
       email,
       company: companyName
     }));
-    window.location.href = '/';
+    window.location.href = '/member';
   };
 
   const handleResendOtp = () => {

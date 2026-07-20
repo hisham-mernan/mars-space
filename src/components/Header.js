@@ -7,6 +7,7 @@ export default function Header() {
   const { language, toggleLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -14,6 +15,13 @@ export default function Header() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
+    
+    // Auth Check
+    const storedUser = localStorage.getItem('mars-user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
@@ -128,7 +136,7 @@ export default function Header() {
 
         {/* CTA Button */}
         <a
-          href="#rooms"
+          href={user ? '/member' : '#rooms'}
           className="btn-pill-primary"
           style={{
             padding: '11px 24px',
@@ -136,7 +144,7 @@ export default function Header() {
             whiteSpace: 'nowrap',
           }}
         >
-          {t.nav.cta}
+          {user ? (language === 'ar' ? 'لوحة التحكم' : 'Dashboard') : t.nav.cta}
         </a>
 
         {/* Mobile Hamburger toggle (styled via inline CSS) */}
@@ -186,7 +194,7 @@ export default function Header() {
           
           <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
             <a
-              href="#rooms"
+              href={user ? '/member' : '#rooms'}
               onClick={() => setMenuOpen(false)}
               className="btn-pill-primary"
               style={{
@@ -197,7 +205,7 @@ export default function Header() {
                 textAlign: 'center',
               }}
             >
-              {t.nav.cta}
+              {user ? (language === 'ar' ? 'لوحة التحكم' : 'Dashboard') : t.nav.cta}
             </a>
           </div>
         </div>
