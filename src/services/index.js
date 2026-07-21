@@ -1,0 +1,12 @@
+export { eventBus, DOMAIN_EVENTS } from '@/core/events/EventBus';
+export { activityService, ActivityService } from './ActivityService';
+export { auditLogService, AuditLogService } from './AuditLogService';
+export { notificationService, NotificationService } from './NotificationService';
+export { workspaceService, WorkspaceService } from './WorkspaceService';
+export { bookingService, BookingService } from './BookingService';
+export { invoiceService, InvoiceService } from './InvoiceService';
+export { crmService, CrmService } from './CrmService';
+export { inventoryService, InventoryService } from './InventoryService';
+export { supportService, SupportService } from './SupportService';
+export { searchService, SearchService } from './SearchService';
+export { analyticsService, AnalyticsService } from './AnalyticsService';

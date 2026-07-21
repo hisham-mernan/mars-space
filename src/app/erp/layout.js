@@ -34,21 +34,21 @@ export default function ErpLayout({ children }) {
       setSearchResults([]);
       return;
     }
-    const q = searchQuery.toLowerCase();
-    
-    // Search across mocked collections
-    const mockData = [
-      { category: 'Member', name: 'Ahmed Alharbi', sub: 'ahmed@example.com', link: '/erp' },
-      { category: 'Member', name: 'Sarah Khan', sub: 'sarah@example.com', link: '/erp' },
-      { category: 'Booking', name: 'Meeting Room Alpha reservation', sub: 'MS-BK-1001 · Confirmed', link: '/erp/workspaces' },
-      { category: 'Invoice', name: 'Premium Membership invoice', sub: 'INV-2026-001245 · Paid', link: '/erp' },
-      { category: 'Ticket', name: 'Intermittent Wi-Fi issues', sub: 'MSP-2043 · In Progress', link: '/erp' }
-    ];
 
-    const matches = mockData.filter(
-      item => item.name.toLowerCase().includes(q) || item.category.toLowerCase().includes(q)
-    );
-    setSearchResults(matches);
+    async function performSearch() {
+      try {
+        const res = await fetch(`/api/v1/search?q=${encodeURIComponent(searchQuery)}`);
+        const json = await res.json();
+        if (json.success) {
+          setSearchResults(json.data);
+        }
+      } catch (err) {
+        console.error('Search error:', err);
+      }
+    }
+
+    const timer = setTimeout(performSearch, 200);
+    return () => clearTimeout(timer);
   }, [searchQuery]);
 
   const handleLogout = () => {

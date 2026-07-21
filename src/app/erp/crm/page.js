@@ -4,17 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function CrmKanban() {
-  const { language, t, mounted } = useLanguage();
+  const { language, theme, mounted } = useLanguage();
   const [user, setUser] = useState(null);
-  
-  // Seeded Lead records matching MSP schema
-  const [leads, setLeads] = useState([
-    { id: 'ld-101', name: 'Khalid Al-Mansoori', company: 'Zenith Tech', stage: 'New Leads', value: 4800, score: 91, interest: 'Private Office' },
-    { id: 'ld-102', name: 'Reema Abdullah', company: 'Design Grid', stage: 'Qualified', value: 1200, score: 85, interest: 'Dedicated Desk' },
-    { id: 'ld-103', name: 'Tariq Fahad', company: 'Apex Consulting', stage: 'Tour', value: 4800, score: 94, interest: 'Private Office' },
-    { id: 'ld-104', name: 'Sara Yousif', company: 'Sara Est', stage: 'Proposal', value: 2400, score: 78, interest: 'Private Office' },
-    { id: 'ld-105', name: 'Mohammed Ali', company: 'Global Traders', stage: 'Negotiation', value: 6500, score: 88, interest: 'Private Office' }
-  ]);
+  const [pipeline, setPipeline] = useState({
+    'Leads': [],
+    'Contacted': [],
+    'Proposal Sent': [],
+    'Won': []
+  });
+  const [loading, setLoading] = useState(true);
 
   // Selected Lead details drawer state
   const [selectedLead, setSelectedLead] = useState(null);
@@ -26,24 +24,48 @@ export default function CrmKanban() {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
+    async function loadPipeline() {
+      try {
+        const res = await fetch('/api/v1/erp/crm');
+        const json = await res.json();
+        if (json.success) {
+          setPipeline(json.data);
+        }
+      } catch (err) {
+        console.error('Failed to load CRM pipeline:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadPipeline();
   }, []);
 
   if (!mounted || !user) return null;
 
   // Move lead card to another stage
-  const moveLeadStage = (id, newStage) => {
-    setLeads(prev =>
-      prev.map(l => {
-        if (l.id === id) {
-          // If moved to "Won", simulate converting to member
-          if (newStage === 'Won') {
-            alert(`Deal WON! Simulating conversion of ${l.name} into an active Member, generating Contract draft, and issuing Invoice.`);
-          }
-          return { ...l, stage: newStage };
+  const moveLeadStage = async (id, newStage) => {
+    try {
+      const res = await fetch('/api/v1/erp/crm', {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ id, stage: newStage })
+      });
+      const json = await res.json();
+      if (json.success) {
+        // Re-fetch pipeline
+        const pipeRes = await fetch('/api/v1/erp/crm');
+        const pipeJson = await pipeRes.json();
+        if (pipeJson.success) {
+          setPipeline(pipeJson.data);
         }
-        return l;
-      })
-    );
+        if (newStage === 'Won') {
+          alert(`Deal WON! Simulating conversion into an active Member, generating Contract draft, and issuing Invoice.`);
+        }
+      }
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   const handleCreateQuotation = () => {
@@ -53,46 +75,48 @@ export default function CrmKanban() {
 
   const handleConvertQuotation = () => {
     setQuotationConverted(true);
-    // Simulate updating stage to Proposal or Negotiation
     if (selectedLead) {
-      moveLeadStage(selectedLead.id, 'Proposal');
-      setSelectedLead(prev => ({ ...prev, stage: 'Proposal' }));
+      moveLeadStage(selectedLead.id, 'Proposal Sent');
+      setSelectedLead(prev => ({ ...prev, stage: 'Proposal Sent' }));
     }
   };
 
-  const columns = ['New Leads', 'Qualified', 'Tour', 'Proposal', 'Negotiation', 'Won', 'Lost'];
+  const columns = ['Leads', 'Contacted', 'Proposal Sent', 'Won'];
 
   return (
     <div style={{ display: 'grid', gap: '32px' }}>
       
       {/* Page Header */}
-      <div>
-        <h1 style={{ fontSize: '28px', color: '#FFFFFF', fontWeight: 300, margin: 0 }}>
+      <div style={{ textAlign: 'start' }}>
+        <h1 style={{ fontSize: '28px', color: 'var(--text-primary)', fontWeight: 300, margin: 0 }}>
           {language === 'ar' ? 'مبيعات الـ CRM والصفقات' : 'CRM Sales pipeline'}
         </h1>
-        <p style={{ margin: '6px 0 0', color: 'var(--text-muted-dark)', fontSize: '14px' }}>
+        <p style={{ margin: '6px 0 0', color: 'var(--text-secondary)', fontSize: '14px' }}>
           {language === 'ar' ? 'إدارة فرص المبيعات والعملاء المحتملين وتتبع جولات المعاينة وصياغة العقود.' : 'Drag and drop leads between pipeline stages to trigger workflows and track conversions.'}
         </p>
       </div>
 
-      {/* Kanban Board Board */}
+      {/* Kanban Board */}
       <div style={{
         display: 'grid',
-        gridTemplateColumns: `repeat(${columns.length}, minmax(180px, 1fr))`,
+        gridTemplateColumns: `repeat(${columns.length}, minmax(220px, 1fr))`,
         gap: '16px',
         overflowX: 'auto',
         paddingBottom: '20px',
         boxSizing: 'border-box'
       }}>
         {columns.map((colName) => {
-          const colLeads = leads.filter(l => l.stage === colName);
-          const colValue = colLeads.reduce((a, b) => a + b.value, 0);
+          const colLeads = pipeline[colName] || [];
+          const colValue = colLeads.reduce((a, b) => a + Number(b.value || 0), 0);
 
           return (
             <div
               key={colName}
               style={{
-                background: 'var(--mars-slate)',
+                background: theme === 'light'
+                  ? 'linear-gradient(135deg, rgba(11, 11, 15, 0.03) 0%, rgba(11, 11, 15, 0.01) 100%)'
+                  : 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, rgba(255, 255, 255, 0.01) 100%)',
+                border: '1px solid var(--border-color)',
                 borderRadius: '8px',
                 padding: '16px 12px',
                 display: 'flex',
@@ -103,12 +127,12 @@ export default function CrmKanban() {
               }}
             >
               {/* Column Header */}
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(245, 245, 245, 0.08)', paddingBottom: '10px' }}>
-                <span style={{ fontSize: '13px', fontWeight: 700, color: '#FFFFFF' }}>{colName}</span>
-                <span style={{ fontSize: '11px', color: 'var(--text-muted-dark)', fontWeight: 600 }}>{colLeads.length}</span>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '10px' }}>
+                <span style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text-primary)' }}>{colName}</span>
+                <span style={{ fontSize: '11px', color: 'var(--text-secondary)', fontWeight: 600 }}>{colLeads.length}</span>
               </div>
-              <div style={{ fontSize: '11px', color: 'var(--copper-400)', fontWeight: 600 }}>
-                Est: {colValue} SAR
+              <div style={{ fontSize: '11px', color: 'var(--copper-400)', fontWeight: 600, textAlign: 'start' }}>
+                Est: {colValue.toLocaleString()} SAR
               </div>
 
               {/* Cards wrapper */}
@@ -118,31 +142,32 @@ export default function CrmKanban() {
                     key={l.id}
                     onClick={() => setSelectedLead(l)}
                     style={{
-                      background: 'var(--mars-void)',
-                      border: '1px solid var(--line-dark)',
+                      background: 'var(--mars-slate)',
+                      border: '1px solid var(--border-color)',
                       borderRadius: '6px',
                       padding: '14px',
                       cursor: 'pointer',
                       display: 'grid',
                       gap: '8px',
+                      textAlign: 'start',
                       transition: 'border-color 120ms ease'
                     }}
                     onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--copper-400)'}
-                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--line-dark)'}
+                    onMouseLeave={(e) => e.currentTarget.style.borderColor = 'var(--border-color)'}
                   >
-                    <div style={{ fontWeight: 600, fontSize: '14px', color: '#FFFFFF' }}>{l.name}</div>
-                    <div style={{ fontSize: '12px', color: 'var(--text-muted-dark)' }}>{l.company}</div>
+                    <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-primary)' }}>{l.name}</div>
+                    <div style={{ fontSize: '12px', color: 'var(--text-secondary)' }}>{l.company || 'Individual'}</div>
                     
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: '6px', fontSize: '11px' }}>
                       <span style={{ color: 'var(--copper-400)', fontWeight: 600 }}>{l.value} SAR</span>
-                      <span style={{ background: 'rgba(245, 245, 245, 0.05)', padding: '2px 6px', borderRadius: '4px', color: 'var(--text-muted-dark)' }}>
-                        Score: {l.score}
+                      <span style={{ background: 'rgba(245, 245, 245, 0.05)', padding: '2px 6px', borderRadius: '4px', color: 'var(--text-secondary)' }}>
+                        Source: {l.source || 'Direct'}
                       </span>
                     </div>
 
-                    {/* Quick Move Trigger controls for drag simulation */}
-                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', borderTop: '1px solid rgba(245, 245, 245, 0.05)', paddingTop: '8px', marginTop: '4px' }}>
-                      {columns.filter(c => c !== colName).slice(0, 3).map((targetCol) => (
+                    {/* Stage Move Trigger controls */}
+                    <div style={{ display: 'flex', gap: '4px', flexWrap: 'wrap', borderTop: '1px solid var(--border-color)', paddingTop: '8px', marginTop: '4px' }}>
+                      {columns.filter(c => c !== colName).map((targetCol) => (
                         <button
                           key={targetCol}
                           onClick={(e) => {
@@ -151,11 +176,11 @@ export default function CrmKanban() {
                           }}
                           style={{
                             background: 'none',
-                            border: '1px solid var(--line-dark)',
+                            border: '1px solid var(--border-color)',
                             borderRadius: '4px',
-                            color: 'var(--text-muted-dark)',
+                            color: 'var(--text-secondary)',
                             fontSize: '9px',
-                            padding: '2px 4px',
+                            padding: '2px 6px',
                             cursor: 'pointer'
                           }}
                         >
@@ -183,8 +208,8 @@ export default function CrmKanban() {
           left: language === 'ar' ? 0 : 'auto',
           width: 'min(100%, 480px)',
           background: 'var(--mars-slate)',
-          borderLeft: language === 'ar' ? 'none' : '1px solid var(--line-dark)',
-          borderRight: language === 'ar' ? '1px solid var(--line-dark)' : 'none',
+          borderLeft: language === 'ar' ? 'none' : '1px solid var(--border-color)',
+          borderRight: language === 'ar' ? '1px solid var(--border-color)' : 'none',
           boxShadow: '-8px 0 32px rgba(0, 0, 0, 0.4)',
           zIndex: 100,
           padding: '40px 32px',
@@ -194,11 +219,11 @@ export default function CrmKanban() {
           animation: 'fadeIn 200ms ease-out'
         }}>
           {/* Drawer Header */}
-          <div style={{ display: 'flex', justifySelf: 'start', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid rgba(245, 245, 245, 0.08)', paddingBottom: '20px', width: '100%' }}>
-            <h3 style={{ margin: 0, fontSize: '20px', color: '#FFFFFF' }}>{selectedLead.name}</h3>
+          <div style={{ display: 'flex', justifySelf: 'start', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '20px', width: '100%' }}>
+            <h3 style={{ margin: 0, fontSize: '20px', color: 'var(--text-primary)' }}>{selectedLead.name}</h3>
             <button
               onClick={() => setSelectedLead(null)}
-              style={{ background: 'none', border: 'none', color: 'var(--text-muted-dark)', fontSize: '22px', cursor: 'pointer', padding: 0 }}
+              style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', fontSize: '22px', cursor: 'pointer', padding: 0 }}
             >
               ✕
             </button>
@@ -207,41 +232,41 @@ export default function CrmKanban() {
           {/* Drawer Body details */}
           <div style={{ flex: 1, overflowY: 'auto', marginTop: '24px', display: 'grid', gap: '20px', fontSize: '14px', textAlign: 'start' }}>
             <div>
-              <div style={{ color: 'var(--text-muted-dark)' }}>Company Name</div>
-              <div style={{ fontWeight: 600, color: '#FFFFFF', marginTop: '4px' }}>{selectedLead.company}</div>
+              <div style={{ color: 'var(--text-secondary)' }}>Company / Entity</div>
+              <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.company || 'Individual'}</div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
+              <div>
+                <div style={{ color: 'var(--text-secondary)' }}>Email</div>
+                <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.email || 'N/A'}</div>
+              </div>
+              <div>
+                <div style={{ color: 'var(--text-secondary)' }}>Phone / Mobile</div>
+                <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.phone || 'N/A'}</div>
+              </div>
             </div>
             
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
-                <div style={{ color: 'var(--text-muted-dark)' }}>Pipeline Stage</div>
+                <div style={{ color: 'var(--text-secondary)' }}>Pipeline Stage</div>
                 <div style={{ fontWeight: 600, color: 'var(--copper-400)', marginTop: '4px' }}>{selectedLead.stage}</div>
               </div>
               <div>
-                <div style={{ color: 'var(--text-muted-dark)' }}>Lead Score</div>
-                <div style={{ fontWeight: 600, color: '#FFFFFF', marginTop: '4px' }}>{selectedLead.score} / 100</div>
+                <div style={{ color: 'var(--text-secondary)' }}>Deal Value</div>
+                <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.value} SAR</div>
               </div>
             </div>
 
             <div>
-              <div style={{ color: 'var(--text-muted-dark)' }}>Workspace Interest</div>
-              <div style={{ fontWeight: 600, color: '#FFFFFF', marginTop: '4px' }}>{selectedLead.interest}</div>
-            </div>
-
-            {/* AI Workspace Recommendation Engine mockup */}
-            <div style={{ background: 'rgba(200, 107, 60, 0.06)', padding: '20px', borderRadius: '6px', border: '1px solid rgba(200, 107, 60, 0.2)' }}>
-              <div style={{ fontWeight: 600, color: 'var(--copper-400)', fontSize: '13px' }}>
-                ★ AI Workspace Recommendation
-              </div>
-              <ul style={{ margin: '8px 0 0', paddingLeft: '16px', color: 'var(--text-muted-dark)', fontSize: '13px', display: 'grid', gap: '6px' }}>
-                <li>Suggested Workspace: <b>Private Office A-101</b></li>
-                <li>Reason: Matches capacity request (4 desk layout) and monthly target budget (4,800 SAR).</li>
-              </ul>
+              <div style={{ color: 'var(--text-secondary)' }}>Inquiry Notes</div>
+              <div style={{ color: 'var(--text-primary)', marginTop: '4px', lineHeight: 1.5 }}>{selectedLead.notes || 'Interested in Mars Space solutions.'}</div>
             </div>
 
           </div>
 
           {/* Drawer Actions */}
-          <div style={{ borderTop: '1px solid rgba(245, 245, 245, 0.08)', paddingTop: '20px', display: 'grid', gap: '10px' }}>
+          <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '20px', display: 'grid', gap: '10px' }}>
             <button
               onClick={handleCreateQuotation}
               className="btn-pill-primary"
@@ -269,14 +294,14 @@ export default function CrmKanban() {
             background: 'var(--mars-slate)',
             padding: '36px',
             borderRadius: '8px',
-            border: '1px solid var(--line-dark)',
+            border: '1px solid var(--border-color)',
             width: '100%',
             maxWidth: '480px',
             boxSizing: 'border-box',
             margin: '0 20px',
             textAlign: 'start'
           }}>
-            <h3 style={{ margin: 0, fontSize: '20px', color: '#FFFFFF', marginBottom: '16px' }}>
+            <h3 style={{ margin: 0, fontSize: '20px', color: 'var(--text-primary)', marginBottom: '16px' }}>
               {language === 'ar' ? 'صياغة عرض السعر للعميل' : 'Quotation Builder'}
             </h3>
 
@@ -296,30 +321,25 @@ export default function CrmKanban() {
             ) : (
               <div style={{ display: 'grid', gap: '16px', fontSize: '13px' }}>
                 <div>
-                  <div style={{ color: 'var(--text-muted-dark)' }}>Client Recipient</div>
-                  <div style={{ fontWeight: 600, color: '#FFFFFF', marginTop: '4px' }}>{selectedLead.name} ({selectedLead.company})</div>
+                  <div style={{ color: 'var(--text-secondary)' }}>Client Recipient</div>
+                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.name} ({selectedLead.company || 'Individual'})</div>
                 </div>
 
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-                  <label style={{ display: 'grid', gap: '6px', color: 'var(--text-muted-dark)' }}>
+                  <label style={{ display: 'grid', gap: '6px', color: 'var(--text-secondary)' }}>
                     Plan Type
-                    <input type="text" value={selectedLead.interest} readOnly style={{ background: 'var(--mars-void)', border: '1px solid var(--line-dark)', borderRadius: '4px', padding: '10px', color: 'rgba(255,255,255,0.7)', outline: 'none' }} />
+                    <input type="text" value="Workspace Membership" readOnly style={{ background: 'var(--mars-void)', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '10px', color: 'var(--text-primary)', outline: 'none' }} />
                   </label>
-                  <label style={{ display: 'grid', gap: '6px', color: 'var(--text-muted-dark)' }}>
+                  <label style={{ display: 'grid', gap: '6px', color: 'var(--text-secondary)' }}>
                     Base Price (Monthly)
-                    <input type="text" value={`${selectedLead.value} SAR`} readOnly style={{ background: 'var(--mars-void)', border: '1px solid var(--line-dark)', borderRadius: '4px', padding: '10px', color: 'rgba(255,255,255,0.7)', outline: 'none' }} />
+                    <input type="text" value={`${selectedLead.value} SAR`} readOnly style={{ background: 'var(--mars-void)', border: '1px solid var(--border-color)', borderRadius: '4px', padding: '10px', color: 'var(--text-primary)', outline: 'none' }} />
                   </label>
                 </div>
-
-                <label style={{ display: 'grid', gap: '6px', color: 'var(--text-muted-dark)' }}>
-                  Special Contract Terms
-                  <textarea rows="3" defaultValue="Includes 24/7 branch access, high-speed fiber internet, and 30 meeting room credits per month." style={{ background: 'var(--mars-void)', border: '1px solid var(--line-dark)', borderRadius: '4px', padding: '10px', color: '#FFFFFF', outline: 'none', resize: 'vertical', fontFamily: 'inherit' }} />
-                </label>
 
                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
                   <button
                     onClick={() => setShowQuotationModal(false)}
-                    style={{ background: 'none', border: 'none', color: 'var(--text-muted-dark)', cursor: 'pointer', fontWeight: 600 }}
+                    style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', cursor: 'pointer', fontWeight: 600 }}
                   >
                     Cancel
                   </button>

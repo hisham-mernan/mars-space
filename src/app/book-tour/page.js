@@ -24,23 +24,31 @@ export default function BookTour() {
     setSubmitting(true);
 
     try {
-      // Simulate saving tour to CRM lead collection
-      const tourData = {
-        fullName,
-        email,
-        phone,
-        preferredDate,
-        preferredTime,
-        workspaceInterest,
-        notes,
-        createdAt: new Date().toISOString()
-      };
-      
-      // Seed this as a lead in CRM (simulated timeout)
-      await new Promise(resolve => setTimeout(resolve, 800));
-      setSuccess(true);
+      const res = await fetch('/api/v1/public/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          fullName,
+          name: fullName,
+          email,
+          phone,
+          preferredDate,
+          preferredTime,
+          workspaceInterest,
+          message: `Tour request for ${workspaceInterest} on ${preferredDate} at ${preferredTime}. Notes: ${notes}`,
+          source: 'Website Tour Request Form'
+        })
+      });
+
+      const json = await res.json();
+      if (json.success) {
+        setSuccess(true);
+      } else {
+        alert(json.error?.message || 'Submission failed');
+      }
     } catch (err) {
       console.error(err);
+      alert('Error submitting request');
     } finally {
       setSubmitting(false);
     }

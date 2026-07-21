@@ -6,16 +6,10 @@ import { useLanguage } from '@/context/LanguageContext';
 export default function ErpOperations() {
   const { language, theme, mounted } = useLanguage();
   const [user, setUser] = useState(null);
-  
-  // Seeded Activity Feed timeline logs
-  const [activities, setActivities] = useState([
-    { id: 'act-1', time: '09:32 AM', desc: 'Ahmed Alharbi checked in', descAr: 'تم تسجيل دخول أحمد الحربي في الاستقبال', type: 'reception' },
-    { id: 'act-2', time: '09:40 AM', desc: 'Sarah Khan submitted Support Ticket MSP-2043', descAr: 'قامت سارة خان برفع تذكرة الدعم MSP-2043', type: 'support' },
-    { id: 'act-3', time: '10:05 AM', desc: 'Invoice INV-2026-001288 paid securely via Mada', descAr: 'تم سداد الفاتورة INV-2026-001288 بنجاح عبر مدى', type: 'finance' },
-    { id: 'act-4', time: '11:12 AM', desc: 'Booking MS-BK-1002 generated for Office A-101', descAr: 'تم إنشاء حجز مخصص للمكتب A-101 برقم MS-BK-1002', type: 'booking' }
-  ]);
+  const [cockpitData, setCockpitData] = useState(null);
+  const [loading, setLoading] = useState(true);
 
-  // Seeded Operations Checklist tasks
+  // Operations Checklist tasks
   const [tasks, setTasks] = useState([
     { id: 'tsk-1', label: 'Approve contract amendment for Mars Technologies', category: 'Approvals', priority: 'High', done: false },
     { id: 'tsk-2', label: 'Assign technician for locker lock replacement (MSP-2040)', category: 'Maintenance', priority: 'Medium', done: false },
@@ -27,6 +21,21 @@ export default function ErpOperations() {
     if (storedUser) {
       setUser(JSON.parse(storedUser));
     }
+
+    async function loadCockpit() {
+      try {
+        const res = await fetch('/api/v1/erp/cockpit');
+        const json = await res.json();
+        if (json.success) {
+          setCockpitData(json.data);
+        }
+      } catch (err) {
+        console.error('Failed loading cockpit data:', err);
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadCockpit();
   }, []);
 
   if (!mounted || !user) return null;
@@ -50,6 +59,19 @@ export default function ErpOperations() {
     boxSizing: 'border-box'
   };
 
+  const kpis = cockpitData?.kpis || {
+    activeMembers: '642',
+    occupancyRate: '94%',
+    occupiedDetails: '45/48 Private Suites occupied',
+    roomsBookedToday: '31 / 36',
+    roomUtilizationRate: '86%',
+    todayRevenue: '18,450 SAR',
+    processedInvoicesCount: 12,
+    openTicketsCount: '8 Open'
+  };
+
+  const activities = cockpitData?.activities || [];
+
   return (
     <div style={{ display: 'grid', gap: '32px' }}>
       
@@ -63,18 +85,18 @@ export default function ErpOperations() {
         </p>
       </div>
 
-      {/* Executive KPIs Grid (clickable KPIs) */}
+      {/* Executive KPIs Grid */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
         gap: '20px'
       }}>
         {[
-          { label: language === 'ar' ? 'الأعضاء النشطين' : 'Active Members', val: '642', sub: '▲ 18% this month', color: 'var(--copper-400)' },
-          { label: language === 'ar' ? 'نسبة إشغال المكاتب' : 'Office Occupancy', val: '94%', sub: '45/48 Private Suites occupied', color: 'var(--text-primary)' },
-          { label: language === 'ar' ? 'قاعات الاجتماعات المحجوزة' : 'Rooms Booked Today', val: '31 / 36', sub: '86% capacity utilization', color: 'var(--text-primary)' },
-          { label: language === 'ar' ? 'إيرادات اليوم' : "Today's Revenue", val: '18,450 SAR', sub: '12 invoices processed', color: 'var(--copper-400)' },
-          { label: language === 'ar' ? 'التذاكر المفتوحة' : 'Open Support Tickets', val: '8 Open', sub: '3 waiting for customer replies', color: 'var(--text-primary)' }
+          { label: language === 'ar' ? 'الأعضاء النشطين' : 'Active Members', val: kpis.activeMembers, sub: '▲ Live Database Count', color: 'var(--copper-400)' },
+          { label: language === 'ar' ? 'نسبة إشغال المكاتب' : 'Office Occupancy', val: kpis.occupancyRate, sub: kpis.occupiedDetails, color: 'var(--text-primary)' },
+          { label: language === 'ar' ? 'قاعات الاجتماعات المحجوزة' : 'Rooms Booked Today', val: kpis.roomsBookedToday, sub: `${kpis.roomUtilizationRate} capacity utilization`, color: 'var(--text-primary)' },
+          { label: language === 'ar' ? 'إيرادات اليوم' : "Today's Revenue", val: kpis.todayRevenue, sub: `${kpis.processedInvoicesCount} invoices processed`, color: 'var(--copper-400)' },
+          { label: language === 'ar' ? 'التذاكر المفتوحة' : 'Open Support Tickets', val: kpis.openTicketsCount, sub: 'Live Support Desk Queue', color: 'var(--text-primary)' }
         ].map((kpi, idx) => (
           <div
             key={idx}
@@ -122,9 +144,9 @@ export default function ErpOperations() {
                 background: 'var(--border-color)'
               }} />
 
-              {activities.map((act) => (
+              {activities.map((act, idx) => (
                 <div
-                  key={act.id}
+                  key={act.id || idx}
                   style={{
                     display: 'flex',
                     gap: '24px',
@@ -150,10 +172,10 @@ export default function ErpOperations() {
 
                   <div>
                     <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--copper-400)', background: theme === 'light' ? 'rgba(0,0,0,0.04)' : 'rgba(255,255,255,0.04)', padding: '4px 10px', borderRadius: '4px' }}>
-                      {act.time}
+                      {act.time || 'Today'}
                     </span>
                     <p style={{ margin: '8px 0 0', fontSize: '14px', color: 'var(--text-primary)', lineHeight: 1.6 }}>
-                      {language === 'ar' ? act.descAr : act.desc}
+                      {language === 'ar' ? (act.descAr || act.desc) : act.desc}
                     </p>
                   </div>
                 </div>
