@@ -6,17 +6,36 @@ import { useLanguage } from '@/context/LanguageContext';
 export default function MemberDashboard() {
   const { language, theme, mounted } = useLanguage();
   const [user, setUser] = useState(null);
+  const [bookings, setBookings] = useState([]);
+  const [invoices, setInvoices] = useState([]);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('mars-user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      const parsed = JSON.parse(storedUser);
+      setUser(parsed);
+
+      async function loadMemberData() {
+        try {
+          const [bRes, iRes] = await Promise.all([
+            fetch('/api/v1/public/bookings'),
+            fetch('/api/v1/erp/invoices')
+          ]);
+          const bJson = await bRes.json();
+          const iJson = await iRes.json();
+
+          if (bJson.success) setBookings(bJson.data);
+          if (iJson.success) setInvoices(iJson.data);
+        } catch (err) {
+          console.error('Error loading member data:', err);
+        }
+      }
+      loadMemberData();
     }
   }, []);
 
   if (!mounted || !user) return null;
 
-  // Glass style depending on active theme
   const glassStyle = {
     background: theme === 'light'
       ? 'linear-gradient(135deg, rgba(11, 11, 15, 0.03) 0%, rgba(11, 11, 15, 0.01) 100%)'
@@ -30,10 +49,12 @@ export default function MemberDashboard() {
     boxSizing: 'border-box'
   };
 
+  const userBookings = bookings.filter(b => b.customerEmail === user.email || !b.customerEmail);
+
   return (
     <div style={{ display: 'grid', gap: '32px' }}>
       
-      {/* 1. Welcome Banner Widget (Polished with Gradient and Glows) */}
+      {/* 1. Welcome Banner Widget */}
       <section style={{
         position: 'relative',
         background: 'linear-gradient(135deg, var(--mars-copper) 0%, var(--copper-900) 100%)',
@@ -49,27 +70,14 @@ export default function MemberDashboard() {
         overflow: 'hidden',
         boxShadow: '0 12px 40px rgba(138, 65, 32, 0.15)'
       }}>
-        {/* Subtle decorative vector glow */}
-        <div style={{
-          position: 'absolute',
-          top: '-20%',
-          right: '-10%',
-          width: '300px',
-          height: '300px',
-          background: 'rgba(255, 255, 255, 0.08)',
-          borderRadius: '50%',
-          filter: 'blur(40px)',
-          pointerEvents: 'none'
-        }} />
-
         <div style={{ position: 'relative', zIndex: 2 }}>
           <h1 style={{ fontSize: '32px', fontWeight: 300, margin: 0, letterSpacing: '-0.02em' }}>
             {language === 'ar' ? `مرحباً، ${user.name} 👋` : `Welcome back, ${user.name} 👋`}
           </h1>
           <p style={{ margin: '14px 0 0', opacity: 0.85, fontSize: '15px', maxWidth: '48ch', lineHeight: 1.7 }}>
             {language === 'ar'
-              ? 'لديك حجز قاعة اجتماعات نشط اليوم. جميع فواتيرك الحالية مدفوعة بالكامل.'
-              : 'Your workspaces parameters are fully active. You have 1 reservation scheduled for today, and 0 overdue invoices.'}
+              ? `لديك ${userBookings.length} حجوزات مسجلة في النظام.`
+              : `Your workspace parameters are fully active. You have ${userBookings.length} active reservation(s) in the system.`}
           </p>
         </div>
         <div style={{ position: 'relative', zIndex: 2 }}>
@@ -90,7 +98,7 @@ export default function MemberDashboard() {
         </div>
       </section>
 
-      {/* Grid of widgets: Left (2/3 width) and Right (1/3 width) */}
+      {/* Grid of widgets */}
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 360px), 1fr))',
@@ -98,38 +106,10 @@ export default function MemberDashboard() {
         alignItems: 'start'
       }}>
         
-        {/* Left Column (Main widgets) */}
+        {/* Left Column */}
         <div style={{ gridColumn: 'span 2', display: 'grid', gap: '32px' }}>
           
-          {/* 2. Today's Schedule Widget */}
-          <div style={glassStyle}>
-            <h3 style={{ margin: '0 0 20px', fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)', letterSpacing: '-0.01em' }}>
-              {language === 'ar' ? 'جدول أعمال اليوم' : "Today's Schedule"}
-            </h3>
-            
-            <div style={{ display: 'grid', gap: '16px' }}>
-              <div style={{
-                display: 'flex',
-                gap: '20px',
-                alignItems: 'center',
-                background: theme === 'light' ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.02)',
-                padding: '20px 24px',
-                borderRadius: '8px',
-                border: theme === 'light' ? '1px solid rgba(11,11,15,0.04)' : '1px solid rgba(255,255,255,0.04)'
-              }}>
-                <div style={{ fontSize: '20px', fontWeight: 700, color: 'var(--copper-400)' }}>14:00</div>
-                <div style={{ height: '32px', width: '1px', background: 'var(--border-color)' }} />
-                <div style={{ textAlign: 'start' }}>
-                  <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Meeting Room Alpha</div>
-                  <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                    Jeddah Towers Branch · Floor 1
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          {/* 3. Upcoming Bookings List Widget */}
+          {/* Upcoming Bookings List Widget */}
           <div style={glassStyle}>
             <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '24px' }}>
               <h3 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)' }}>
@@ -141,29 +121,37 @@ export default function MemberDashboard() {
             </div>
 
             <div style={{ display: 'grid', gap: '16px' }}>
-              <div style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                background: theme === 'light' ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.02)',
-                padding: '20px 24px',
-                borderRadius: '8px',
-                border: theme === 'light' ? '1px solid rgba(11,11,15,0.04)' : '1px solid rgba(255,255,255,0.04)'
-              }}>
-                <div style={{ textAlign: 'start' }}>
-                  <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>Meeting Room Alpha</div>
-                  <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                    Tomorrow · 02:00 PM - 04:00 PM
-                  </div>
+              {userBookings.length === 0 ? (
+                <div style={{ padding: '24px', textAlign: 'center', color: 'var(--text-secondary)' }}>
+                  No upcoming bookings. Book a workspace slot to get started.
                 </div>
-                <a href="/member/bookings" style={{ fontSize: '13px', color: 'var(--copper-400)', fontWeight: 600 }}>
-                  {language === 'ar' ? 'عرض الرمز' : 'View Ticket'}
-                </a>
-              </div>
+              ) : (
+                userBookings.map((b) => (
+                  <div key={b.id} style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    background: theme === 'light' ? 'rgba(0,0,0,0.02)' : 'rgba(255,255,255,0.02)',
+                    padding: '20px 24px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--border-color)'
+                  }}>
+                    <div style={{ textAlign: 'start' }}>
+                      <div style={{ fontWeight: 600, color: 'var(--text-primary)' }}>{b.resourceName || 'Meeting Suite'}</div>
+                      <div style={{ fontSize: '13px', color: 'var(--text-secondary)', marginTop: '4px' }}>
+                        {b.date} · {b.startTime} - {b.endTime}
+                      </div>
+                    </div>
+                    <span style={{ fontSize: '12px', color: 'var(--copper-400)', fontWeight: 600, border: '1px solid var(--border-color)', padding: '4px 10px', borderRadius: '4px' }}>
+                      {b.status || 'Confirmed'}
+                    </span>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
-          {/* 4. Quick Actions Widget */}
+          {/* Quick Actions Widget */}
           <div style={glassStyle}>
             <h3 style={{ margin: '0 0 20px', fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)' }}>
               {language === 'ar' ? 'إجراءات سريعة' : 'Quick Actions'}
@@ -199,10 +187,10 @@ export default function MemberDashboard() {
 
         </div>
 
-        {/* Right Column (Sidebar widgets) */}
+        {/* Right Column */}
         <div style={{ display: 'grid', gap: '32px' }}>
           
-          {/* 5. Premium Membership Glass Card */}
+          {/* Premium Membership Card */}
           <div style={{
             ...glassStyle,
             background: theme === 'light'
@@ -228,36 +216,14 @@ export default function MemberDashboard() {
                 <span style={{ color: 'var(--text-secondary)' }}>{language === 'ar' ? 'ساعات قاعات الاجتماعات' : 'Meeting Credits'}</span>
                 <span style={{ fontWeight: 600, color: 'var(--copper-400)' }}>18 / 20 hours</span>
               </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ color: 'var(--text-secondary)' }}>{language === 'ar' ? 'الطباعة والخدمات' : 'Printing Limit'}</span>
-                <span style={{ fontWeight: 600, color: 'var(--text-primary)' }}>50 pages / month</span>
-              </div>
             </div>
 
             <a
               href="/member/membership"
               className="btn-pill-primary"
-              style={{ width: '100%', padding: '12px 0', fontSize: '13px', marginTop: '24px', textAlign: 'center', border: 'none', cursor: 'pointer' }}
+              style={{ width: '100%', padding: '12px 0', fontSize: '13px', marginTop: '24px', textAlign: 'center', border: 'none', cursor: 'pointer', display: 'block' }}
             >
               {language === 'ar' ? 'إدارة الاشتراك' : 'Manage Subscription'}
-            </a>
-          </div>
-
-          {/* 6. Outstanding Balance Widget */}
-          <div style={glassStyle}>
-            <h3 style={{ margin: '0 0 16px', fontSize: '18px', fontWeight: 600, color: 'var(--text-primary)' }}>
-              {language === 'ar' ? 'الفواتير المستحقة' : 'Outstanding Balance'}
-            </h3>
-            <div style={{ fontSize: '28px', fontWeight: 700, color: 'var(--text-primary)' }}>0.00 SAR</div>
-            <p style={{ margin: '6px 0 20px', color: '#4CAF50', fontSize: '13px', fontWeight: 500 }}>
-              ✓ {language === 'ar' ? 'جميع فواتيرك مسددة بالكامل!' : 'All invoices are settled in full!'}
-            </p>
-            <a
-              href="/member/invoices"
-              className="btn-pill-secondary"
-              style={{ width: '100%', padding: '12px 0', fontSize: '13px', textAlign: 'center', cursor: 'pointer' }}
-            >
-              {language === 'ar' ? 'عرض الفواتير' : 'View Invoices Log'}
             </a>
           </div>
 
