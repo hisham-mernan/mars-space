@@ -1,25 +1,28 @@
-import { IBM_Plex_Sans_Arabic, Inter, Outfit } from "next/font/google";
+import localFont from "next/font/local";
 import { LanguageProvider } from "../context/LanguageContext";
 import "./globals.css";
 
-const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
-  subsets: ["arabic", "latin"],
-  weight: ["200", "300", "400", "500", "600", "700"],
-  variable: "--font-ibm-plex",
+const thmanyahSans = localFont({
+  src: [
+    { path: "../../public/fonts/thmanyahsans/woff2/thmanyahsans-Light.woff2", weight: "300", style: "normal" },
+    { path: "../../public/fonts/thmanyahsans/woff2/thmanyahsans-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../../public/fonts/thmanyahsans/woff2/thmanyahsans-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../../public/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2", weight: "700", style: "normal" },
+    { path: "../../public/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2", weight: "900", style: "normal" },
+  ],
+  variable: "--font-thmanyah-sans",
   display: "swap",
 });
 
-const inter = Inter({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-inter",
-  display: "swap",
-});
-
-const outfit = Outfit({
-  subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-outfit",
+const thmanyahSerifDisplay = localFont({
+  src: [
+    { path: "../../public/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Light.woff2", weight: "300", style: "normal" },
+    { path: "../../public/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Regular.woff2", weight: "400", style: "normal" },
+    { path: "../../public/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Medium.woff2", weight: "500", style: "normal" },
+    { path: "../../public/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Bold.woff2", weight: "700", style: "normal" },
+    { path: "../../public/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Black.woff2", weight: "900", style: "normal" },
+  ],
+  variable: "--font-thmanyah-serif-display",
   display: "swap",
 });
 
@@ -35,12 +38,12 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html className={`${ibmPlexSansArabic.variable} ${inter.variable} ${outfit.variable} h-full antialiased`}>
+    <html className={`${thmanyahSans.variable} ${thmanyahSerifDisplay.variable} h-full antialiased`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body style={{ fontFamily: "var(--font-inter), var(--font-ibm-plex), system-ui, sans-serif" }}>
+      <body style={{ fontFamily: "var(--font-thmanyah-sans), var(--font-thmanyah-serif-display), system-ui, sans-serif" }}>
         <LanguageProvider>
           {children}
         </LanguageProvider>

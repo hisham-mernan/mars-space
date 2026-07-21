@@ -53,7 +53,7 @@ body {
   margin: 0;
   background: var(--mars-void);
   color: var(--mars-paper);
-  font-family: var(--font-inter), var(--font-ibm-plex), system-ui, -apple-system, sans-serif;
+  font-family: var(--font-thmanyah-sans), var(--font-thmanyah-serif-display), system-ui, -apple-system, sans-serif;
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -61,6 +61,24 @@ body {
   min-height: 100%;
   display: flex;
   flex-direction: column;
+}
+
+/* English Language Fonts */
+html[lang="en"] body,
+html[lang="en"] button,
+html[lang="en"] input,
+html[lang="en"] select,
+html[lang="en"] textarea {
+  font-family: var(--font-thmanyah-sans), system-ui, sans-serif;
+}
+
+/* Arabic Language Fonts */
+html[lang="ar"] body,
+html[lang="ar"] button,
+html[lang="ar"] input,
+html[lang="ar"] select,
+html[lang="ar"] textarea {
+  font-family: var(--font-thmanyah-serif-display), system-ui, sans-serif;
 }
 
 /* Tabular Numerics for Financial & Metric Alignment */
@@ -72,8 +90,25 @@ body {
 /* Headings font-family */
 h1, h2, h3, h4, h5, h6 {
   margin: 0;
-  font-family: var(--font-outfit), var(--font-ibm-plex), sans-serif;
   letter-spacing: -0.02em;
+}
+
+html[lang="en"] h1,
+html[lang="en"] h2,
+html[lang="en"] h3,
+html[lang="en"] h4,
+html[lang="en"] h5,
+html[lang="en"] h6 {
+  font-family: var(--font-thmanyah-sans), sans-serif;
+}
+
+html[lang="ar"] h1,
+html[lang="ar"] h2,
+html[lang="ar"] h3,
+html[lang="ar"] h4,
+html[lang="ar"] h5,
+html[lang="ar"] h6 {
+  font-family: var(--font-thmanyah-serif-display), sans-serif;
 }
 
 a {
