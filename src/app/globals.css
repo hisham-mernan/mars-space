@@ -145,52 +145,42 @@ body {
   flex-direction: column;
 }
 
-/* English Language Fonts */
+/* English Language Fonts - Universal Application */
 html[lang="en"] body,
 html[lang="en"] button,
 html[lang="en"] input,
 html[lang="en"] select,
-html[lang="en"] textarea {
-  font-family: 'Thmanyah Sans', var(--font-thmanyah-sans), system-ui, sans-serif;
-}
-
-/* Arabic Language Fonts */
-html[lang="ar"] body,
-html[lang="ar"] button,
-html[lang="ar"] input,
-html[lang="ar"] select,
-html[lang="ar"] textarea {
-  font-family: 'Thmanyah Serif Display', var(--font-thmanyah-serif-display), system-ui, sans-serif;
-}
-
-/* Tabular Numerics for Financial & Metric Alignment */
-.tabular-nums {
-  font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
-}
-
-/* Headings font-family */
-h1, h2, h3, h4, h5, h6 {
-  margin: 0;
-  letter-spacing: -0.02em;
-}
-
+html[lang="en"] textarea,
 html[lang="en"] h1,
 html[lang="en"] h2,
 html[lang="en"] h3,
 html[lang="en"] h4,
 html[lang="en"] h5,
-html[lang="en"] h6 {
-  font-family: 'Thmanyah Sans', var(--font-thmanyah-sans), sans-serif;
+html[lang="en"] h6,
+html[lang="en"] p,
+html[lang="en"] span,
+html[lang="en"] div,
+html[lang="en"] a {
+  font-family: 'Thmanyah Sans', var(--font-thmanyah-sans), system-ui, -apple-system, sans-serif !important;
 }
 
+/* Arabic Language Fonts - Universal Application */
+html[lang="ar"] body,
+html[lang="ar"] button,
+html[lang="ar"] input,
+html[lang="ar"] select,
+html[lang="ar"] textarea,
 html[lang="ar"] h1,
 html[lang="ar"] h2,
 html[lang="ar"] h3,
 html[lang="ar"] h4,
 html[lang="ar"] h5,
-html[lang="ar"] h6 {
-  font-family: 'Thmanyah Serif Display', var(--font-thmanyah-serif-display), sans-serif;
+html[lang="ar"] h6,
+html[lang="ar"] p,
+html[lang="ar"] span,
+html[lang="ar"] div,
+html[lang="ar"] a {
+  font-family: 'Thmanyah Serif Display', var(--font-thmanyah-serif-display), system-ui, -apple-system, sans-serif !important;
 }
 
 a {
