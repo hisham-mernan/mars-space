@@ -1,4 +1,86 @@
 /* Mars Space Global Stylesheet - World-Class Product Design System */
+
+/* Local Font Face Declarations for Thmanyah Sans & Thmanyah Serif Display */
+@font-face {
+  font-family: 'Thmanyah Sans';
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thmanyah Sans';
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thmanyah Sans';
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thmanyah Sans';
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thmanyah Sans';
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thmanyah Serif Display';
+  src: url('/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Light.woff2') format('woff2');
+  font-weight: 300;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thmanyah Serif Display';
+  src: url('/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Regular.woff2') format('woff2');
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thmanyah Serif Display';
+  src: url('/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Medium.woff2') format('woff2');
+  font-weight: 500;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thmanyah Serif Display';
+  src: url('/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Bold.woff2') format('woff2');
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thmanyah Serif Display';
+  src: url('/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Black.woff2') format('woff2');
+  font-weight: 900;
+  font-style: normal;
+  font-display: swap;
+}
+
 :root {
   /* Brand Palette */
   --mars-void: #09090D;
@@ -53,7 +135,7 @@ body {
   margin: 0;
   background: var(--mars-void);
   color: var(--mars-paper);
-  font-family: var(--font-thmanyah-sans), var(--font-thmanyah-serif-display), system-ui, -apple-system, sans-serif;
+  font-family: 'Thmanyah Sans', 'Thmanyah Serif Display', var(--font-thmanyah-sans), var(--font-thmanyah-serif-display), system-ui, -apple-system, sans-serif;
   font-size: 15px;
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
@@ -69,7 +151,7 @@ html[lang="en"] button,
 html[lang="en"] input,
 html[lang="en"] select,
 html[lang="en"] textarea {
-  font-family: var(--font-thmanyah-sans), system-ui, sans-serif;
+  font-family: 'Thmanyah Sans', var(--font-thmanyah-sans), system-ui, sans-serif;
 }
 
 /* Arabic Language Fonts */
@@ -78,7 +160,7 @@ html[lang="ar"] button,
 html[lang="ar"] input,
 html[lang="ar"] select,
 html[lang="ar"] textarea {
-  font-family: var(--font-thmanyah-serif-display), system-ui, sans-serif;
+  font-family: 'Thmanyah Serif Display', var(--font-thmanyah-serif-display), system-ui, sans-serif;
 }
 
 /* Tabular Numerics for Financial & Metric Alignment */
@@ -99,7 +181,7 @@ html[lang="en"] h3,
 html[lang="en"] h4,
 html[lang="en"] h5,
 html[lang="en"] h6 {
-  font-family: var(--font-thmanyah-sans), sans-serif;
+  font-family: 'Thmanyah Sans', var(--font-thmanyah-sans), sans-serif;
 }
 
 html[lang="ar"] h1,
@@ -108,7 +190,7 @@ html[lang="ar"] h3,
 html[lang="ar"] h4,
 html[lang="ar"] h5,
 html[lang="ar"] h6 {
-  font-family: var(--font-thmanyah-serif-display), sans-serif;
+  font-family: 'Thmanyah Serif Display', var(--font-thmanyah-serif-display), sans-serif;
 }
 
 a {
