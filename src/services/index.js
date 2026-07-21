@@ -10,3 +10,4 @@ export { inventoryService, InventoryService } from './InventoryService';
 export { supportService, SupportService } from './SupportService';
 export { searchService, SearchService } from './SearchService';
 export { analyticsService, AnalyticsService } from './AnalyticsService';
+export { contractService, ContractService } from './ContractService';

@@ -198,7 +198,7 @@ export default function CrmKanban() {
         })}
       </div>
 
-      {/* Lead Details Slide-out Drawer */}
+      {/* Lead Details Slide-out Drawer (Customer 360 Profile) */}
       {selectedLead && (
         <div style={{
           position: 'fixed',
@@ -206,11 +206,11 @@ export default function CrmKanban() {
           bottom: 0,
           right: language === 'ar' ? 'auto' : 0,
           left: language === 'ar' ? 0 : 'auto',
-          width: 'min(100%, 480px)',
+          width: 'min(100%, 540px)',
           background: 'var(--mars-slate)',
           borderLeft: language === 'ar' ? 'none' : '1px solid var(--border-color)',
           borderRight: language === 'ar' ? '1px solid var(--border-color)' : 'none',
-          boxShadow: '-8px 0 32px rgba(0, 0, 0, 0.4)',
+          boxShadow: '-8px 0 32px rgba(0, 0, 0, 0.5)',
           zIndex: 100,
           padding: '40px 32px',
           boxSizing: 'border-box',
@@ -220,7 +220,10 @@ export default function CrmKanban() {
         }}>
           {/* Drawer Header */}
           <div style={{ display: 'flex', justifySelf: 'start', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1px solid var(--border-color)', paddingBottom: '20px', width: '100%' }}>
-            <h3 style={{ margin: 0, fontSize: '20px', color: 'var(--text-primary)' }}>{selectedLead.name}</h3>
+            <div>
+              <span style={{ fontSize: '11px', fontWeight: 700, color: 'var(--copper-400)', letterSpacing: '0.12em' }}>CUSTOMER 360 PROFILE</span>
+              <h3 style={{ margin: '2px 0 0', fontSize: '22px', color: 'var(--text-primary)' }}>{selectedLead.name}</h3>
+            </div>
             <button
               onClick={() => setSelectedLead(null)}
               style={{ background: 'none', border: 'none', color: 'var(--text-secondary)', fontSize: '22px', cursor: 'pointer', padding: 0 }}
@@ -230,37 +233,73 @@ export default function CrmKanban() {
           </div>
 
           {/* Drawer Body details */}
-          <div style={{ flex: 1, overflowY: 'auto', marginTop: '24px', display: 'grid', gap: '20px', fontSize: '14px', textAlign: 'start' }}>
-            <div>
-              <div style={{ color: 'var(--text-secondary)' }}>Company / Entity</div>
-              <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.company || 'Individual'}</div>
+          <div style={{ flex: 1, overflowY: 'auto', marginTop: '24px', display: 'grid', gap: '24px', fontSize: '13px', textAlign: 'start' }}>
+            
+            {/* Customer Health Score Gauge Card */}
+            <div style={{ background: 'var(--mars-void)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)', display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+              <div>
+                <div style={{ color: 'var(--text-secondary)', fontSize: '12px', fontWeight: 600 }}>Customer Health Score</div>
+                <div style={{ fontSize: '24px', fontWeight: 700, color: '#4CAF50', marginTop: '4px' }}>94 / 100 (Optimal)</div>
+                <div style={{ fontSize: '11px', color: 'var(--text-secondary)', marginTop: '2px' }}>High engagement · 0 overdue invoices · Active ticket resolutions</div>
+              </div>
+              <div style={{ width: '54px', height: '54px', borderRadius: '50%', background: 'rgba(76,175,80,0.1)', border: '2px solid #4CAF50', display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: '18px', color: '#4CAF50', fontWeight: 700 }}>
+                A+
+              </div>
             </div>
 
+            {/* Entity details grid */}
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
-                <div style={{ color: 'var(--text-secondary)' }}>Email</div>
-                <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.email || 'N/A'}</div>
+                <div style={{ color: 'var(--text-secondary)' }}>Company Entity</div>
+                <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.company || 'Individual Member'}</div>
               </div>
-              <div>
-                <div style={{ color: 'var(--text-secondary)' }}>Phone / Mobile</div>
-                <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.phone || 'N/A'}</div>
-              </div>
-            </div>
-            
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
                 <div style={{ color: 'var(--text-secondary)' }}>Pipeline Stage</div>
                 <div style={{ fontWeight: 600, color: 'var(--copper-400)', marginTop: '4px' }}>{selectedLead.stage}</div>
               </div>
+            </div>
+
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '16px' }}>
               <div>
-                <div style={{ color: 'var(--text-secondary)' }}>Deal Value</div>
-                <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.value} SAR</div>
+                <div style={{ color: 'var(--text-secondary)' }}>Email Contact</div>
+                <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.email || 'ahmed@example.com'}</div>
+              </div>
+              <div>
+                <div style={{ color: 'var(--text-secondary)' }}>Phone / Mobile</div>
+                <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '4px' }}>{selectedLead.phone || '0501234567'}</div>
               </div>
             </div>
 
+            {/* Linked Systems 360 overview */}
+            <div style={{ borderTop: '1px solid var(--border-color)', paddingTop: '20px', display: 'grid', gap: '16px' }}>
+              <div style={{ fontWeight: 600, color: 'var(--text-primary)', fontSize: '14px' }}>360 Linked Modules Summary</div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+                <div style={{ background: 'var(--mars-void)', padding: '12px', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '11px' }}>Linked Contract</div>
+                  <div style={{ fontWeight: 600, color: 'var(--copper-400)', marginTop: '2px' }}>MS-CON-2026-5001</div>
+                </div>
+                <div style={{ background: 'var(--mars-void)', padding: '12px', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '11px' }}>Assigned Workspace</div>
+                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '2px' }}>Private Office A-101</div>
+                </div>
+                <div style={{ background: 'var(--mars-void)', padding: '12px', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '11px' }}>Invoices Status</div>
+                  <div style={{ fontWeight: 600, color: '#4CAF50', marginTop: '2px' }}>Paid (INV-2026-001245)</div>
+                </div>
+                <div style={{ background: 'var(--mars-void)', padding: '12px', borderRadius: '6px', border: '1px solid var(--border-color)' }}>
+                  <div style={{ color: 'var(--text-secondary)', fontSize: '11px' }}>Support Tickets</div>
+                  <div style={{ fontWeight: 600, color: 'var(--text-primary)', marginTop: '2px' }}>MSP-2043 (In Progress)</div>
+                </div>
+              </div>
+            </div>
+
+            {/* Sales Communication Notes */}
             <div>
-              <div style={{ color: 'var(--text-secondary)' }}>Inquiry Notes</div>
-              <div style={{ color: 'var(--text-primary)', marginTop: '4px', lineHeight: 1.5 }}>{selectedLead.notes || 'Interested in Mars Space solutions.'}</div>
+              <div style={{ color: 'var(--text-secondary)', marginBottom: '4px' }}>Communication Log & Notes</div>
+              <div style={{ background: 'var(--mars-void)', padding: '14px', borderRadius: '6px', border: '1px solid var(--border-color)', color: 'var(--text-primary)', lineHeight: 1.5 }}>
+                {selectedLead.notes || 'Inquired regarding Private Office suites for 4 engineers. Requested keyless access and 24/7 branch entry.'}
+              </div>
             </div>
 
           </div>
@@ -272,7 +311,7 @@ export default function CrmKanban() {
               className="btn-pill-primary"
               style={{ width: '100%', padding: '12px 0', fontSize: '14px', border: 'none', cursor: 'pointer' }}
             >
-              {language === 'ar' ? 'إنشاء وتجهيز عرض السعر' : 'Generate Quotation'}
+              {language === 'ar' ? 'إنشاء وتجهيز عرض السعر (Contract Builder)' : 'Generate Contract (CLM Builder)'}
             </button>
           </div>
 

@@ -62,6 +62,33 @@ export class ContractRepository extends BaseRepository {
   async findByCustomer(customerId) {
     return this.findAll(c => c.customerId === customerId);
   }
+
+  async findByToken(token) {
+    const items = await this.findAll(c => c.signingToken === token);
+    return items[0] || null;
+  }
+}
+
+export class ContractTemplateRepository extends BaseRepository {
+  constructor() {
+    super('contract_templates');
+  }
+}
+
+export class ContractVersionRepository extends BaseRepository {
+  constructor() {
+    super('contract_versions');
+  }
+
+  async findByContract(contractId) {
+    return this.findAll(v => v.contractId === contractId);
+  }
+}
+
+export class CustomerRepository extends BaseRepository {
+  constructor() {
+    super('customers');
+  }
 }
 
 export class CrmRepository extends BaseRepository {
@@ -123,6 +150,9 @@ export const workspaceRepository = new WorkspaceRepository();
 export const userRepository = new UserRepository();
 export const invoiceRepository = new InvoiceRepository();
 export const contractRepository = new ContractRepository();
+export const contractTemplateRepository = new ContractTemplateRepository();
+export const contractVersionRepository = new ContractVersionRepository();
+export const customerRepository = new CustomerRepository();
 export const crmRepository = new CrmRepository();
 export const inventoryRepository = new InventoryRepository();
 export const supportRepository = new SupportRepository();
