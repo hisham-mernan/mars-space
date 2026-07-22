@@ -131,12 +131,28 @@ html {
   height: 100%;
 }
 
-/* Default Universal Font Assignment */
-body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, span, div, a {
+/* Universal Default Font Assignment - Thmanyah Sans Everywhere */
+*,
+html,
+body,
+button,
+input,
+select,
+textarea,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+span,
+div,
+a {
   font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', var(--font-thmanyah-serif-display), 'Thmanyah Serif Display', system-ui, -apple-system, sans-serif !important;
 }
 
-/* English Language Fonts */
+/* English Language Fonts - Thmanyah Sans */
 html[lang="en"] body,
 html[lang="en"] button,
 html[lang="en"] input,
@@ -155,7 +171,7 @@ html[lang="en"] a {
   font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', system-ui, -apple-system, sans-serif !important;
 }
 
-/* Arabic Language Fonts */
+/* Arabic Language Fonts - Thmanyah Sans Primary (Clean Modern Kufi/Naskh) */
 html[lang="ar"] body,
 html[lang="ar"] button,
 html[lang="ar"] input,
@@ -171,7 +187,7 @@ html[lang="ar"] p,
 html[lang="ar"] span,
 html[lang="ar"] div,
 html[lang="ar"] a {
-  font-family: var(--font-thmanyah-serif-display), 'Thmanyah Serif Display', var(--font-thmanyah-sans), 'Thmanyah Sans', system-ui, -apple-system, sans-serif !important;
+  font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', var(--font-thmanyah-serif-display), 'Thmanyah Serif Display', system-ui, -apple-system, sans-serif !important;
 }
 
 /* Tabular Numerics for Financial & Metric Alignment */
