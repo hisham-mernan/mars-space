@@ -131,21 +131,12 @@ html {
   height: 100%;
 }
 
-body {
-  margin: 0;
-  background: var(--mars-void);
-  color: var(--mars-paper);
-  font-family: 'Thmanyah Sans', 'Thmanyah Serif Display', var(--font-thmanyah-sans), var(--font-thmanyah-serif-display), system-ui, -apple-system, sans-serif;
-  font-size: 15px;
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  min-height: 100%;
-  display: flex;
-  flex-direction: column;
+/* Default Universal Font Assignment */
+body, button, input, select, textarea, h1, h2, h3, h4, h5, h6, p, span, div, a {
+  font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', var(--font-thmanyah-serif-display), 'Thmanyah Serif Display', system-ui, -apple-system, sans-serif !important;
 }
 
-/* English Language Fonts - Universal Application */
+/* English Language Fonts */
 html[lang="en"] body,
 html[lang="en"] button,
 html[lang="en"] input,
@@ -161,10 +152,10 @@ html[lang="en"] p,
 html[lang="en"] span,
 html[lang="en"] div,
 html[lang="en"] a {
-  font-family: 'Thmanyah Sans', var(--font-thmanyah-sans), system-ui, -apple-system, sans-serif !important;
+  font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', system-ui, -apple-system, sans-serif !important;
 }
 
-/* Arabic Language Fonts - Universal Application */
+/* Arabic Language Fonts */
 html[lang="ar"] body,
 html[lang="ar"] button,
 html[lang="ar"] input,
@@ -180,7 +171,13 @@ html[lang="ar"] p,
 html[lang="ar"] span,
 html[lang="ar"] div,
 html[lang="ar"] a {
-  font-family: 'Thmanyah Serif Display', var(--font-thmanyah-serif-display), system-ui, -apple-system, sans-serif !important;
+  font-family: var(--font-thmanyah-serif-display), 'Thmanyah Serif Display', var(--font-thmanyah-sans), 'Thmanyah Sans', system-ui, -apple-system, sans-serif !important;
+}
+
+/* Tabular Numerics for Financial & Metric Alignment */
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+  letter-spacing: -0.01em;
 }
 
 a {
@@ -203,7 +200,7 @@ a:hover {
   outline-offset: 2px;
 }
 
-/* Custom Scrollbar styling (Vercel style) */
+/* Custom Scrollbar styling */
 ::-webkit-scrollbar {
   width: 6px;
   height: 6px;

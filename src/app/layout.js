@@ -38,7 +38,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html className={`${thmanyahSans.variable} ${thmanyahSerifDisplay.variable} h-full antialiased`}>
+    <html lang="ar" dir="rtl" className={`${thmanyahSans.variable} ${thmanyahSerifDisplay.variable} h-full antialiased`}>
       <head>
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
