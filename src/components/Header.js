@@ -5,9 +5,8 @@ import { useLanguage } from '../context/LanguageContext';
 import BookingModal from './BookingModal';
 
 export default function Header() {
-  const { language, toggleLanguage, t } = useLanguage();
+  const { language, toggleLanguage } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
-  const [menuOpen, setMenuOpen] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [user, setUser] = useState(null);
 
@@ -35,144 +34,152 @@ export default function Header() {
           style={{
             position: 'absolute',
             inset: 0,
-            background: scrolled ? 'var(--glass-bg)' : 'transparent',
-            borderBottom: scrolled ? '1px solid var(--glass-border)' : '1px solid transparent',
+            background: scrolled ? 'rgba(11, 11, 15, 0.85)' : 'transparent',
+            borderBottom: scrolled ? '1px solid rgba(245, 243, 239, 0.08)' : '1px solid transparent',
             backdropFilter: scrolled ? 'blur(16px)' : 'none',
             WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
-            transition: 'all 300ms cubic-bezier(0.16, 1, 0.30, 1)',
+            transition: 'opacity 400ms ease',
           }}
         />
 
         <div
           style={{
             position: 'relative',
-            maxWidth: '1440px',
+            maxWidth: '1600px',
             margin: '0 auto',
-            padding: '12px clamp(24px, 5vw, 64px)',
-            minHeight: '76px',
+            padding: '0 clamp(24px, 4vw, 72px)',
+            height: '88px',
             boxSizing: 'border-box',
             display: 'flex',
             alignItems: 'center',
-            gap: '16px',
+            gap: 'clamp(20px, 3vw, 48px)',
           }}
         >
-          {/* Brand Logo & Tagline */}
-          <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+          {/* Brand Logo & Lockup */}
+          <a href="#top" style={{ display: 'flex', alignItems: 'flex-end', gap: '12px' }}>
             <img
               src="/assets/mars-lockup-white.png"
               alt="MARS مارس"
-              style={{ height: '36px', display: 'block' }}
+              style={{ height: '40px', display: 'block' }}
             />
             <span
               style={{
-                fontSize: '11px',
-                fontWeight: 700,
-                letterSpacing: '0.22em',
-                color: 'var(--copper-400)',
+                fontSize: '13px',
+                fontWeight: 500,
+                letterSpacing: '0.1em',
+                color: '#A8A49D',
+                paddingBottom: '3px',
                 textTransform: 'uppercase',
-                background: 'rgba(200, 107, 60, 0.10)',
-                border: '1px solid rgba(200, 107, 60, 0.25)',
-                padding: '3px 8px',
-                borderRadius: '999px',
               }}
             >
               {language === 'ar' ? 'سبيس' : 'SPACE'}
             </span>
           </a>
 
-          {/* Desktop Navigation */}
+          {/* Navigation Links */}
           <nav
             style={{
               display: 'flex',
-              alignItems: 'center',
-              gap: '24px',
+              flexWrap: 'wrap',
+              gap: '6px clamp(16px, 2.2vw, 36px)',
               marginInlineStart: 'auto',
-              fontSize: '13px',
-              fontWeight: 500,
-              color: 'var(--text-secondary)',
+              fontSize: '15px',
+              fontWeight: 400,
+              whiteSpace: 'nowrap',
+              color: '#F5F3EF',
             }}
             className="desktop-nav"
           >
-            <a href="#floor" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.space}</a>
-            <a href="#rooms" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.rooms}</a>
-            <a href="#community" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.community}</a>
-            <a href="#membership" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.membership}</a>
-            <a href="#ecosystem" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.about}</a>
-            <a href="#location" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.contact}</a>
+            <a href="#space" className="nav-link">{language === 'ar' ? 'المساحة' : 'The Space'}</a>
+            <a href="#explore" className="nav-link">{language === 'ar' ? 'استكشف' : 'Explore'}</a>
+            <a href="#offices" className="nav-link">{language === 'ar' ? 'المكاتب' : 'Offices'}</a>
+            <a href="#membership" className="nav-link">{language === 'ar' ? 'العضويات' : 'Membership'}</a>
+            <a href="#community" className="nav-link">{language === 'ar' ? 'المجتمع' : 'Community'}</a>
+            <a href="#visit" className="nav-link">{language === 'ar' ? 'زيارة' : 'Visit'}</a>
           </nav>
 
-          {/* Right Controls */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginInlineStart: menuOpen ? 'auto' : '0' }}>
-            {/* Language Switcher */}
-            <button
-              onClick={toggleLanguage}
+          {/* Language Switcher Pill */}
+          <div
+            onClick={toggleLanguage}
+            style={{
+              display: 'flex',
+              flex: 'none',
+              border: '1px solid rgba(245, 243, 239, 0.2)',
+              borderRadius: '999px',
+              overflow: 'hidden',
+              fontSize: '12px',
+              fontWeight: 500,
+              lineHeight: 1,
+              cursor: 'pointer'
+            }}
+          >
+            <span
               style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                border: '1px solid var(--glass-border)',
-                borderRadius: '999px',
-                overflow: 'hidden',
-                fontSize: '12px',
-                fontWeight: 600,
-                background: 'rgba(255, 255, 255, 0.03)',
-                cursor: 'pointer',
-                padding: '2px',
-                color: 'inherit',
+                padding: '8px 13px',
+                color: language === 'ar' ? '#0B0B0F' : '#A8A49D',
+                background: language === 'ar' ? '#F5F3EF' : 'transparent',
+                transition: 'all 200ms ease'
               }}
             >
-              <span
-                style={{
-                  padding: '6px 12px',
-                  borderRadius: '999px',
-                  color: language === 'ar' ? '#FFFFFF' : 'var(--text-muted-dark)',
-                  background: language === 'ar' ? 'var(--mars-copper)' : 'transparent',
-                  transition: 'all 200ms ease',
-                }}
-              >
-                عربي
-              </span>
-              <span
-                style={{
-                  padding: '6px 12px',
-                  borderRadius: '999px',
-                  color: language === 'en' ? '#FFFFFF' : 'var(--text-muted-dark)',
-                  background: language === 'en' ? 'var(--mars-copper)' : 'transparent',
-                  transition: 'all 200ms ease',
-                }}
-              >
-                EN
-              </span>
-            </button>
-
-            {/* CTA Button */}
-            <button
-              onClick={() => setBookingOpen(true)}
-              className="btn-pill-primary"
+              عربي
+            </span>
+            <span
               style={{
-                padding: '9px 20px',
-                fontSize: '13px',
-                fontWeight: 600,
-                whiteSpace: 'nowrap',
-                border: 'none',
-                cursor: 'pointer'
+                padding: '8px 13px',
+                color: language === 'en' ? '#0B0B0F' : '#A8A49D',
+                background: language === 'en' ? '#F5F3EF' : 'transparent',
+                transition: 'all 200ms ease'
               }}
             >
-              {language === 'ar' ? 'احجز قاعة' : 'Book a room'}
-            </button>
+              EN
+            </span>
           </div>
 
-          <style jsx>{`
-            .nav-link-item:hover {
-              color: var(--copper-400) !important;
-            }
-            @media (max-width: 900px) {
-              .desktop-nav {
-                display: none !important;
-              }
-            }
-          `}</style>
+          {/* Book Button */}
+          <button
+            onClick={() => setBookingOpen(true)}
+            style={{
+              display: 'inline-flex',
+              flex: 'none',
+              alignItems: 'center',
+              gap: '10px',
+              background: '#8A4120',
+              color: '#FFFFFF',
+              border: 'none',
+              borderRadius: '999px',
+              padding: '12px 26px',
+              font: "500 15px 'Thmanyah Sans', sans-serif",
+              lineHeight: 1,
+              whiteSpace: 'nowrap',
+              cursor: 'pointer',
+              transition: 'background 250ms, gap 250ms'
+            }}
+          >
+            {user ? (language === 'ar' ? 'لوحة التحكم' : 'Dashboard') : (language === 'ar' ? 'احجز مساحة' : 'Book a space')}
+            <span style={{ fontSize: '15px', lineHeight: 1 }}>→</span>
+          </button>
         </div>
       </header>
+
+      <style jsx global>{`
+        .nav-link {
+          padding: 6px 0;
+          background-image: linear-gradient(#C86B3C, #C86B3C);
+          background-repeat: no-repeat;
+          background-position: 0 100%;
+          background-size: 0% 1.5px;
+          transition: background-size 320ms cubic-bezier(0.16, 1, 0.30, 1), color 200ms;
+        }
+        .nav-link:hover {
+          background-size: 100% 1.5px;
+          color: #F5F3EF !important;
+        }
+        @media (max-width: 900px) {
+          .desktop-nav {
+            display: none !important;
+          }
+        }
+      `}</style>
 
       {/* Booking Modal */}
       <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
