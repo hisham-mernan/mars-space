@@ -1,24 +1,20 @@
 'use client';
 
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import BookingModal from '../components/BookingModal';
 
 export default function Home() {
-  const { t, language, mounted } = useLanguage();
+  const { language, mounted } = useLanguage();
 
-  // Booking Modal Controls
+  // Booking Modal State
   const [bookingOpen, setBookingOpen] = useState(false);
-  const [bookingInitialSpace, setBookingInitialSpace] = useState('ventures');
-
-  // Office Enquiry Modal Controls
-  const [officeModalOpen, setOfficeModalOpen] = useState(false);
-  const [selectedOffice, setSelectedOffice] = useState(null);
-
-  // Tour Booking Modal Controls
-  const [tourModalOpen, setTourModalOpen] = useState(false);
+  const [bookingFlow, setBookingFlow] = useState('book');
+  const [initialSpaceIndex, setInitialSpaceIndex] = useState(0);
+  const [initialOfficeIndex, setInitialOfficeIndex] = useState(0);
+  const [initialPlanIndex, setInitialPlanIndex] = useState(0);
 
   // Explore Floor Interactive State
   const [selectedArea, setSelectedArea] = useState(0);
@@ -26,7 +22,7 @@ export default function Home() {
   // Testimonials Slider State
   const [activeQuote, setActiveQuote] = useState(0);
 
-  // Animated Numbers Ref & State
+  // Animated Numbers State
   const [numsCounted, setNumsCounted] = useState(false);
   const [numValues, setNumValues] = useState([0, 0, 0, 0]);
 
@@ -102,21 +98,8 @@ export default function Home() {
       size: '22 m²',
       desks: language === 'ar' ? '٤ مكاتب' : '4 desks',
       loc: language === 'ar' ? 'الواجهة الشمالية، المطلة على الشارع' : 'North perimeter, window line',
-      price: 'from SAR 6,500 / month',
-      priceAr: 'ابتداءً من ٦,٥٠٠ ر.س / شهرياً',
-      img: '/assets/photo-glass-offices.jpg',
-      features: [
-        '4 height-adjustable desks with chairs',
-        'Lockable glass front, frosted band',
-        'Storage wall and personal lockers',
-        'Own network segment and printing'
-      ],
-      featuresAr: [
-        '٤ مكاتب قابلة لتعديل الارتفاع مع كراسي',
-        'واجهة زجاجية قابلة للقفل مع شريط خصوصية',
-        'جدار تخزين وخزائن شخصية',
-        'شبكة مستقلة وطباعة خاصة'
-      ]
+      price: language === 'ar' ? 'من ٦,٥٠٠ ر.س / شهرياً' : 'from SAR 6,500 / month',
+      img: '/assets/photo-glass-offices.jpg'
     },
     {
       id: 'office-11',
@@ -124,21 +107,8 @@ export default function Home() {
       size: '32 m²',
       desks: language === 'ar' ? '٦ مكاتب' : '6 desks',
       loc: language === 'ar' ? 'الركن الشرقي، إضاءة من جانبين' : 'East corner, daylight on two sides',
-      price: 'from SAR 9,000 / month',
-      priceAr: 'ابتداءً من ٩,٠٠٠ ر.س / شهرياً',
-      img: '/assets/photo-vip-lounge.jpg',
-      features: [
-        '6 desks with monitor arms',
-        'Corner glazing, double aspect',
-        'In-office meeting nook for 3',
-        'Own network segment and storage'
-      ],
-      featuresAr: [
-        '٦ مكاتب مزودة بحوامل شاشات',
-        'زوايا زجاجية مزدوجة الإضاءة',
-        'ركن اجتماعات مصغر داخل المكتب لـ ٣ أشخاص',
-        'شبكة مستقلة وتخزين خاص'
-      ]
+      price: language === 'ar' ? 'من ٩,٠٠٠ ر.س / شهرياً' : 'from SAR 9,000 / month',
+      img: '/assets/photo-vip-lounge.jpg'
     },
     {
       id: 'office-17',
@@ -146,21 +116,8 @@ export default function Home() {
       size: '48 m²',
       desks: language === 'ar' ? '١٠ مكاتب' : '10 desks',
       loc: language === 'ar' ? 'جناح الواجهة الجنوبية' : 'South perimeter suite',
-      price: 'from SAR 14,000 / month',
-      priceAr: 'ابتداءً من ١٤,٠٠٠ ر.س / شهرياً',
-      img: '/assets/photo-coworking.jpg',
-      features: [
-        '10 desks in two banks',
-        'Separable manager cabin',
-        'Dedicated storage room',
-        'Own network, AC zone control'
-      ],
-      featuresAr: [
-        '١٠ مكاتب مقسمة على مجموعتين',
-        'مكتب مدير مستقل قابل للفصل',
-        'غرفة تخزين مخصصة',
-        'شبكة خاصة وتحكم مستقل بالتكييف'
-      ]
+      price: language === 'ar' ? 'من ١٤,٠٠٠ ر.س / شهرياً' : 'from SAR 14,000 / month',
+      img: '/assets/photo-coworking.jpg'
     }
   ];
 
@@ -189,7 +146,7 @@ export default function Home() {
     }
   ];
 
-  // Counter numbers scroll trigger
+  // Counter numbers animation
   useEffect(() => {
     if (!mounted || numsCounted) return;
     const targetValues = [21, 4, 120, 24];
@@ -200,14 +157,9 @@ export default function Home() {
       const elapsed = now - startTime;
       const progress = Math.min(elapsed / duration, 1);
       const ease = 1 - Math.pow(1 - progress, 3);
-
       setNumValues(targetValues.map(t => Math.round(t * ease)));
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      } else {
-        setNumsCounted(true);
-      }
+      if (progress < 1) requestAnimationFrame(animate);
+      else setNumsCounted(true);
     };
 
     requestAnimationFrame(animate);
@@ -217,14 +169,28 @@ export default function Home() {
 
   const currentArea = areas[selectedArea];
 
-  const handleOpenRoomBooking = (spaceId = 'ventures') => {
-    setBookingInitialSpace(spaceId);
+  // Modal Open Handlers matching v2 functions (openBook, openOffice, openTour, planPicks)
+  const openBookFlow = (spaceIndex = 0) => {
+    setBookingFlow('book');
+    setInitialSpaceIndex(spaceIndex);
     setBookingOpen(true);
   };
 
-  const handleOpenOfficeModal = (office) => {
-    setSelectedOffice(office);
-    setOfficeModalOpen(true);
+  const openOfficeFlow = (officeIdx = 0) => {
+    setBookingFlow('office');
+    setInitialOfficeIndex(officeIdx);
+    setBookingOpen(true);
+  };
+
+  const openTourFlow = () => {
+    setBookingFlow('tour');
+    setBookingOpen(true);
+  };
+
+  const openPlanFlow = (planIdx = 0) => {
+    setBookingFlow('plan');
+    setInitialPlanIndex(planIdx);
+    setBookingOpen(true);
   };
 
   return (
@@ -263,7 +229,7 @@ export default function Home() {
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', animation: 'heroRise 700ms cubic-bezier(0.16,1,0.30,1) 650ms both' }}>
                 <button
-                  onClick={() => handleOpenRoomBooking('ventures')}
+                  onClick={() => openBookFlow(0)}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -284,7 +250,7 @@ export default function Home() {
                 </button>
                 
                 <button
-                  onClick={() => setTourModalOpen(true)}
+                  onClick={openTourFlow}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -364,7 +330,7 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Section 4: Explore the Space (Interactive Floor Picker) */}
+        {/* Section 4: Explore the Space */}
         <section id="explore" data-screen-label="Explore the space" style={{ background: '#111014', padding: 'clamp(100px, 14vh, 180px) 0' }}>
           <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 clamp(24px, 4vw, 72px)', boxSizing: 'border-box' }}>
             <h2 style={{ margin: 0, fontSize: 'clamp(36px, 4vw, 64px)', fontWeight: 300, letterSpacing: '-0.025em', lineHeight: 1.1, maxWidth: '16ch' }}>
@@ -519,10 +485,10 @@ export default function Home() {
             </div>
 
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: 'clamp(24px, 3vw, 48px)', marginTop: 'clamp(48px, 6vh, 80px)' }}>
-              {officesList.map((o) => (
+              {officesList.map((o, k) => (
                 <div
                   key={o.id}
-                  onClick={() => handleOpenOfficeModal(o)}
+                  onClick={() => openOfficeFlow(k)}
                   style={{ cursor: 'pointer', minWidth: 0 }}
                 >
                   <div style={{ overflow: 'hidden', aspectRatio: '4/3', background: '#1A191E', borderRadius: '4px' }}>
@@ -566,7 +532,7 @@ export default function Home() {
                       : 'Talks, screenings, demo days and quiet dinners. The community hall reconfigures around whatever the week needs, with the screen wall, seating and catering handled by us.'}
                   </p>
                   <button
-                    onClick={() => handleOpenRoomBooking('community-hall')}
+                    onClick={() => openBookFlow(3)}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -659,7 +625,7 @@ export default function Home() {
                   <span style={{ fontSize: '14px', fontWeight: 300, color: '#6B675F' }}>{language === 'ar' ? '/ يومي' : '/ day'}</span>
                 </div>
                 <button
-                  onClick={() => handleOpenRoomBooking('day-pass')}
+                  onClick={() => openPlanFlow(0)}
                   style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'Thmanyah Sans', sans-serif", color: '#8A4120' }}
                 >
                   {language === 'ar' ? 'احصل على تصريح' : 'Get a pass'}
@@ -682,7 +648,7 @@ export default function Home() {
                   <span style={{ fontSize: '14px', fontWeight: 300, color: '#6B675F' }}>{language === 'ar' ? '/ شهرياً' : '/ month'}</span>
                 </div>
                 <button
-                  onClick={() => setTourModalOpen(true)}
+                  onClick={() => openPlanFlow(1)}
                   style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'Thmanyah Sans', sans-serif", color: '#8A4120' }}
                 >
                   {language === 'ar' ? 'انضم الآن' : 'Join'}
@@ -705,7 +671,7 @@ export default function Home() {
                   <span style={{ fontSize: '14px', fontWeight: 300, color: '#6B675F' }}>{language === 'ar' ? '/ شهرياً' : '/ month'}</span>
                 </div>
                 <button
-                  onClick={() => setTourModalOpen(true)}
+                  onClick={() => openPlanFlow(2)}
                   style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'Thmanyah Sans', sans-serif", color: '#8A4120' }}
                 >
                   {language === 'ar' ? 'انضم الآن' : 'Join'}
@@ -728,7 +694,7 @@ export default function Home() {
                   <span style={{ fontSize: '14px', fontWeight: 300, color: '#6B675F' }}>{language === 'ar' ? '/ شهرياً' : '/ month'}</span>
                 </div>
                 <button
-                  onClick={() => handleOpenOfficeModal(officesList[0])}
+                  onClick={() => openOfficeFlow(0)}
                   style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'Thmanyah Sans', sans-serif", color: '#8A4120' }}
                 >
                   {language === 'ar' ? 'عرض المكاتب' : 'See offices'}
@@ -802,7 +768,7 @@ export default function Home() {
 
                 <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '14px', marginTop: '44px' }}>
                   <button
-                    onClick={() => setTourModalOpen(true)}
+                    onClick={openTourFlow}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -823,7 +789,7 @@ export default function Home() {
                   </button>
 
                   <button
-                    onClick={() => handleOpenRoomBooking('ventures')}
+                    onClick={() => openBookFlow(0)}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
@@ -849,106 +815,15 @@ export default function Home() {
 
       <Footer />
 
-      {/* Main Interactive Booking Engine Modal */}
+      {/* Unified V2 Multi-Flow Booking Engine Modal */}
       <BookingModal
         isOpen={bookingOpen}
         onClose={() => setBookingOpen(false)}
-        initialSpaceId={bookingInitialSpace}
+        initialFlow={bookingFlow}
+        initialSpaceIndex={initialSpaceIndex}
+        initialOfficeIndex={initialOfficeIndex}
+        initialPlanIndex={initialPlanIndex}
       />
-
-      {/* Office Detail & Enquiry Modal */}
-      {officeModalOpen && selectedOffice && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(11, 11, 15, 0.85)', backdropFilter: 'blur(16px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ background: '#F5F3EF', color: '#0B0B0F', borderRadius: '12px', padding: '36px', width: '100%', maxWidth: '600px', position: 'relative', textAlign: 'start' }}>
-            <button
-              onClick={() => setOfficeModalOpen(false)}
-              style={{ position: 'absolute', top: '20px', right: language === 'ar' ? 'auto' : '20px', left: language === 'ar' ? '20px' : 'auto', background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }}
-            >
-              ✕
-            </button>
-
-            <h3 style={{ margin: '0 0 6px', fontSize: '28px', fontWeight: 500 }}>{selectedOffice.name}</h3>
-            <p style={{ margin: '0 0 20px', fontSize: '15px', color: '#6B675F' }}>{selectedOffice.desks} · {selectedOffice.size} · {selectedOffice.loc}</p>
-
-            <div style={{ background: '#FFFFFF', padding: '20px', borderRadius: '8px', border: '1px solid rgba(11,11,15,0.1)', marginBottom: '20px' }}>
-              <div style={{ fontSize: '13px', fontWeight: 600, color: '#6B675F', marginBottom: '10px' }}>
-                {language === 'ar' ? 'المميزات والتجهيزات:' : 'Office Specifications:'}
-              </div>
-              <div style={{ display: 'grid', gap: '8px', fontSize: '14px', color: '#3D3A36' }}>
-                {(language === 'ar' ? selectedOffice.featuresAr : selectedOffice.features).map((feat, idx) => (
-                  <div key={idx} style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
-                    <span style={{ width: '6px', height: '6px', background: '#8A4120', borderRadius: '50%' }} />
-                    {feat}
-                  </div>
-                ))}
-              </div>
-            </div>
-
-            <div style={{ fontSize: '18px', fontWeight: 700, color: '#8A4120', marginBottom: '20px' }}>
-              {language === 'ar' ? selectedOffice.priceAr : selectedOffice.price}
-            </div>
-
-            <button
-              onClick={() => {
-                setOfficeModalOpen(false);
-                setTourModalOpen(true);
-              }}
-              style={{ width: '100%', background: '#8A4120', color: '#FFFFFF', border: 'none', borderRadius: '999px', padding: '14px 0', fontSize: '15px', fontWeight: 500, cursor: 'pointer' }}
-            >
-              {language === 'ar' ? 'طلب معاينة وعقد لمكتب' : 'Request Contract & Viewing'}
-            </button>
-          </div>
-        </div>
-      )}
-
-      {/* Book a Tour Modal */}
-      {tourModalOpen && (
-        <div style={{ position: 'fixed', inset: 0, background: 'rgba(11, 11, 15, 0.85)', backdropFilter: 'blur(16px)', zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: '20px' }}>
-          <div style={{ background: '#F5F3EF', color: '#0B0B0F', borderRadius: '12px', padding: '36px', width: '100%', maxWidth: '520px', position: 'relative', textAlign: 'start' }}>
-            <button
-              onClick={() => setTourModalOpen(false)}
-              style={{ position: 'absolute', top: '20px', right: language === 'ar' ? 'auto' : '20px', left: language === 'ar' ? '20px' : 'auto', background: 'none', border: 'none', fontSize: '20px', cursor: 'pointer' }}
-            >
-              ✕
-            </button>
-
-            <h3 style={{ margin: '0 0 6px', fontSize: '26px', fontWeight: 500 }}>
-              {language === 'ar' ? 'احجز جولة في مارس سبيس' : 'Schedule a Floor Tour'}
-            </h3>
-            <p style={{ margin: '0 0 24px', fontSize: '14px', color: '#6B675F' }}>
-              {language === 'ar' ? 'اختر اليوم والوقت المناسب وسيكون فريقنا بانتظارك مع القهوة.' : 'Choose your preferred date and time. Our host will meet you with coffee.'}
-            </p>
-
-            <form onSubmit={(e) => {
-              e.preventDefault();
-              alert(language === 'ar' ? 'تم استلام طلب الجولة بنجاح! سنتواصل معك قريباً.' : 'Tour request submitted! We will contact you shortly.');
-              setTourModalOpen(false);
-            }} style={{ display: 'grid', gap: '16px' }}>
-              <label style={{ display: 'grid', gap: '6px', fontSize: '13px', fontWeight: 600, color: '#6B675F' }}>
-                {language === 'ar' ? 'الاسم الكامل' : 'Full Name'}
-                <input type="text" required placeholder="e.g. Faisal Al-Otaibi" style={{ border: 'none', borderBottom: '1px solid rgba(11,11,15,0.25)', background: 'none', padding: '10px 2px', font: "300 15px 'Thmanyah Sans', sans-serif" }} />
-              </label>
-
-              <label style={{ display: 'grid', gap: '6px', fontSize: '13px', fontWeight: 600, color: '#6B675F' }}>
-                {language === 'ar' ? 'رقم الهاتف' : 'Phone / WhatsApp'}
-                <input type="tel" required placeholder="+966 50 123 4567" style={{ border: 'none', borderBottom: '1px solid rgba(11,11,15,0.25)', background: 'none', padding: '10px 2px', font: "300 15px 'Thmanyah Sans', sans-serif" }} />
-              </label>
-
-              <label style={{ display: 'grid', gap: '6px', fontSize: '13px', fontWeight: 600, color: '#6B675F' }}>
-                {language === 'ar' ? 'البريد الإلكتروني' : 'Email Address'}
-                <input type="email" required placeholder="you@company.com" style={{ border: 'none', borderBottom: '1px solid rgba(11,11,15,0.25)', background: 'none', padding: '10px 2px', font: "300 15px 'Thmanyah Sans', sans-serif" }} />
-              </label>
-
-              <button
-                type="submit"
-                style={{ marginTop: '16px', background: '#8A4120', color: '#FFFFFF', border: 'none', borderRadius: '999px', padding: '14px 0', fontSize: '15px', fontWeight: 500, cursor: 'pointer' }}
-              >
-                {language === 'ar' ? 'تأكيد طلب الجولة' : 'Confirm Tour Request'}
-              </button>
-            </form>
-          </div>
-        </div>
-      )}
 
       {/* Keyframe Animations */}
       <style jsx global>{`
