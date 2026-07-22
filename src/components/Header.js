@@ -11,7 +11,7 @@ export default function Header() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setScrolled(window.scrollY > 40);
+      setScrolled(window.scrollY > 30);
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
@@ -32,12 +32,11 @@ export default function Header() {
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'rgba(30, 30, 36, 0.92)',
-          borderBottom: '1px solid rgba(245, 245, 245, 0.10)',
-          backdropFilter: 'blur(12px)',
-          WebkitBackdropFilter: 'blur(12px)',
-          opacity: scrolled ? 1 : 0,
-          transition: 'opacity 220ms cubic-bezier(0.16, 1, 0.30, 1)',
+          background: scrolled ? 'var(--glass-bg)' : 'transparent',
+          borderBottom: scrolled ? '1px solid var(--glass-border)' : '1px solid transparent',
+          backdropFilter: scrolled ? 'blur(16px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
+          transition: 'all 300ms cubic-bezier(0.16, 1, 0.30, 1)',
         }}
       />
 
@@ -46,28 +45,32 @@ export default function Header() {
           position: 'relative',
           maxWidth: '1440px',
           margin: '0 auto',
-          padding: '10px clamp(24px, 5vw, 96px)',
-          minHeight: '80px',
+          padding: '12px clamp(24px, 5vw, 64px)',
+          minHeight: '76px',
           boxSizing: 'border-box',
           display: 'flex',
           alignItems: 'center',
-          gap: '12px clamp(16px, 2vw, 32px)',
+          gap: '16px',
         }}
       >
-        {/* Logo */}
-        <a href="#top" style={{ display: 'flex', alignItems: 'flex-end', gap: '12px', padding: '10px 0' }}>
+        {/* Brand Logo & Tagline */}
+        <a href="/" style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
           <img
             src="/assets/mars-lockup-white.png"
             alt="MARS مارس"
-            style={{ height: '42px', display: 'block' }}
+            style={{ height: '36px', display: 'block' }}
           />
           <span
             style={{
-              fontSize: '12px',
-              fontWeight: 500,
-              letterSpacing: '0.16em',
-              color: 'var(--text-muted-dark)',
-              paddingBottom: '3px',
+              fontSize: '11px',
+              fontWeight: 700,
+              letterSpacing: '0.22em',
+              color: 'var(--copper-400)',
+              textTransform: 'uppercase',
+              background: 'rgba(200, 107, 60, 0.10)',
+              border: '1px solid rgba(200, 107, 60, 0.25)',
+              padding: '3px 8px',
+              borderRadius: '999px',
             }}
           >
             {language === 'ar' ? 'سبيس' : 'SPACE'}
@@ -78,138 +81,92 @@ export default function Header() {
         <nav
           style={{
             display: 'flex',
-            gap: '8px clamp(12px, 1.6vw, 28px)',
+            alignItems: 'center',
+            gap: '24px',
             marginInlineStart: 'auto',
-            fontSize: 'clamp(13px, 1vw, 14px)',
+            fontSize: '13px',
             fontWeight: 500,
-            whiteSpace: 'nowrap',
+            color: 'var(--text-secondary)',
           }}
           className="desktop-nav"
         >
-          <a href="#floor" style={{ padding: '8px 0' }}>{t.nav.space}</a>
-          <a href="#rooms" style={{ padding: '8px 0' }}>{t.nav.rooms}</a>
-          <a href="#community" style={{ padding: '8px 0' }}>{t.nav.community}</a>
-          <a href="#membership" style={{ padding: '8px 0' }}>{t.nav.membership}</a>
-          <a href="#ecosystem" style={{ padding: '8px 0' }}>{t.nav.about}</a>
-          <a href="#location" style={{ padding: '8px 0' }}>{t.nav.contact}</a>
+          <a href="#floor" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.space}</a>
+          <a href="#rooms" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.rooms}</a>
+          <a href="#community" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.community}</a>
+          <a href="#membership" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.membership}</a>
+          <a href="#ecosystem" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.about}</a>
+          <a href="#location" style={{ transition: 'color 160ms' }} className="nav-link-item">{t.nav.contact}</a>
         </nav>
 
-        {/* Language Switcher */}
-        <button
-          onClick={toggleLanguage}
-          style={{
-            display: 'flex',
-            border: '1px solid rgba(245, 245, 245, 0.22)',
-            borderRadius: '999px',
-            overflow: 'hidden',
-            fontSize: '12px',
-            fontWeight: 500,
-            lineHeight: 1,
-            whiteSpace: 'nowrap',
-            background: 'none',
-            cursor: 'pointer',
-            padding: 0,
-            color: 'inherit',
-          }}
-        >
-          <span
+        {/* Right Controls */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '12px', marginInlineStart: menuOpen ? 'auto' : '0' }}>
+          {/* Language Switcher */}
+          <button
+            onClick={toggleLanguage}
             style={{
-              padding: '8px 13px',
-              color: language === 'ar' ? 'var(--mars-void)' : 'var(--text-muted-dark)',
-              background: language === 'ar' ? 'var(--mars-paper)' : 'none',
-              transition: 'all var(--dur-instant)',
+              display: 'inline-flex',
+              alignItems: 'center',
+              border: '1px solid var(--glass-border)',
+              borderRadius: '999px',
+              overflow: 'hidden',
+              fontSize: '12px',
+              fontWeight: 600,
+              background: 'rgba(255, 255, 255, 0.03)',
+              cursor: 'pointer',
+              padding: '2px',
+              color: 'inherit',
             }}
           >
-            عربي
-          </span>
-          <span
-            style={{
-              padding: '8px 13px',
-              color: language === 'en' ? 'var(--mars-void)' : 'var(--text-muted-dark)',
-              background: language === 'en' ? 'var(--mars-paper)' : 'none',
-              transition: 'all var(--dur-instant)',
-            }}
-          >
-            EN
-          </span>
-        </button>
-
-        {/* CTA Button */}
-        <a
-          href={user ? '/member' : '#rooms'}
-          className="btn-pill-primary"
-          style={{
-            padding: '11px 24px',
-            fontSize: '14px',
-            whiteSpace: 'nowrap',
-          }}
-        >
-          {user ? (language === 'ar' ? 'لوحة التحكم' : 'Dashboard') : t.nav.cta}
-        </a>
-
-        {/* Mobile Hamburger toggle (styled via inline CSS) */}
-        <button
-          onClick={() => setMenuOpen(!menuOpen)}
-          style={{
-            display: 'none',
-            flexDirection: 'column',
-            justifyContent: 'space-between',
-            width: '20px',
-            height: '14px',
-            background: 'none',
-            border: 'none',
-            cursor: 'pointer',
-            padding: 0,
-            zIndex: 70,
-          }}
-          className="mobile-hamburger"
-        >
-          <span style={{ width: '100%', height: '2px', background: '#F5F5F5', transition: 'all 0.2s', transform: menuOpen ? 'rotate(45deg) translateY(4px)' : 'none' }}></span>
-          <span style={{ width: '100%', height: '2px', background: '#F5F5F5', transition: 'all 0.2s', opacity: menuOpen ? 0 : 1 }}></span>
-          <span style={{ width: '100%', height: '2px', background: '#F5F5F5', transition: 'all 0.2s', transform: menuOpen ? 'rotate(-45deg) translateY(-4px)' : 'none' }}></span>
-        </button>
-      </div>
-
-      {/* Mobile Drawer Menu */}
-      {menuOpen && (
-        <div
-          style={{
-            position: 'fixed',
-            inset: 0,
-            background: 'var(--mars-void)',
-            zIndex: 55,
-            display: 'flex',
-            flexDirection: 'column',
-            padding: '100px 24px 40px',
-            gap: '24px',
-            boxSizing: 'border-box',
-          }}
-        >
-          <a href="#floor" onClick={() => setMenuOpen(false)} style={{ fontSize: '20px', fontWeight: 500 }}>{t.nav.space}</a>
-          <a href="#rooms" onClick={() => setMenuOpen(false)} style={{ fontSize: '20px', fontWeight: 500 }}>{t.nav.rooms}</a>
-          <a href="#community" onClick={() => setMenuOpen(false)} style={{ fontSize: '20px', fontWeight: 500 }}>{t.nav.community}</a>
-          <a href="#membership" onClick={() => setMenuOpen(false)} style={{ fontSize: '20px', fontWeight: 500 }}>{t.nav.membership}</a>
-          <a href="#ecosystem" onClick={() => setMenuOpen(false)} style={{ fontSize: '20px', fontWeight: 500 }}>{t.nav.about}</a>
-          <a href="#location" onClick={() => setMenuOpen(false)} style={{ fontSize: '20px', fontWeight: 500 }}>{t.nav.contact}</a>
-          
-          <div style={{ marginTop: 'auto', display: 'flex', flexDirection: 'column', gap: '16px' }}>
-            <a
-              href={user ? '/member' : '#rooms'}
-              onClick={() => setMenuOpen(false)}
-              className="btn-pill-primary"
+            <span
               style={{
-                padding: '16px',
-                fontSize: '16px',
-                width: '100%',
-                boxSizing: 'border-box',
-                textAlign: 'center',
+                padding: '6px 12px',
+                borderRadius: '999px',
+                color: language === 'ar' ? '#FFFFFF' : 'var(--text-muted-dark)',
+                background: language === 'ar' ? 'var(--mars-copper)' : 'transparent',
+                transition: 'all 200ms ease',
               }}
             >
-              {user ? (language === 'ar' ? 'لوحة التحكم' : 'Dashboard') : t.nav.cta}
-            </a>
-          </div>
+              عربي
+            </span>
+            <span
+              style={{
+                padding: '6px 12px',
+                borderRadius: '999px',
+                color: language === 'en' ? '#FFFFFF' : 'var(--text-muted-dark)',
+                background: language === 'en' ? 'var(--mars-copper)' : 'transparent',
+                transition: 'all 200ms ease',
+              }}
+            >
+              EN
+            </span>
+          </button>
+
+          {/* CTA Button */}
+          <a
+            href={user ? '/member' : '#rooms'}
+            className="btn-pill-primary"
+            style={{
+              padding: '9px 20px',
+              fontSize: '13px',
+              fontWeight: 600,
+              whiteSpace: 'nowrap',
+            }}
+          >
+            {user ? (language === 'ar' ? 'لوحة التحكم' : 'Dashboard') : t.nav.cta}
+          </a>
         </div>
-      )}
+
+        <style jsx>{`
+          .nav-link-item:hover {
+            color: var(--copper-400) !important;
+          }
+          @media (max-width: 900px) {
+            .desktop-nav {
+              display: none !important;
+            }
+          }
+        `}</style>
+      </div>
     </header>
   );
 }

@@ -1,4 +1,4 @@
-/* Mars Space Global Stylesheet - World-Class Product Design System */
+/* Mars Space Global Stylesheet - World-Class Handcrafted Design System */
 
 /* Local Font Face Declarations for Thmanyah Sans */
 @font-face {
@@ -42,31 +42,48 @@
 }
 
 :root {
-  /* Brand Palette */
-  --mars-void: #09090D;
-  --mars-slate: #16161D;
-  --mars-paper: #F4F4F6;
+  /* Brand Core Palette - Handcrafted Deep Obsidian & Copper Spectrum */
+  --mars-void: #07070A;
+  --mars-slate: #111116;
+  --mars-paper: #F5F5F8;
   --mars-copper: #8A4120;
-
-  /* Theme-specific tokens */
-  --text-primary: #FFFFFF;
-  --text-secondary: #90909A;
-  --border-color: rgba(255, 255, 255, 0.08);
-
-  /* Extension Tokens */
   --copper-400: #C86B3C;
-  --copper-900: #4A2210;
-  --surface-2: #21212B;
+  --copper-300: #E07A48;
+  --copper-900: #3D1C0E;
+
+  /* Status Colors */
+  --status-emerald: #10B981;
+  --status-emerald-bg: rgba(16, 185, 129, 0.12);
+  --status-amber: #F59E0B;
+  --status-amber-bg: rgba(245, 158, 11, 0.12);
+  --status-crimson: #EF4444;
+  --status-crimson-bg: rgba(239, 68, 68, 0.12);
+  --status-cobalt: #3B82F6;
+  --status-cobalt-bg: rgba(59, 130, 246, 0.12);
+
+  /* Surfaces & Glassmorphism */
+  --surface-1: #0D0D12;
+  --surface-2: #16161F;
+  --surface-3: #1F1F2C;
+  --glass-bg: rgba(17, 17, 22, 0.75);
+  --glass-border: rgba(255, 255, 255, 0.07);
+  --glass-border-hover: rgba(200, 107, 60, 0.4);
+  --glass-glow: rgba(200, 107, 60, 0.15);
+
+  /* Theme Text Tokens */
+  --text-primary: #FFFFFF;
+  --text-secondary: #9E9EA9;
+  --text-muted-dark: #80808E;
+  --text-muted-light: #5A5A66;
+  --border-color: rgba(255, 255, 255, 0.08);
   --line-dark: rgba(255, 255, 255, 0.08);
   --line-light: rgba(11, 11, 15, 0.08);
-  --text-muted-dark: #90909A;
-  --text-muted-light: #5A5A62;
 
   /* Motion Tokens */
-  --dur-instant: 120ms;
-  --dur-fast: 220ms;
-  --dur-base: 380ms;
-  --dur-slow: 700ms;
+  --dur-instant: 100ms;
+  --dur-fast: 200ms;
+  --dur-base: 350ms;
+  --dur-slow: 600ms;
   --ease-out: cubic-bezier(0.16, 1, 0.30, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
 
@@ -75,23 +92,29 @@
 }
 
 .theme-light {
-  --mars-void: #F6F7F9;
+  --mars-void: #F5F6F9;
   --mars-slate: #FFFFFF;
-  --mars-paper: #111115;
-  --text-primary: #111115;
-  --text-secondary: #5A5A62;
+  --mars-paper: #0B0B0F;
+  --surface-1: #FFFFFF;
+  --surface-2: #EDEBF0;
+  --surface-3: #E1DFE6;
+  --glass-bg: rgba(255, 255, 255, 0.85);
+  --glass-border: rgba(11, 11, 15, 0.08);
+  --text-primary: #0B0B0F;
+  --text-secondary: #52525C;
+  --text-muted-dark: #62626E;
   --border-color: rgba(11, 11, 15, 0.08);
   --line-dark: rgba(11, 11, 15, 0.08);
-  --text-muted-dark: #5A5A62;
-  --surface-2: #EAEAEF;
 }
 
 html {
   scroll-behavior: smooth;
   height: 100%;
+  background-color: var(--mars-void);
+  color: var(--text-primary);
 }
 
-/* Universal Sans-Serif Rule: Force Thmanyah Sans with IBM Plex Sans Arabic fallback across all elements */
+/* Universal Typography & Font Stacking */
 *,
 *::before,
 *::after,
@@ -116,18 +139,19 @@ table,
 td,
 th {
   font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', var(--font-ibm-plex-sans-arabic), 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif !important;
+  box-sizing: border-box;
 }
 
 /* Tabular Numerics for Financial & Metric Alignment */
 .tabular-nums {
   font-variant-numeric: tabular-nums;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
 
 a {
   color: inherit;
   text-decoration: none;
-  transition: color var(--dur-instant) var(--ease-out);
+  transition: color var(--dur-fast) var(--ease-out);
 }
 
 a:hover {
@@ -171,63 +195,95 @@ a:hover {
   margin-right: auto;
   padding-left: clamp(20px, 4vw, 48px);
   padding-right: clamp(20px, 4vw, 48px);
-  box-sizing: border-box;
 }
 
-/* Pill Buttons */
-.btn-pill-primary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--mars-copper);
-  color: #FFFFFF;
-  border-radius: 999px;
-  padding: 12px 24px;
-  font-size: 14px;
-  font-weight: 600;
-  border: none;
-  cursor: pointer;
-  transition: transform var(--dur-instant) var(--ease-out), background var(--dur-instant) var(--ease-out), box-shadow var(--dur-instant) var(--ease-out);
+/* Glass & Card Primitives */
+.glass-panel {
+  background: var(--glass-bg);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
 }
 
-.btn-pill-primary:hover {
-  background: var(--copper-400);
-  color: #FFFFFF;
-  transform: translateY(-1px);
-  box-shadow: 0 4px 16px rgba(200, 107, 60, 0.25);
-}
-
-.btn-pill-secondary {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  background: transparent;
-  color: var(--text-primary);
-  border-radius: 999px;
-  padding: 12px 24px;
-  font-size: 14px;
-  font-weight: 600;
-  border: 1px solid var(--border-color);
-  cursor: pointer;
-  transition: all var(--dur-instant) var(--ease-out);
-}
-
-.btn-pill-secondary:hover {
-  border-color: var(--copper-400);
-  color: var(--copper-400);
-}
-
-/* Glass Card hover effects */
 .glass-card {
-  transition: transform 140ms ease, border-color 140ms ease, box-shadow 140ms ease;
+  background: var(--surface-1);
+  border: 1px solid var(--glass-border);
+  border-radius: 12px;
+  transition: transform var(--dur-fast) var(--ease-out), border-color var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out);
 }
 
 .glass-card:hover {
   transform: translateY(-2px);
-  border-color: var(--copper-400) !important;
+  border-color: var(--glass-border-hover);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.25), 0 0 20px var(--glass-glow);
 }
 
+/* Status Badges */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+
+.status-pill-emerald {
+  background: var(--status-emerald-bg);
+  color: var(--status-emerald);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+}
+
+.status-pill-amber {
+  background: var(--status-amber-bg);
+  color: var(--status-amber);
+  border: 1px solid rgba(245, 158, 11, 0.25);
+}
+
+.status-pill-copper {
+  background: rgba(200, 107, 60, 0.12);
+  color: var(--copper-400);
+  border: 1px solid rgba(200, 107, 60, 0.25);
+}
+
+/* Command & Action Primitives */
+.cmd-key {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: var(--surface-3);
+  border: 1px solid var(--glass-border);
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+/* Animations */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(6px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulseGlow {
+  0%, 100% { opacity: 0.4; transform: scale(1); }
+  50% { opacity: 0.8; transform: scale(1.05); }
+}
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.animate-fade-in {
+  animation: fadeIn var(--dur-base) var(--ease-out) forwards;
+}
+
+.animate-pulse-glow {
+  animation: pulseGlow 4s ease-in-out infinite;
 }
