@@ -29,6 +29,11 @@ const thmanyahSerifDisplay = localFont({
 export const metadata = {
   title: "Mars Space — Enterprise Coworking, Private Offices & Space ERP",
   description: "Enterprise private offices, meeting rooms, and physical space management in Saudi Arabia. Book hourly or monthly.",
+  icons: {
+    icon: "/icon.png",
+    shortcut: "/favicon.ico",
+    apple: "/apple-icon.png",
+  },
 };
 
 export const viewport = {
@@ -40,6 +45,9 @@ export default function RootLayout({ children }) {
   return (
     <html lang="ar" dir="rtl" className={`${thmanyahSans.variable} ${thmanyahSerifDisplay.variable} h-full antialiased`}>
       <head>
+        <link rel="icon" type="image/png" href="/icon.png" />
+        <link rel="shortcut icon" href="/favicon.ico" />
+        <link rel="apple-touch-icon" href="/apple-icon.png" />
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
