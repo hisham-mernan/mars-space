@@ -251,7 +251,7 @@ export default function Home() {
                     border: '1px solid rgba(11, 11, 15, 0.14)',
                     borderRadius: '4px',
                     padding: '13px 14px',
-                    font: "400 16px var(--font-ibm-plex), sans-serif",
+                    fontSize: '16px',
                     color: 'var(--mars-void)',
                     background: '#FFFFFF',
                   }}
@@ -272,7 +272,7 @@ export default function Home() {
                     border: '1px solid rgba(11, 11, 15, 0.14)',
                     borderRadius: '4px',
                     padding: '13px 14px',
-                    font: "400 16px var(--font-ibm-plex), sans-serif",
+                    fontSize: '16px',
                     color: 'var(--mars-void)',
                     background: '#FFFFFF',
                   }}
@@ -296,7 +296,7 @@ export default function Home() {
                     border: '1px solid rgba(11, 11, 15, 0.14)',
                     borderRadius: '4px',
                     padding: '13px 14px',
-                    font: "400 16px var(--font-ibm-plex), sans-serif",
+                    fontSize: '16px',
                     color: 'var(--mars-void)',
                     background: '#FFFFFF',
                   }}
@@ -317,7 +317,7 @@ export default function Home() {
                     border: '1px solid rgba(11, 11, 15, 0.14)',
                     borderRadius: '4px',
                     padding: '13px 14px',
-                    font: "400 16px var(--font-ibm-plex), sans-serif",
+                    fontSize: '16px',
                     color: 'var(--mars-void)',
                     background: '#FFFFFF',
                   }}

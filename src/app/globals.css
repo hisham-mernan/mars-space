@@ -41,47 +41,6 @@
   font-display: swap;
 }
 
-/* Local Font Face Declarations for Thmanyah Serif Display */
-@font-face {
-  font-family: 'Thmanyah Serif Display';
-  src: url('/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Light.woff2') format('woff2');
-  font-weight: 300;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Thmanyah Serif Display';
-  src: url('/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Regular.woff2') format('woff2');
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Thmanyah Serif Display';
-  src: url('/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Medium.woff2') format('woff2');
-  font-weight: 500;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Thmanyah Serif Display';
-  src: url('/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Bold.woff2') format('woff2');
-  font-weight: 700;
-  font-style: normal;
-  font-display: swap;
-}
-
-@font-face {
-  font-family: 'Thmanyah Serif Display';
-  src: url('/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Black.woff2') format('woff2');
-  font-weight: 900;
-  font-style: normal;
-  font-display: swap;
-}
-
 :root {
   /* Brand Palette */
   --mars-void: #09090D;
@@ -132,7 +91,7 @@ html {
   height: 100%;
 }
 
-/* Universal Sans-Serif Rule: Force Thmanyah Sans across all elements */
+/* Universal Sans-Serif Rule: Force Thmanyah Sans with IBM Plex Sans Arabic fallback across all elements */
 *,
 *::before,
 *::after,
@@ -156,7 +115,7 @@ label,
 table,
 td,
 th {
-  font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', system-ui, -apple-system, sans-serif !important;
+  font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', var(--font-ibm-plex-sans-arabic), 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif !important;
 }
 
 /* Tabular Numerics for Financial & Metric Alignment */
