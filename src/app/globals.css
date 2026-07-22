@@ -1,6 +1,6 @@
 /* Mars Space Global Stylesheet - World-Class Product Design System */
 
-/* Local Font Face Declarations for Thmanyah Sans & Thmanyah Serif Display */
+/* Local Font Face Declarations for Thmanyah Sans */
 @font-face {
   font-family: 'Thmanyah Sans';
   src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Light.woff2') format('woff2');
@@ -41,6 +41,7 @@
   font-display: swap;
 }
 
+/* Local Font Face Declarations for Thmanyah Serif Display */
 @font-face {
   font-family: 'Thmanyah Serif Display';
   src: url('/fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Light.woff2') format('woff2');
@@ -131,8 +132,10 @@ html {
   height: 100%;
 }
 
-/* Universal Default Font Assignment - Thmanyah Sans Everywhere */
+/* Universal Sans-Serif Rule: Force Thmanyah Sans across all elements */
 *,
+*::before,
+*::after,
 html,
 body,
 button,
@@ -148,46 +151,12 @@ h6,
 p,
 span,
 div,
-a {
-  font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', var(--font-thmanyah-serif-display), 'Thmanyah Serif Display', system-ui, -apple-system, sans-serif !important;
-}
-
-/* English Language Fonts - Thmanyah Sans */
-html[lang="en"] body,
-html[lang="en"] button,
-html[lang="en"] input,
-html[lang="en"] select,
-html[lang="en"] textarea,
-html[lang="en"] h1,
-html[lang="en"] h2,
-html[lang="en"] h3,
-html[lang="en"] h4,
-html[lang="en"] h5,
-html[lang="en"] h6,
-html[lang="en"] p,
-html[lang="en"] span,
-html[lang="en"] div,
-html[lang="en"] a {
+a,
+label,
+table,
+td,
+th {
   font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', system-ui, -apple-system, sans-serif !important;
-}
-
-/* Arabic Language Fonts - Thmanyah Sans Primary (Clean Modern Kufi/Naskh) */
-html[lang="ar"] body,
-html[lang="ar"] button,
-html[lang="ar"] input,
-html[lang="ar"] select,
-html[lang="ar"] textarea,
-html[lang="ar"] h1,
-html[lang="ar"] h2,
-html[lang="ar"] h3,
-html[lang="ar"] h4,
-html[lang="ar"] h5,
-html[lang="ar"] h6,
-html[lang="ar"] p,
-html[lang="ar"] span,
-html[lang="ar"] div,
-html[lang="ar"] a {
-  font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', var(--font-thmanyah-serif-display), 'Thmanyah Serif Display', system-ui, -apple-system, sans-serif !important;
 }
 
 /* Tabular Numerics for Financial & Metric Alignment */

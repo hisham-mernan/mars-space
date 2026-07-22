@@ -11,6 +11,7 @@ const thmanyahSans = localFont({
     { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2", weight: "900", style: "normal" },
   ],
   variable: "--font-thmanyah-sans",
+  fallback: ["system-ui", "-apple-system", "sans-serif"],
   display: "swap",
 });
 
@@ -23,6 +24,7 @@ const thmanyahSerifDisplay = localFont({
     { path: "./fonts/thmanyahserifdisplay/woff2/thmanyahserifdisplay-Black.woff2", weight: "900", style: "normal" },
   ],
   variable: "--font-thmanyah-serif-display",
+  fallback: ["system-ui", "-apple-system", "sans-serif"],
   display: "swap",
 });
 
@@ -43,7 +45,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ar" dir="rtl" className={`${thmanyahSans.variable} ${thmanyahSerifDisplay.variable} h-full antialiased`}>
+    <html lang="ar" dir="rtl" className={`${thmanyahSans.variable} ${thmanyahSerifDisplay.variable} ${thmanyahSans.className} h-full antialiased`}>
       <head>
         <link rel="icon" type="image/png" href="/icon.png" />
         <link rel="shortcut icon" href="/favicon.ico" />
@@ -51,7 +53,7 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.googleapis.com" />
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
       </head>
-      <body>
+      <body className={`${thmanyahSans.className} h-full`}>
         <LanguageProvider>
           {children}
         </LanguageProvider>
