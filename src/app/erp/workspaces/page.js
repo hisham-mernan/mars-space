@@ -35,17 +35,11 @@ export default function WorkspaceManagement() {
   useEffect(() => {
     async function loadSpaces() {
       try {
-        const localData = localStorage.getItem('mars-erp-spaces');
-        if (localData) {
-          setSpaces(JSON.parse(localData));
-        } else {
-          // Fetch from API and seed
-          const res = await fetch('/api/v1/public/workspaces');
-          const json = await res.json();
-          if (json.success) {
-            setSpaces(json.data);
-            localStorage.setItem('mars-erp-spaces', JSON.stringify(json.data));
-          }
+        const res = await fetch('/api/v1/public/workspaces');
+        const json = await res.json();
+        if (json.success) {
+          setSpaces(json.data);
+          localStorage.setItem('mars-erp-spaces', JSON.stringify(json.data));
         }
       } catch (err) {
         console.error(err);

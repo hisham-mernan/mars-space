@@ -27,330 +27,390 @@
   ],
   "resources": [
     {
-      "id": "office-a101",
+      "id": "ventures",
       "branchId": "jeddah",
-      "name": "Private Office A-101",
-      "nameAr": "مكتب خاص A-101",
-      "slug": "private-office-a-101",
-      "category": "private_office",
+      "name": "Ventures Room",
+      "nameAr": "قاعة فينتشرز",
+      "slug": "ventures",
+      "category": "meeting_room",
       "floor": "Floor 1",
-      "capacity": 4,
-      "size": 24,
-      "rate": 4800,
+      "capacity": 14,
+      "size": 35,
+      "rate": 220,
       "status": "Available",
-      "amenities": ["High-Speed Wi-Fi", "Ergonomic Chairs", "Whiteboard", "Keyless Entry"],
-      "amenitiesAr": ["إنترنت فائق السرعة", "كراسي مريحة", "سبورة بيضاء", "دخول بدون مفتاح"],
+      "teaser": "Boardroom table, 75\" screen with video conferencing, whiteboard wall.",
+      "teaserAr": "طاولة اجتماعات رئيسية، شاشة 75 بوصة مع اتصال مرئي، جدار سبورة بيضاء.",
+      "features": [
+        "Boardroom table seating 14",
+        "75\" screen with video conferencing",
+        "Conference microphone and audio",
+        "Whiteboard wall with markers",
+        "Stationery, adapters and clickers"
+      ],
+      "featuresAr": [
+        "طاولة اجتماعات تتسع لـ 14 شخصاً",
+        "شاشة 75 بوصة مع نظام اتصالات مرئية",
+        "مكبرات صوت وميكروفون للمؤتمرات",
+        "جدار سبورة بيضاء مع أقلام",
+        "أدوات مكتبية ومحولات وصلات"
+      ],
+      "amenities": ["75\" Screen", "Video Conference", "Whiteboard Wall", "Audio System", "Adapters"],
+      "amenitiesAr": ["شاشة 75 بوصة", "اتصال مرئي", "جدار سبورة بيضاء", "نظام صوتي", "محولات"],
       "image": "/assets/photo-glass-offices.jpg",
-      "gallery": [
-        "/assets/photo-glass-offices.jpg",
-        "/assets/photo-coworking.jpg",
-        "/assets/photo-lounge-velvet.jpg"
-      ]
+      "gallery": ["/assets/photo-glass-offices.jpg", "/assets/photo-vip-lounge.jpg", "/assets/photo-coworking.jpg"]
     },
     {
-      "id": "office-b203",
+      "id": "lab",
       "branchId": "jeddah",
-      "name": "Private Office B-203",
-      "nameAr": "مكتب خاص B-203",
-      "slug": "private-office-b-203",
-      "category": "private_office",
-      "floor": "Floor 2",
-      "capacity": 6,
-      "size": 36,
-      "rate": 6500,
-      "status": "Occupied",
-      "amenities": ["High-Speed Wi-Fi", "Ergonomic Chairs", "Whiteboard", "City View"],
-      "amenitiesAr": ["إنترنت فائق السرعة", "كراسي مريحة", "سبورة بيضاء", "إطلالة على المدينة"],
-      "image": "/assets/photo-glass-offices.jpg",
-      "gallery": ["/assets/photo-glass-offices.jpg"]
-    },
-    {
-      "id": "room-alpha",
-      "branchId": "jeddah",
-      "name": "Meeting Room Alpha",
-      "nameAr": "قاعة اجتماعات ألفا",
-      "slug": "meeting-room-alpha",
+      "name": "Lab Room",
+      "nameAr": "قاعة اللاب",
+      "slug": "lab",
       "category": "meeting_room",
       "floor": "Floor 1",
       "capacity": 8,
-      "size": 20,
-      "rate": 80,
+      "size": 24,
+      "rate": 160,
       "status": "Available",
-      "amenities": ["65\" Smart TV", "Whiteboard", "Video Conference Camera", "Coffee Service"],
-      "amenitiesAr": ["شاشة ذكية 65 بوصة", "سبورة بيضاء", "كاميرا اتصالات مرئية", "خدمة القهوة"],
-      "image": "/assets/photo-community-cinema.jpg",
-      "gallery": [
-        "/assets/photo-community-cinema.jpg",
-        "/assets/photo-vip-lounge.jpg"
-      ]
+      "teaser": "Workshop tables, projector and 65\" screen, full-wall whiteboard.",
+      "teaserAr": "طاولات ورش عمل، جهاز عرض وشاشة 65 بوصة، سبورة بيضاء كاملة.",
+      "features": [
+        "Movable workshop tables for 8",
+        "65\" screen and projector",
+        "Full-wall whiteboard",
+        "Workshop kit: sticky notes, markers, timer",
+        "Standing rail for pin-ups"
+      ],
+      "featuresAr": [
+        "طاولات مرنة لورش العمل تتسع لـ 8 أشخاص",
+        "شاشة 65 بوصة وجهاز عرض ضوئي",
+        "سبورة بيضاء على كامل الجدار",
+        "حقيبة ورش العمل: أوراق ملاحظات، أقلام، مؤقت",
+        "حامل تعليق للملاحظات والرسومات"
+      ],
+      "amenities": ["65\" Screen", "Projector", "Full Whiteboard", "Workshop Kit", "Flexible Tables"],
+      "amenitiesAr": ["شاشة 65 بوصة", "جهاز عرض", "سبورة جدارية", "حقيبة ورش عمل", "طاولات مرنة"],
+      "image": "/assets/photo-coworking.jpg",
+      "gallery": ["/assets/photo-coworking.jpg", "/assets/photo-glass-offices.jpg", "/assets/photo-lounge-velvet.jpg"]
     },
     {
-      "id": "room-beta",
+      "id": "vc",
       "branchId": "jeddah",
-      "name": "Meeting Room Beta",
-      "nameAr": "قاعة اجتماعات بيتا",
-      "slug": "meeting-room-beta",
+      "name": "VC Room",
+      "nameAr": "قاعة VC",
+      "slug": "vc",
       "category": "meeting_room",
       "floor": "Floor 1",
-      "capacity": 12,
-      "size": 30,
+      "capacity": 6,
+      "size": 18,
       "rate": 120,
       "status": "Available",
-      "amenities": ["Projector", "Whiteboard", "Video Conference System", "Premium Coffee Included"],
-      "amenitiesAr": ["جهاز عرض ضوئي", "سبورة بيضاء", "نظام اتصالات مرئية", "قهوة فاخرة متضمنة"],
-      "image": "/assets/photo-community-cinema.jpg",
-      "gallery": ["/assets/photo-community-cinema.jpg"]
+      "teaser": "Round table for six, 55\" screen, natural light, the quiet room.",
+      "teaserAr": "طاولة دائرية لستة أشخاص، شاشة 55 بوصة، إضاءة طبيعية، غرفة هادئة.",
+      "features": [
+        "Round table seating 6",
+        "55\" screen with wireless casting",
+        "Natural light, blackout blind",
+        "Acoustic panelling",
+        "Office essentials tray"
+      ],
+      "featuresAr": [
+        "طاولة دائرية تتسع لـ 6 أشخاص",
+        "شاشة 55 بوصة مع بث لاسلكي",
+        "إضاءة طبيعية مع ستائر عتمة",
+        "عزل صوتي متقدم",
+        "صينية المستلزمات المكتبية"
+      ],
+      "amenities": ["55\" Screen", "Wireless Casting", "Natural Light", "Acoustic Panels", "Round Table"],
+      "amenitiesAr": ["شاشة 55 بوصة", "بث لاسلكي", "إضاءة طبيعية", "عزل صوتي", "طاولة دائرية"],
+      "image": "/assets/photo-vip-lounge.jpg",
+      "gallery": ["/assets/photo-vip-lounge.jpg", "/assets/photo-lounge-velvet.jpg", "/assets/photo-glass-offices.jpg"]
     },
     {
-      "id": "hall-jeddah",
+      "id": "community-hall",
       "branchId": "jeddah",
       "name": "Community Hall",
-      "nameAr": "قاعة المجتمع",
+      "nameAr": "القاعة المجتمعية",
       "slug": "community-hall",
       "category": "community_hall",
       "floor": "Floor 1",
-      "capacity": 120,
-      "size": 150,
-      "rate": 1200,
+      "capacity": 80,
+      "size": 120,
+      "rate": 400,
       "status": "Available",
-      "amenities": ["Sound System", "Projector & Stage", "Catering Space", "Flexible Seating Layouts"],
-      "amenitiesAr": ["نظام صوتي متكامل", "جهاز عرض ومسرح", "مساحة لتقديم الطعام", "ترتيبات جلوس مرنة"],
+      "teaser": "Screen wall, configurable seating and PA for talks, workshops and launches.",
+      "teaserAr": "جدار شاشة عرض، مقاعد قابلة للتهيئة ونظام صوتي للمحاضرات والإطلاقات.",
+      "features": [
+        "Screen wall and projector",
+        "Theatre, classroom or circle seating",
+        "PA system and two microphones",
+        "Stage lighting presets",
+        "Pantry access for catering"
+      ],
+      "featuresAr": [
+        "جدار شاشة عرض وجهاز عرض ضوئي",
+        "ترتيب مقاعد مسرحي أو تدريبي أو دائري",
+        "نظام صوتي مكبر وميكروفونين",
+        "إعدادات إضاءة المسرح",
+        "إمكانية الوصول للمطبخ للضيافة"
+      ],
+      "amenities": ["Screen Wall", "Projector", "PA Sound System", "Microphones", "Stage Lighting"],
+      "amenitiesAr": ["جدار شاشات", "بروجكتر", "نظام صوتي", "ميكروفونات", "إضاءة مسرح"],
+      "image": "/assets/photo-community-cinema.jpg",
+      "gallery": ["/assets/photo-community-cinema.jpg", "/assets/photo-lounge-velvet.jpg", "/assets/photo-coworking.jpg"]
+    },
+    {
+      "id": "office-04",
+      "branchId": "jeddah",
+      "name": "Office 04",
+      "nameAr": "مكتب ٠٤",
+      "slug": "office-04",
+      "category": "private_office",
+      "floor": "Floor 1",
+      "capacity": 4,
+      "size": 22,
+      "rate": 6500,
+      "status": "Available",
+      "loc": "North perimeter, window line",
+      "locAr": "الواجهة الشمالية، المطلة على الشارع",
+      "features": [
+        "4 height-adjustable desks with chairs",
+        "Lockable glass front, frosted band",
+        "Storage wall and personal lockers",
+        "Own network segment and printing"
+      ],
+      "featuresAr": [
+        "٤ مكاتب قابلة لتعديل الارتفاع مع كراسي",
+        "واجهة زجاجية قابلة للقفل مع شريط خصوصية",
+        "جدار تخزين وخزائن شخصية",
+        "شبكة مستقلة وطباعة خاصة"
+      ],
+      "amenities": ["4 Adjustable Desks", "Private Glass Office", "Storage Lockers", "24/7 Access"],
+      "amenitiesAr": ["٤ مكاتب قابلة للتعديل", "مكتب زجاجي خاص", "خزائن تخزين", "دخول ٢٤/٧"],
+      "image": "/assets/photo-glass-offices.jpg",
+      "gallery": ["/assets/photo-glass-offices.jpg", "/assets/photo-coworking.jpg", "/assets/photo-vip-lounge.jpg"]
+    },
+    {
+      "id": "office-11",
+      "branchId": "jeddah",
+      "name": "Office 11",
+      "nameAr": "مكتب ١١",
+      "slug": "office-11",
+      "category": "private_office",
+      "floor": "Floor 1",
+      "capacity": 6,
+      "size": 32,
+      "rate": 9000,
+      "status": "Available",
+      "loc": "East corner, daylight on two sides",
+      "locAr": "الركن الشرقي، إضاءة من جانبين",
+      "features": [
+        "6 desks with monitor arms",
+        "Corner glazing, double aspect",
+        "In-office meeting nook for 3",
+        "Own network segment and storage"
+      ],
+      "featuresAr": [
+        "٦ مكاتب مزودة بحوامل شاشات",
+        "زوايا زجاجية مزدوجة الإضاءة",
+        "ركن اجتماعات مصغر داخل المكتب لـ ٣ أشخاص",
+        "شبكة مستقلة وتخزين خاص"
+      ],
+      "amenities": ["6 Workstations", "Double Aspect Daylight", "Mini Meeting Nook", "24/7 Access"],
+      "amenitiesAr": ["٦ محطات عمل", "إضاءة من جانبين", "ركن اجتماعات مصغر", "دخول ٢٤/٧"],
       "image": "/assets/photo-vip-lounge.jpg",
-      "gallery": ["/assets/photo-vip-lounge.jpg"]
+      "gallery": ["/assets/photo-vip-lounge.jpg", "/assets/photo-glass-offices.jpg", "/assets/photo-lounge-velvet.jpg"]
+    },
+    {
+      "id": "office-17",
+      "branchId": "jeddah",
+      "name": "Office 17",
+      "nameAr": "مكتب ١٧",
+      "slug": "office-17",
+      "category": "private_office",
+      "floor": "Floor 1",
+      "capacity": 10,
+      "size": 48,
+      "rate": 14000,
+      "status": "Occupied",
+      "loc": "South perimeter suite",
+      "locAr": "جناح الواجهة الجنوبية",
+      "features": [
+        "10 desks in two banks",
+        "Separable manager cabin",
+        "Dedicated storage room",
+        "Own network, AC zone control"
+      ],
+      "featuresAr": [
+        "١٠ مكاتب مقسمة على مجموعتين",
+        "مكتب مدير مستقل قابل للفصل",
+        "غرفة تخزين مخصصة",
+        "شبكة خاصة وتحكم مستقل بالتكييف"
+      ],
+      "amenities": ["10 Workstations", "Manager Cabin", "Private Storage Room", "Dedicated AC"],
+      "amenitiesAr": ["١٠ محطات عمل", "مكتب مدير خاص", "غرفة تخزين خاصة", "تكييف مستقل"],
+      "image": "/assets/photo-coworking.jpg",
+      "gallery": ["/assets/photo-coworking.jpg", "/assets/photo-vip-lounge.jpg", "/assets/photo-community-cinema.jpg"]
     }
+  ],
+  "addons": [
+    { "id": "add-tea", "name": "Tea Service", "nameAr": "خدمة الشاي والضيافة", "price": 40 },
+    { "id": "add-coffee", "name": "Specialty Coffee Service", "nameAr": "خدمة القهوة المختصة", "price": 60 },
+    { "id": "add-drinks", "name": "Water & Soft Drinks", "nameAr": "مياه ومشروبات باردة", "price": 35 },
+    { "id": "add-kit", "name": "Extra Whiteboard & Workshop Kit", "nameAr": "حقيبة ورش عمل وسبورة إضافية", "price": 30 },
+    { "id": "add-catering", "name": "Catering Service", "nameAr": "خدمة تقديم الطعام والوجبات", "price": 0, "quote": true }
   ],
   "membership_plans": [
     {
-      "id": "day-pass",
+      "id": "plan-daypass",
       "name": "Day Pass",
-      "nameAr": "بطاقة يومية",
-      "price": 75,
-      "billing": "Day",
-      "bullets": [
-        "Full-day access to coworking",
-        "High-speed Wi-Fi",
-        "Coffee & tea included",
-        "Lounge access"
-      ],
-      "bulletsAr": [
-        "دخول كامل اليوم لمنطقة العمل المشتركة",
-        "إنترنت فائق السرعة",
-        "شاي وقهوة متضمنة",
-        "دخول إلى منطقة الاستراحة"
-      ]
+      "nameAr": "تصريح يومي",
+      "rate": 150,
+      "billingCycle": "daily",
+      "features": ["Single day access to hot desks", "High-speed Wi-Fi & Cafe access", "1 hr meeting room credit"],
+      "featuresAr": ["دخول يومي للمكاتب المشتركة", "إنترنت فائق السرعة ودخول المقهى", "ساعة واحدة رصيد قاعات اجتماعات"]
     },
     {
-      "id": "hot-desk",
-      "name": "Coworking Flex (Hot Desk)",
-      "nameAr": "عضوية مكتب مرن",
-      "price": 799,
-      "billing": "Month",
-      "bullets": [
-        "Unlimited coworking access",
-        "10 meeting room hours / month",
-        "Community events access",
-        "Coffee & utilities included"
-      ],
-      "bulletsAr": [
-        "دخول غير محدود لمنطقة العمل المشتركة",
-        "10 ساعات قاعات اجتماعات شهرياً",
-        "حضور فعاليات مجتمع مارس",
-        "شامل القهوة والخدمات العامة"
-      ],
-      "isFeatured": true
+      "id": "plan-opendesk",
+      "name": "Open Desk",
+      "nameAr": "مكتب مشترك",
+      "rate": 1200,
+      "billingCycle": "monthly",
+      "features": ["24/7 Access to hot desking area", "5 hrs meeting room credits / mo", "Member directory & events access"],
+      "featuresAr": ["دخول ٢٤/٧ لمساحة المكاتب المشتركة", "٥ ساعات رصيد قاعات اجتماعات شهرياً", "دخول دليل الأعضاء والفعاليات"]
     },
     {
-      "id": "dedicated-desk",
+      "id": "plan-dedicated",
       "name": "Dedicated Desk",
       "nameAr": "مكتب مخصص",
-      "price": 1200,
-      "billing": "Month",
-      "bullets": [
-        "Reserved workstation & locker",
-        "15 meeting room hours / month",
-        "Mail & package handling",
-        "24/7 branch access"
-      ],
-      "bulletsAr": [
-        "مكتب مخصص وصندوق أمانات خاص",
-        "15 ساعة قاعات اجتماعات شهرياً",
-        "استلام وإدارة البريد والطرود",
-        "وصول للفرع على مدار الساعة 24/7"
-      ]
+      "rate": 2200,
+      "billingCycle": "monthly",
+      "features": ["Reserved desk with lockable storage", "10 hrs meeting room credits / mo", "Business address & mail handling"],
+      "featuresAr": ["مكتب مخصص دائم مع وحدة تخزين قابلة للقفل", "١٠ ساعات رصيد قاعات اجتماعات شهرياً", "عنوان تجاري واستلام البريد"]
     },
     {
-      "id": "private-office",
+      "id": "plan-office",
       "name": "Private Office",
       "nameAr": "مكتب خاص",
-      "price": 4800,
-      "billing": "Month",
-      "bullets": [
-        "Fully furnished lockable suite",
-        "30 meeting room credits / month",
-        "Company registration support",
-        "1 assigned parking space"
-      ],
-      "bulletsAr": [
-        "مكتب مغلق ومؤثث بالكامل",
-        "30 رصيد قاعات اجتماعات شهرياً",
-        "دعم ترخيص وتجارة الشركة",
-        "موقف سيارات مخصص"
-      ]
+      "rate": 6500,
+      "billingCycle": "monthly",
+      "features": ["Lockable glass office suite", "20 hrs meeting room credits / mo", "Branded door sign & 24/7 access"],
+      "featuresAr": ["جناح مكتب زجاجي خاص قابل للقفل", "٢٠ ساعة رصيد قاعات اجتماعات شهرياً", "لوحة اسم الشركة على الباب ودخول ٢٤/٧"]
     }
   ],
   "users": [
     {
-      "id": "usr-01",
-      "name": "Ahmed Alharbi",
-      "nameAr": "أحمد الحربي",
-      "email": "ahmed@example.com",
-      "mobile": "0501234567",
-      "role": "Company Admin",
-      "membership": "Premium Membership",
+      "id": "usr-1",
+      "name": "Faisal Al-Otaibi",
+      "email": "faisal@mars.sa",
+      "role": "Member",
       "company": "Mars Technologies",
-      "memberSince": "March 2025",
-      "status": "Active",
-      "credits": {
-        "meeting": 18,
-        "printing": 50,
-        "parking": 1
-      }
+      "membership": "Dedicated Desk",
+      "status": "Active"
     },
     {
-      "id": "usr-02",
-      "name": "Sarah Khan",
-      "nameAr": "سارة خان",
-      "email": "sarah@example.com",
-      "mobile": "0507654321",
-      "role": "Standard Member",
-      "membership": "Coworking Flex",
-      "company": "Mars Technologies",
-      "memberSince": "June 2025",
-      "status": "Active",
-      "credits": {
-        "meeting": 8,
-        "printing": 20,
-        "parking": 0
-      }
+      "id": "usr-2",
+      "name": "Sarah Mansour",
+      "email": "sarah@techcorp.sa",
+      "role": "Member",
+      "company": "TechCorp KSA",
+      "membership": "Private Office",
+      "status": "Active"
     },
     {
-      "id": "staff-01",
-      "name": "Noura Al-Sudairi",
-      "nameAr": "نورة السديري",
-      "email": "noura@mars.space",
-      "role": "Receptionist",
+      "id": "usr-3",
+      "name": "Operations Admin",
+      "email": "admin@mars.sa",
+      "role": "Admin",
+      "company": "Mars Space HQ",
+      "membership": "Enterprise Admin",
       "status": "Active"
     }
   ],
   "bookings": [
     {
-      "id": "bk-1001",
-      "reference": "MS-BK-1001",
-      "customerId": "usr-01",
-      "customerName": "Ahmed Alharbi",
-      "resourceId": "room-alpha",
-      "resourceName": "Meeting Room Alpha",
-      "date": "2026-07-20",
+      "id": "BK-9021",
+      "resourceId": "ventures",
+      "resourceName": "Ventures Room",
+      "customerName": "Faisal Al-Otaibi",
+      "customerEmail": "faisal@mars.sa",
+      "customerPhone": "+966 50 123 4567",
+      "company": "Mars Technologies",
+      "date": "2026-07-23",
+      "startTime": "10:00",
+      "endTime": "12:00",
+      "hours": 2,
+      "subtotal": 440,
+      "vat": 66,
+      "total": 506,
+      "addons": ["Tea Service"],
+      "status": "Confirmed",
+      "paymentMethod": "Mada",
+      "paymentStatus": "Paid",
+      "qrCode": "QR-BK9021-MS",
+      "createdAt": "2026-07-22T14:30:00Z"
+    },
+    {
+      "id": "BK-9022",
+      "resourceId": "lab",
+      "resourceName": "Lab Room",
+      "customerName": "Sarah Mansour",
+      "customerEmail": "sarah@techcorp.sa",
+      "customerPhone": "+966 55 987 6543",
+      "company": "TechCorp KSA",
+      "date": "2026-07-23",
       "startTime": "14:00",
       "endTime": "16:00",
-      "duration": 2,
+      "hours": 2,
+      "subtotal": 320,
+      "vat": 48,
+      "total": 368,
+      "addons": ["Coffee Service", "Extra Whiteboard"],
       "status": "Confirmed",
+      "paymentMethod": "Apple Pay",
       "paymentStatus": "Paid",
-      "totalAmount": 160,
-      "createdAt": "2026-07-19T10:00:00Z"
+      "qrCode": "QR-BK9022-MS",
+      "createdAt": "2026-07-22T16:15:00Z"
     }
   ],
   "invoices": [
     {
-      "id": "inv-2026-001245",
-      "invoiceNumber": "INV-2026-001245",
-      "customerId": "usr-01",
-      "customerName": "Ahmed Alharbi",
-      "companyName": "Mars Technologies",
-      "date": "2026-06-28",
-      "dueDate": "2026-07-05",
-      "type": "Membership",
-      "description": "Mars Premium Membership - Business Plan",
-      "amount": 2400,
+      "id": "INV-2026-001",
+      "customerName": "Mars Technologies",
+      "customerEmail": "faisal@mars.sa",
+      "amount": 506,
+      "subtotal": 440,
+      "vat": 66,
+      "date": "2026-07-22",
+      "dueDate": "2026-08-01",
       "status": "Paid",
-      "items": [
-        { "item": "Premium Membership", "qty": 1, "unitPrice": 2400, "total": 2400 }
-      ],
-      "subtotal": 2086.96,
-      "vat": 313.04,
-      "total": 2400
+      "description": "Ventures Room Booking (2 hrs) + Tea Service"
+    },
+    {
+      "id": "INV-2026-002",
+      "customerName": "TechCorp KSA",
+      "customerEmail": "sarah@techcorp.sa",
+      "amount": 368,
+      "subtotal": 320,
+      "vat": 48,
+      "date": "2026-07-22",
+      "dueDate": "2026-08-01",
+      "status": "Paid",
+      "description": "Lab Room Booking (2 hrs) + Coffee & Whiteboard Kit"
     }
   ],
   "contracts": [
     {
-      "id": "con-5001",
-      "contractNumber": "MS-CON-2026-5001",
-      "customerId": "usr-01",
-      "company": "Mars Technologies",
-      "plan": "Business Plan",
-      "status": "Active",
+      "id": "CTR-101",
+      "customerName": "TechCorp KSA",
+      "spaceName": "Office 17 (10 Desks)",
+      "type": "Private Office",
       "startDate": "2026-01-01",
       "endDate": "2026-12-31",
-      "renewalDate": "2026-12-28",
-      "monthlyFee": 2400,
-      "deposit": 2400,
-      "billingCycle": "Monthly",
-      "autoRenewal": true
+      "monthlyRate": 14000,
+      "status": "Active",
+      "signingToken": "token-techcorp-101"
     }
   ],
-  "events": [
-    {
-      "id": "ev-01",
-      "title": "Startup Networking Night",
-      "titleAr": "ليلة تواصل الشركات الناشئة",
-      "category": "Networking",
-      "date": "2026-07-23",
-      "time": "7:00 PM",
-      "duration": "2 Hours",
-      "venue": "Community Hall",
-      "speaker": "Abeer Al-Shoraim",
-      "seatsRemaining": 52,
-      "price": "Free for Members",
-      "priceAr": "مجاني للأعضاء",
-      "image": "/assets/photo-community-cinema.jpg"
-    },
-    {
-      "id": "ev-02",
-      "title": "AI Startup Workshop",
-      "titleAr": "ورشة عمل الذكاء الاصطناعي للشركات",
-      "category": "Workshops",
-      "date": "2026-07-25",
-      "time": "5:00 PM",
-      "duration": "3 Hours",
-      "venue": "Mars Hall",
-      "speaker": "Dr. Fahad Al-Otaibi",
-      "seatsRemaining": 18,
-      "price": "Free for Members",
-      "priceAr": "مجاني للأعضاء",
-      "image": "/assets/photo-vip-lounge.jpg"
-    }
-  ],
-  "faqs": [
-    {
-      "id": "faq-1",
-      "question": "Can I work for one day?",
-      "questionAr": "هل يمكنني العمل ليوم واحد فقط؟",
-      "answer": "Yes, you can purchase a Day Pass which gives you full-day access to our coworking zone and premium coffee lounge from 8:00 AM to 10:00 PM.",
-      "answerAr": "نعم، يمكنك شراء بطاقة دخول يومية تمنحك إمكانية الوصول الكامل لمناطق العمل المشتركة واستراحة القهوة من الساعة 8 صباحاً حتى 10 مساءً."
-    },
-    {
-      "id": "faq-2",
-      "question": "Is high-speed internet included?",
-      "questionAr": "هل تتوفر خدمة الإنترنت فائق السرعة؟",
-      "answer": "Absolutely. High-speed fiber internet (up to 1 Gbps) is included with all passes, desk memberships, and private offices.",
-      "answerAr": "بالتأكيد. خدمة الإنترنت عبر الألياف البصرية فائق السرعة (يصل إلى 1 جيجابت) متضمنة مع جميع الاشتراكات والمكاتب الخاصة."
-    },
-    {
-      "id": "faq-3",
-      "question": "Can I upgrade my membership later?",
-      "questionAr": "هل يمكنني ترقية عضويتي لاحقاً؟",
-      "answer": "Yes, you can request an upgrade at any time through the Member Portal. The system will automatically calculate the prorated price difference.",
-      "answerAr": "نعم، يمكنك طلب ترقية عضويتك في أي وقت من خلال بوابة الأعضاء. سيقوم النظام تلقائياً بحساب الفروق المالية بشكل نسبي."
-    }
-  ]
+  "events": [],
+  "faqs": []
 }

@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+@font-face{font-family:'Thmanyah Sans';src:url('assets/fonts/ThmanyahSans-Light.otf') format('opentype');font-weight:300;font-display:swap}
+@font-face{font-family:'Thmanyah Sans';src:url('assets/fonts/ThmanyahSans-Regular.otf') format('opentype');font-weight:400;font-display:swap}
+@font-face{font-family:'Thmanyah Sans';src:url('assets/fonts/ThmanyahSans-Medium.otf') format('opentype');font-weight:500;font-display:swap}
+@font-face{font-family:'Thmanyah Sans';src:url('assets/fonts/ThmanyahSans-Bold.otf') format('opentype');font-weight:700;font-display:swap}
+@font-face{font-family:'Thmanyah Sans';src:url('assets/fonts/ThmanyahSans-Black.otf') format('opentype');font-weight:900;font-display:swap}
+html{scroll-behavior:smooth}
+body{margin:0;background:#0B0B0F;color:#F5F3EF;font-family:'Thmanyah Sans',system-ui,sans-serif;font-size:17px;line-height:1.7;-webkit-font-smoothing:antialiased;animation:pageIn 900ms ease both}
+a{color:inherit;text-decoration:none}
+a:hover{color:#C86B3C}
+::selection{background:#8A4120;color:#FFFFFF}
+:focus-visible{outline:2px solid #C86B3C;outline-offset:3px}
+@keyframes pageIn{from{opacity:0}to{opacity:1}}
+@keyframes heroRise{from{opacity:0;transform:translateY(28px)}to{opacity:1;transform:none}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes slowZoom{from{transform:scale(1.08)}to{transform:scale(1)}}
+@keyframes marquee{from{transform:translateX(0)}to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion: reduce){*{animation:none !important;transition:none !important}}
+</style>
+</helmet>
+
+<header style="position:fixed;top:0;left:0;right:0;z-index:60">
+  <div ref="{{ hdrRef }}" style="position:absolute;inset:0;background:rgba(11,11,15,0.85);border-bottom:1px solid rgba(245,243,239,0.08);backdrop-filter:blur(16px);opacity:0;transition:opacity 400ms ease"></div>
+  <div style="position:relative;max-width:1600px;margin:0 auto;padding:0 clamp(24px,4vw,72px);height:88px;display:flex;align-items:center;gap:clamp(20px,3vw,48px)">
+    <a href="#top" style="display:flex;align-items:flex-end;gap:12px">
+      <img src="assets/mars-lockup-white.png" alt="MARS مارس" style="height:40px;display:block">
+      <span style="font-size:13px;font-weight:500;letter-spacing:0.1em;color:#A8A49D;padding-bottom:3px">SPACE</span>
+    </a>
+    <nav style="display:flex;flex-wrap:wrap;gap:6px clamp(16px,2.2vw,36px);margin-inline-start:auto;font-size:15px;font-weight:400;white-space:nowrap">
+      <a href="#space" style="padding:6px 0;background-image:linear-gradient(#C86B3C,#C86B3C);background-repeat:no-repeat;background-position:0 100%;background-size:0% 1.5px;transition:background-size 320ms cubic-bezier(0.16,1,0.30,1),color 200ms" style-hover="background-size:100% 1.5px;color:#F5F3EF">The Space</a>
+      <a href="#explore" style="padding:6px 0;background-image:linear-gradient(#C86B3C,#C86B3C);background-repeat:no-repeat;background-position:0 100%;background-size:0% 1.5px;transition:background-size 320ms cubic-bezier(0.16,1,0.30,1),color 200ms" style-hover="background-size:100% 1.5px;color:#F5F3EF">Explore</a>
+      <a href="#offices" style="padding:6px 0;background-image:linear-gradient(#C86B3C,#C86B3C);background-repeat:no-repeat;background-position:0 100%;background-size:0% 1.5px;transition:background-size 320ms cubic-bezier(0.16,1,0.30,1),color 200ms" style-hover="background-size:100% 1.5px;color:#F5F3EF">Offices</a>
+      <a href="#membership" style="padding:6px 0;background-image:linear-gradient(#C86B3C,#C86B3C);background-repeat:no-repeat;background-position:0 100%;background-size:0% 1.5px;transition:background-size 320ms cubic-bezier(0.16,1,0.30,1),color 200ms" style-hover="background-size:100% 1.5px;color:#F5F3EF">Membership</a>
+      <a href="#community" style="padding:6px 0;background-image:linear-gradient(#C86B3C,#C86B3C);background-repeat:no-repeat;background-position:0 100%;background-size:0% 1.5px;transition:background-size 320ms cubic-bezier(0.16,1,0.30,1),color 200ms" style-hover="background-size:100% 1.5px;color:#F5F3EF">Community</a>
+      <a href="#visit" style="padding:6px 0;background-image:linear-gradient(#C86B3C,#C86B3C);background-repeat:no-repeat;background-position:0 100%;background-size:0% 1.5px;transition:background-size 320ms cubic-bezier(0.16,1,0.30,1),color 200ms" style-hover="background-size:100% 1.5px;color:#F5F3EF">Visit</a>
+    </nav>
+    <div style="display:flex;flex:none;border:1px solid rgba(245,243,239,0.2);border-radius:999px;overflow:hidden;font-size:12px;font-weight:500;line-height:1">
+      <span style="padding:8px 13px;color:#A8A49D">عربي</span>
+      <span style="padding:8px 13px;background:#F5F3EF;color:#0B0B0F">EN</span>
+    </div>
+    <button onClick="{{ openBook }}" style="display:inline-flex;flex:none;align-items:center;gap:10px;background:#8A4120;color:#FFFFFF;border:none;border-radius:999px;padding:12px 26px;font:500 15px 'Thmanyah Sans',sans-serif;line-height:1;white-space:nowrap;cursor:pointer;transition:background 250ms,gap 250ms" style-hover="background:#9A4B26;gap:14px" style-active="background:#5C2B15">Book a space<span style="font-size:15px;line-height:1">→</span></button>
+  </div>
+</header>
+
+<section id="top" data-screen-label="Hero" style="position:relative;min-height:100vh;display:flex;align-items:flex-end;background:#0B0B0F;overflow:hidden">
+  <div style="position:absolute;inset:0;overflow:hidden">
+    <img src="assets/photo-vip-lounge.jpg" alt="The Mars Space lounge at dusk" style="width:100%;height:118%;object-fit:cover;display:block;animation:slowZoom 2400ms cubic-bezier(0.16,1,0.30,1) both">
+  </div>
+  <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(11,11,15,0.94) 0%,rgba(11,11,15,0.42) 45%,rgba(11,11,15,0.30) 100%)"></div>
+  <div style="position:relative;width:100%;max-width:1600px;margin:0 auto;padding:200px clamp(24px,4vw,72px) clamp(96px,14vh,150px)">
+    <h1 style="margin:0;font-size:clamp(52px,7.5vw,124px);font-weight:300;letter-spacing:-0.035em;line-height:1.0;max-width:12ch;animation:heroRise 700ms cubic-bezier(0.16,1,0.30,1) 200ms both">{{ heroTitle }}</h1>
+    <div style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:32px;margin-top:clamp(32px,5vh,56px)">
+      <p style="margin:0;max-width:44ch;font-size:clamp(18px,1.5vw,22px);font-weight:300;line-height:1.65;color:rgba(245,243,239,0.9);animation:heroRise 700ms cubic-bezier(0.16,1,0.30,1) 450ms both">A private working floor in Jeddah: offices, rooms and a community hall, run by the venture builder that works here too.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:14px;animation:heroRise 700ms cubic-bezier(0.16,1,0.30,1) 650ms both">
+        <button onClick="{{ openBook }}" style="display:inline-flex;align-items:center;gap:10px;background:#F5F3EF;color:#0B0B0F;border:none;border-radius:999px;padding:18px 36px;font:500 16px 'Thmanyah Sans',sans-serif;line-height:1;cursor:pointer;transition:background 250ms,gap 250ms" style-hover="background:#FFFFFF;gap:14px">Book a space<span>→</span></button>
+        <button onClick="{{ openTour }}" style="display:inline-flex;align-items:center;background:none;border:1px solid rgba(245,243,239,0.45);color:#F5F3EF;border-radius:999px;padding:18px 36px;font:500 16px 'Thmanyah Sans',sans-serif;line-height:1;cursor:pointer;transition:border-color 250ms,color 250ms" style-hover="border-color:#C86B3C;color:#C86B3C">Book a tour</button>
+      </div>
+    </div>
+    <div dir="rtl" style="margin-top:clamp(40px,6vh,64px);padding-top:28px;border-top:1px solid rgba(245,243,239,0.18);font-size:17px;font-weight:300;color:rgba(245,243,239,0.75);animation:fadeIn 900ms 900ms both">مارس سبيس، جدة. طابقٌ خاص للعمل، من مارس فينتشرز.</div>
+  </div>
+</section>
+
+<section data-screen-label="Philosophy" style="background:#0B0B0F;padding:clamp(120px,18vh,220px) 0">
+  <div style="max-width:1600px;margin:0 auto;padding:0 clamp(24px,4vw,72px)">
+    <p data-reveal style="margin:0 auto;max-width:26ch;font-size:clamp(30px,3.6vw,56px);font-weight:300;letter-spacing:-0.02em;line-height:1.3;text-align:center;text-wrap:pretty">Most workspaces rent you a desk. <span style="color:#C86B3C">We built the floor we needed to build companies.</span> Then we opened the door.</p>
+    <p data-reveal style="margin:48px auto 0;max-width:52ch;text-align:center;font-size:18px;font-weight:300;color:rgba(245,243,239,0.65)">Mars Ventures takes companies from idea to exit. Mars Space is the floor where that happens: one level, six kinds of room, and everything tuned for momentum rather than amenity theatre.</p>
+  </div>
+</section>
+
+<section id="space" data-screen-label="The Space" style="background:#0B0B0F;padding:0 0 clamp(120px,16vh,200px)">
+  <div data-reveal="zoom" style="position:relative;height:clamp(420px,80vh,860px);overflow:hidden">
+    <img ref="{{ pxImg }}" src="assets/photo-community-cinema.jpg" alt="The community hall, screening night" style="width:100%;height:116%;object-fit:cover;display:block;will-change:transform">
+    <div style="position:absolute;inset:0;background:linear-gradient(to top,rgba(11,11,15,0.55),rgba(11,11,15,0) 45%)"></div>
+  </div>
+  <div style="max-width:1600px;margin:0 auto;padding:0 clamp(24px,4vw,72px)">
+    <div style="display:flex;flex-wrap:wrap;gap:clamp(40px,6vw,120px);margin-top:clamp(-80px,-6vw,-120px);position:relative">
+      <div data-reveal style="flex:1 1 480px;background:#F5F3EF;color:#0B0B0F;padding:clamp(40px,4.5vw,72px);max-width:640px">
+        <h2 style="margin:0;font-size:clamp(32px,3.2vw,48px);font-weight:400;letter-spacing:-0.02em;line-height:1.15">One floor,<br>deliberately small.</h2>
+        <p style="margin:28px 0 0;font-size:17px;font-weight:300;line-height:1.75;color:#3D3A36">Five seconds from your desk to a meeting room. Ten to coffee. Offices ring the daylight on the perimeter, the open floor holds the middle, and the community hall takes the corner with the screen wall. Nothing is more than a short walk, including the people worth bumping into.</p>
+        <div dir="rtl" style="margin-top:24px;font-size:16px;font-weight:300;color:#6B675F">طابق واحد، صغير عن قصد. كل شيء على بُعد خطوات.</div>
+      </div>
+      <div data-reveal style="flex:1 1 380px;align-self:flex-end;padding-top:clamp(96px,10vw,160px)">
+        <div style="overflow:hidden">
+          <img src="assets/photo-glass-offices.jpg" alt="Glass-walled offices along the perimeter" style="width:100%;aspect-ratio:4/3;object-fit:cover;display:block;transition:transform 900ms cubic-bezier(0.16,1,0.30,1)" style-hover="transform:scale(1.05)">
+        </div>
+        <p style="margin:18px 0 0;font-size:15px;font-weight:300;color:rgba(245,243,239,0.55)">Twenty-one glass offices hold the perimeter, so the light crosses the whole floor.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="explore" data-screen-label="Explore the space" style="background:#111014;padding:clamp(100px,14vh,180px) 0">
+  <div style="max-width:1600px;margin:0 auto;padding:0 clamp(24px,4vw,72px)">
+    <h2 data-reveal style="margin:0;font-size:clamp(36px,4vw,64px);font-weight:300;letter-spacing:-0.025em;line-height:1.1;max-width:16ch">Walk the floor from here.</h2>
+    <div style="display:flex;flex-wrap:wrap;gap:clamp(40px,5vw,96px);margin-top:clamp(48px,6vh,88px);align-items:stretch">
+      <div data-reveal style="flex:1 1 340px;display:flex;flex-direction:column;justify-content:center">
+        <div onClick="{{ picks.0 }}" onMouseEnter="{{ picks.0 }}" style="cursor:pointer;padding:18px 0;border-bottom:1px solid rgba(245,243,239,0.1);display:flex;align-items:baseline;justify-content:space-between;gap:20px;transition:padding-inline-start 350ms cubic-bezier(0.16,1,0.30,1)" style-hover="padding-inline-start:12px">
+          <span style="font-size:clamp(24px,2.2vw,34px);font-weight:400;letter-spacing:-0.015em;color:{{ tc.0 }};transition:color 300ms">Meeting rooms</span>
+          <span style="font-size:14px;font-weight:300;color:#6B675F;white-space:nowrap">4 – 14 seats</span>
+        </div>
+        <div onClick="{{ picks.1 }}" onMouseEnter="{{ picks.1 }}" style="cursor:pointer;padding:18px 0;border-bottom:1px solid rgba(245,243,239,0.1);display:flex;align-items:baseline;justify-content:space-between;gap:20px;transition:padding-inline-start 350ms cubic-bezier(0.16,1,0.30,1)" style-hover="padding-inline-start:12px">
+          <span style="font-size:clamp(24px,2.2vw,34px);font-weight:400;letter-spacing:-0.015em;color:{{ tc.1 }};transition:color 300ms">Private offices</span>
+          <span style="font-size:14px;font-weight:300;color:#6B675F;white-space:nowrap">2 – 10 people</span>
+        </div>
+        <div onClick="{{ picks.2 }}" onMouseEnter="{{ picks.2 }}" style="cursor:pointer;padding:18px 0;border-bottom:1px solid rgba(245,243,239,0.1);display:flex;align-items:baseline;justify-content:space-between;gap:20px;transition:padding-inline-start 350ms cubic-bezier(0.16,1,0.30,1)" style-hover="padding-inline-start:12px">
+          <span style="font-size:clamp(24px,2.2vw,34px);font-weight:400;letter-spacing:-0.015em;color:{{ tc.2 }};transition:color 300ms">Coworking</span>
+          <span style="font-size:14px;font-weight:300;color:#6B675F;white-space:nowrap">day or month</span>
+        </div>
+        <div onClick="{{ picks.3 }}" onMouseEnter="{{ picks.3 }}" style="cursor:pointer;padding:18px 0;border-bottom:1px solid rgba(245,243,239,0.1);display:flex;align-items:baseline;justify-content:space-between;gap:20px;transition:padding-inline-start 350ms cubic-bezier(0.16,1,0.30,1)" style-hover="padding-inline-start:12px">
+          <span style="font-size:clamp(24px,2.2vw,34px);font-weight:400;letter-spacing:-0.015em;color:{{ tc.3 }};transition:color 300ms">Community hall</span>
+          <span style="font-size:14px;font-weight:300;color:#6B675F;white-space:nowrap">events</span>
+        </div>
+        <div onClick="{{ picks.4 }}" onMouseEnter="{{ picks.4 }}" style="cursor:pointer;padding:18px 0;border-bottom:1px solid rgba(245,243,239,0.1);display:flex;align-items:baseline;justify-content:space-between;gap:20px;transition:padding-inline-start 350ms cubic-bezier(0.16,1,0.30,1)" style-hover="padding-inline-start:12px">
+          <span style="font-size:clamp(24px,2.2vw,34px);font-weight:400;letter-spacing:-0.015em;color:{{ tc.4 }};transition:color 300ms">Coffee lounge</span>
+          <span style="font-size:14px;font-weight:300;color:#6B675F;white-space:nowrap">open access</span>
+        </div>
+        <div onClick="{{ picks.5 }}" onMouseEnter="{{ picks.5 }}" style="cursor:pointer;padding:18px 0;border-bottom:1px solid rgba(245,243,239,0.1);display:flex;align-items:baseline;justify-content:space-between;gap:20px;transition:padding-inline-start 350ms cubic-bezier(0.16,1,0.30,1)" style-hover="padding-inline-start:12px">
+          <span style="font-size:clamp(24px,2.2vw,34px);font-weight:400;letter-spacing:-0.015em;color:{{ tc.5 }};transition:color 300ms">Phone booths</span>
+          <span style="font-size:14px;font-weight:300;color:#6B675F;white-space:nowrap">1 person</span>
+        </div>
+      </div>
+      <div data-reveal style="flex:1.4 1 480px;min-width:0">
+        <div style="position:relative;aspect-ratio:16/10;overflow:hidden">
+          <div ref="{{ exA }}" style="position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 700ms ease"></div>
+          <div ref="{{ exB }}" style="position:absolute;inset:0;background-size:cover;background-position:center;transition:opacity 700ms ease;opacity:0"></div>
+        </div>
+        <div style="margin-top:28px">
+          <h3 style="margin:0;font-size:clamp(22px,1.8vw,28px);font-weight:500;letter-spacing:-0.01em">{{ area.name }} <span dir="rtl" style="font-size:0.7em;font-weight:300;color:#6B675F;margin-inline-start:10px">{{ area.ar }}</span></h3>
+          <p style="margin:10px 0 0;max-width:60ch;font-size:16px;font-weight:300;line-height:1.7;color:rgba(245,243,239,0.65)">{{ area.line }}</p>
+          <p style="margin:12px 0 0;font-size:15px;font-weight:300;color:#A8A49D">{{ area.meta }} · <span style="color:#C86B3C">{{ areaStatus }}</span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="The floor in numbers" style="background:#0B0B0F;padding:clamp(100px,14vh,180px) 0">
+  <div style="max-width:1600px;margin:0 auto;padding:0 clamp(24px,4vw,72px)">
+    <div data-reveal-stagger style="display:flex;flex-wrap:wrap;gap:clamp(32px,4vw,64px)">
+      <div style="flex:1 1 200px;border-top:1px solid rgba(245,243,239,0.15);padding-top:28px">
+        <div style="font-size:clamp(48px,5vw,84px);font-weight:300;letter-spacing:-0.03em;line-height:1"><span ref="{{ nums.0 }}">21</span></div>
+        <p style="margin:14px 0 0;font-size:16px;font-weight:300;color:#A8A49D">private offices, two to ten people each</p>
+      </div>
+      <div style="flex:1 1 200px;border-top:1px solid rgba(245,243,239,0.15);padding-top:28px">
+        <div style="font-size:clamp(48px,5vw,84px);font-weight:300;letter-spacing:-0.03em;line-height:1"><span ref="{{ nums.1 }}">4</span></div>
+        <p style="margin:14px 0 0;font-size:16px;font-weight:300;color:#A8A49D">bookable rooms, by the hour</p>
+      </div>
+      <div style="flex:1 1 200px;border-top:1px solid rgba(245,243,239,0.15);padding-top:28px">
+        <div style="font-size:clamp(48px,5vw,84px);font-weight:300;letter-spacing:-0.03em;line-height:1"><span ref="{{ nums.2 }}">120</span></div>
+        <p style="margin:14px 0 0;font-size:16px;font-weight:300;color:#A8A49D">seats across the floor, desks to lounge</p>
+      </div>
+      <div style="flex:1 1 200px;border-top:1px solid rgba(245,243,239,0.15);padding-top:28px">
+        <div style="font-size:clamp(48px,5vw,84px);font-weight:300;letter-spacing:-0.03em;line-height:1"><span ref="{{ nums.3 }}">24</span><span style="font-size:0.55em;color:#C86B3C">/7</span></div>
+        <p style="margin:14px 0 0;font-size:16px;font-weight:300;color:#A8A49D">member access, every day of the year</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section data-screen-label="Companies on the floor" style="background:#0B0B0F;padding:0 0 clamp(100px,14vh,180px);overflow:hidden">
+  <p data-reveal style="margin:0;font-size:16px;font-weight:300;color:#6B675F;text-align:center">The companies working from this floor</p>
+  <div style="position:relative;margin-top:clamp(36px,5vh,56px)">
+    <div style="display:flex;gap:clamp(56px,7vw,120px);width:max-content;animation:marquee 28s linear infinite" style-hover="animation-play-state:paused">
+      <div style="display:flex;gap:clamp(56px,7vw,120px);align-items:center">
+        <img src="assets/mars-wordmark-white.png" alt="[Member company]" style="height:28px;opacity:0.45;transition:opacity 300ms" style-hover="opacity:1">
+        <img src="assets/mars-wordmark-white.png" alt="[Member company]" style="height:28px;opacity:0.45;transition:opacity 300ms" style-hover="opacity:1">
+        <img src="assets/mars-wordmark-white.png" alt="[Member company]" style="height:28px;opacity:0.45;transition:opacity 300ms" style-hover="opacity:1">
+        <img src="assets/mars-wordmark-white.png" alt="[Member company]" style="height:28px;opacity:0.45;transition:opacity 300ms" style-hover="opacity:1">
+        <img src="assets/mars-wordmark-white.png" alt="[Member company]" style="height:28px;opacity:0.45;transition:opacity 300ms" style-hover="opacity:1">
+        <img src="assets/mars-wordmark-white.png" alt="[Member company]" style="height:28px;opacity:0.45;transition:opacity 300ms" style-hover="opacity:1">
+      </div>
+      <div style="display:flex;gap:clamp(56px,7vw,120px);align-items:center" aria-hidden="true">
+        <img src="assets/mars-wordmark-white.png" alt="" style="height:28px;opacity:0.45">
+        <img src="assets/mars-wordmark-white.png" alt="" style="height:28px;opacity:0.45">
+        <img src="assets/mars-wordmark-white.png" alt="" style="height:28px;opacity:0.45">
+        <img src="assets/mars-wordmark-white.png" alt="" style="height:28px;opacity:0.45">
+        <img src="assets/mars-wordmark-white.png" alt="" style="height:28px;opacity:0.45">
+        <img src="assets/mars-wordmark-white.png" alt="" style="height:28px;opacity:0.45">
+      </div>
+    </div>
+    <div style="position:absolute;top:0;bottom:0;left:0;width:clamp(60px,10vw,180px);background:linear-gradient(to right,#0B0B0F,rgba(11,11,15,0));pointer-events:none"></div>
+    <div style="position:absolute;top:0;bottom:0;right:0;width:clamp(60px,10vw,180px);background:linear-gradient(to left,#0B0B0F,rgba(11,11,15,0));pointer-events:none"></div>
+  </div>
+</section>
+
+<section id="offices" data-screen-label="Offices" style="background:#111014;padding:clamp(100px,14vh,180px) 0">
+  <div style="max-width:1600px;margin:0 auto;padding:0 clamp(24px,4vw,72px)">
+    <div data-reveal style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:32px">
+      <h2 style="margin:0;font-size:clamp(36px,4vw,64px);font-weight:300;letter-spacing:-0.025em;line-height:1.1">Offices open right now.</h2>
+      <p style="margin:0;max-width:42ch;font-size:17px;font-weight:300;color:#A8A49D">Offices are leased on contract, not booked online. Tell us which one fits and we come back to you within a working day to arrange it.</p>
+    </div>
+    <div data-reveal-stagger style="display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:clamp(24px,3vw,48px);margin-top:clamp(48px,6vh,80px)">
+      <sc-for list="{{ officeCards }}" as="o" hint-placeholder-count="3">
+        <div onClick="{{ o.open }}" style="cursor:pointer;min-width:0">
+          <div style="overflow:hidden;aspect-ratio:4/3;background:#1A191E">
+            <div data-bgimg="{{ o.img }}" role="img" aria-label="{{ o.name }}" style="width:100%;height:100%;background-size:cover;background-position:center;transition:transform 900ms cubic-bezier(0.16,1,0.30,1)" style-hover="transform:scale(1.05)"></div>
+          </div>
+          <div style="display:flex;align-items:baseline;justify-content:space-between;gap:16px;margin-top:20px">
+            <h3 style="margin:0;font-size:clamp(21px,1.8vw,26px);font-weight:500;letter-spacing:-0.01em">{{ o.name }}</h3>
+            <span style="font-size:14px;font-weight:300;color:#6B675F;white-space:nowrap">{{ o.size }}</span>
+          </div>
+          <p style="margin:8px 0 0;font-size:15px;font-weight:300;color:#A8A49D">{{ o.desks }} · {{ o.loc }}</p>
+          <p style="margin:14px 0 0;display:inline-flex;align-items:center;gap:8px;font-size:15px;font-weight:500;color:#C86B3C;transition:gap 250ms" style-hover="gap:12px">View and enquire<span>→</span></p>
+        </div>
+      </sc-for>
+    </div>
+  </div>
+</section>
+
+<section id="community" data-screen-label="Community" style="position:relative;background:#0B0B0F;overflow:hidden">
+  <div data-reveal="zoom" style="position:relative;height:clamp(480px,90vh,900px)">
+    <img src="assets/photo-lounge-velvet.jpg" alt="Evening gathering in the lounge" style="width:100%;height:100%;object-fit:cover;display:block">
+    <div style="position:absolute;inset:0;background:linear-gradient(to right,rgba(11,11,15,0.82) 0%,rgba(11,11,15,0.25) 65%,rgba(11,11,15,0.1) 100%)"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center">
+      <div style="max-width:1600px;width:100%;margin:0 auto;padding:0 clamp(24px,4vw,72px)">
+        <div data-reveal style="max-width:560px">
+          <h2 style="margin:0;font-size:clamp(34px,3.8vw,60px);font-weight:300;letter-spacing:-0.025em;line-height:1.12">The room where the city's builders show their work.</h2>
+          <p style="margin:26px 0 0;font-size:17px;font-weight:300;line-height:1.75;color:rgba(245,243,239,0.8)">Talks, screenings, demo days and quiet dinners. The community hall reconfigures around whatever the week needs, with the screen wall, seating and catering handled by us.</p>
+          <button onClick="{{ openHall }}" style="display:inline-flex;align-items:center;gap:10px;margin-top:36px;background:#F5F3EF;color:#0B0B0F;border:none;border-radius:999px;padding:16px 32px;font:500 15px 'Thmanyah Sans',sans-serif;line-height:1;cursor:pointer;transition:background 250ms,gap 250ms" style-hover="background:#FFFFFF;gap:14px">Book the hall<span>→</span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div style="max-width:1600px;margin:0 auto;padding:clamp(64px,8vh,104px) clamp(24px,4vw,72px)">
+    <div data-reveal-stagger style="display:flex;flex-wrap:wrap;gap:clamp(28px,4vw,72px)">
+      <div style="flex:1 1 260px">
+        <p style="margin:0;font-size:16px;font-weight:300;line-height:1.75;color:rgba(245,243,239,0.65)"><span style="color:#F5F3EF;font-weight:500">Fibre that disappears.</span> Symmetric fibre and clean Wi-Fi on every seat. The internet is only noticed when it's gone, so it never is.</p>
+      </div>
+      <div style="flex:1 1 260px">
+        <p style="margin:0;font-size:16px;font-weight:300;line-height:1.75;color:rgba(245,243,239,0.65)"><span style="color:#F5F3EF;font-weight:500">A real address.</span> Registered business address, mail and package handling, and a reception that greets your guests by company name.</p>
+      </div>
+      <div style="flex:1 1 260px">
+        <p style="margin:0;font-size:16px;font-weight:300;line-height:1.75;color:rgba(245,243,239,0.65)"><span style="color:#F5F3EF;font-weight:500">The quiet infrastructure.</span> Prayer room on the floor, showers, lockers, printing, parking below, all arranged so you stop thinking about them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="membership" data-screen-label="Membership" style="background:#F5F3EF;color:#0B0B0F;padding:clamp(100px,14vh,180px) 0">
+  <div style="max-width:1600px;margin:0 auto;padding:0 clamp(24px,4vw,72px)">
+    <div data-reveal style="display:flex;flex-wrap:wrap;align-items:flex-end;justify-content:space-between;gap:32px">
+      <h2 style="margin:0;font-size:clamp(36px,4vw,64px);font-weight:300;letter-spacing:-0.025em;line-height:1.1">Four ways in.</h2>
+      <p style="margin:0;max-width:40ch;font-size:17px;font-weight:300;color:#6B675F">Start with a day, stay for a desk, grow into an office. Every plan includes the whole floor: the lounge, the coffee, the community.</p>
+    </div>
+    <div data-reveal-stagger style="margin-top:clamp(48px,6vh,80px)">
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:16px clamp(24px,4vw,64px);padding:clamp(28px,3vw,40px) 0;border-top:1px solid rgba(11,11,15,0.15);transition:background 300ms,padding-inline-start 400ms cubic-bezier(0.16,1,0.30,1)" style-hover="background:rgba(11,11,15,0.03);padding-inline-start:16px">
+        <h3 style="margin:0;flex:1 1 220px;font-size:clamp(24px,2.2vw,34px);font-weight:400;letter-spacing:-0.015em">Day pass</h3>
+        <p style="margin:0;flex:2.2 1 320px;font-size:16px;font-weight:300;color:#6B675F">Any open desk from eight to eight, coffee and lounge included. Come see how the floor works.</p>
+        <div style="flex:none;display:flex;align-items:baseline;gap:8px"><span style="font-size:clamp(20px,1.6vw,26px);font-weight:700;letter-spacing:-0.01em"><bdi>SAR ___</bdi></span><span style="font-size:14px;font-weight:300;color:#6B675F">/ day</span></div>
+        <button onClick="{{ planPicks.0 }}" style="flex:none;display:inline-flex;align-items:center;gap:8px;background:none;border:none;padding:0;cursor:pointer;font:500 15px 'Thmanyah Sans',sans-serif;color:#8A4120;transition:gap 250ms" style-hover="gap:12px">Get a pass<span>→</span></button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:16px clamp(24px,4vw,64px);padding:clamp(28px,3vw,40px) 0;border-top:1px solid rgba(11,11,15,0.15);transition:background 300ms,padding-inline-start 400ms cubic-bezier(0.16,1,0.30,1)" style-hover="background:rgba(11,11,15,0.03);padding-inline-start:16px">
+        <h3 style="margin:0;flex:1 1 220px;font-size:clamp(24px,2.2vw,34px);font-weight:400;letter-spacing:-0.015em">Open desk</h3>
+        <p style="margin:0;flex:2.2 1 320px;font-size:16px;font-weight:300;color:#6B675F">Any desk, any hour, 24/7, with monthly meeting-room hours and your mail handled at reception.</p>
+        <div style="flex:none;display:flex;align-items:baseline;gap:8px"><span style="font-size:clamp(20px,1.6vw,26px);font-weight:700;letter-spacing:-0.01em"><bdi>SAR ___</bdi></span><span style="font-size:14px;font-weight:300;color:#6B675F">/ month</span></div>
+        <button onClick="{{ planPicks.1 }}" style="flex:none;display:inline-flex;align-items:center;gap:8px;background:none;border:none;padding:0;cursor:pointer;font:500 15px 'Thmanyah Sans',sans-serif;color:#8A4120;transition:gap 250ms" style-hover="gap:12px">Join<span>→</span></button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:16px clamp(24px,4vw,64px);padding:clamp(28px,3vw,40px) 0;border-top:1px solid rgba(11,11,15,0.15);transition:background 300ms,padding-inline-start 400ms cubic-bezier(0.16,1,0.30,1)" style-hover="background:rgba(11,11,15,0.03);padding-inline-start:16px">
+        <h3 style="margin:0;flex:1 1 220px;font-size:clamp(24px,2.2vw,34px);font-weight:400;letter-spacing:-0.015em">Dedicated desk</h3>
+        <p style="margin:0;flex:2.2 1 320px;font-size:16px;font-weight:300;color:#6B675F">The same chair every morning, a locker, a registered business address: a fixed point for a moving company.</p>
+        <div style="flex:none;display:flex;align-items:baseline;gap:8px"><span style="font-size:clamp(20px,1.6vw,26px);font-weight:700;letter-spacing:-0.01em"><bdi>SAR ___</bdi></span><span style="font-size:14px;font-weight:300;color:#6B675F">/ month</span></div>
+        <button onClick="{{ planPicks.2 }}" style="flex:none;display:inline-flex;align-items:center;gap:8px;background:none;border:none;padding:0;cursor:pointer;font:500 15px 'Thmanyah Sans',sans-serif;color:#8A4120;transition:gap 250ms" style-hover="gap:12px">Join<span>→</span></button>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:16px clamp(24px,4vw,64px);padding:clamp(28px,3vw,40px) 0;border-top:1px solid rgba(11,11,15,0.15);border-bottom:1px solid rgba(11,11,15,0.15);transition:background 300ms,padding-inline-start 400ms cubic-bezier(0.16,1,0.30,1)" style-hover="background:rgba(11,11,15,0.03);padding-inline-start:16px">
+        <h3 style="margin:0;flex:1 1 220px;font-size:clamp(24px,2.2vw,34px);font-weight:400;letter-spacing:-0.015em;color:#8A4120">Private office</h3>
+        <p style="margin:0;flex:2.2 1 320px;font-size:16px;font-weight:300;color:#6B675F">A lockable glass office for two to ten, your name on the door, your own network. Leased on contract, arranged in person.</p>
+        <div style="flex:none;display:flex;align-items:baseline;gap:8px"><span style="font-size:clamp(20px,1.6vw,26px);font-weight:700;letter-spacing:-0.01em"><bdi>SAR ___</bdi></span><span style="font-size:14px;font-weight:300;color:#6B675F">/ month</span></div>
+        <button onClick="{{ openOffice }}" style="flex:none;display:inline-flex;align-items:center;gap:8px;background:none;border:none;padding:0;cursor:pointer;font:500 15px 'Thmanyah Sans',sans-serif;color:#8A4120;transition:gap 250ms" style-hover="gap:12px">See offices<span>→</span></button>
+      </div>
+    </div>
+    <p data-reveal style="margin:28px 0 0;font-size:15px;font-weight:300;color:#6B675F">Meeting rooms and the community hall are open to everyone. Members and visitors book the same spaces at the same rates.</p>
+  </div>
+</section>
+
+<section data-screen-label="Testimonial" style="background:#111014;padding:clamp(110px,16vh,200px) 0">
+  <div style="max-width:1600px;margin:0 auto;padding:0 clamp(24px,4vw,72px)">
+    <div data-reveal ref="{{ quoteRef }}" style="max-width:900px;margin:0 auto;text-align:center;transition:opacity 450ms ease">
+      <p style="margin:0;font-size:clamp(26px,3vw,44px);font-weight:300;letter-spacing:-0.015em;line-height:1.4;text-wrap:pretty">“{{ quote.text }}”</p>
+      <p style="margin:36px 0 0;font-size:16px;font-weight:500;color:#C86B3C">{{ quote.who }}</p>
+      <p style="margin:4px 0 0;font-size:15px;font-weight:300;color:#6B675F">{{ quote.role }}</p>
+    </div>
+    <div style="display:flex;justify-content:center;gap:12px;margin-top:56px">
+      <button onClick="{{ qPicks.0 }}" aria-label="Quote 1" style="width:32px;height:4px;border:none;padding:0;cursor:pointer;background:{{ qc.0 }};transition:background 300ms"></button>
+      <button onClick="{{ qPicks.1 }}" aria-label="Quote 2" style="width:32px;height:4px;border:none;padding:0;cursor:pointer;background:{{ qc.1 }};transition:background 300ms"></button>
+      <button onClick="{{ qPicks.2 }}" aria-label="Quote 3" style="width:32px;height:4px;border:none;padding:0;cursor:pointer;background:{{ qc.2 }};transition:background 300ms"></button>
+    </div>
+  </div>
+</section>
+
+<section id="visit" data-screen-label="Book a tour" style="position:relative;background:#0B0B0F;overflow:hidden">
+  <div data-reveal="zoom" style="position:relative;height:clamp(520px,88vh,860px)">
+    <img src="assets/photo-coworking.jpg" alt="Morning light across the coworking floor" style="width:100%;height:100%;object-fit:cover;display:block">
+    <div style="position:absolute;inset:0;background:rgba(11,11,15,0.72)"></div>
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 24px">
+      <div data-reveal>
+        <h2 style="margin:0;font-size:clamp(40px,5.5vw,88px);font-weight:300;letter-spacing:-0.03em;line-height:1.05">See it in person.</h2>
+        <div dir="rtl" style="margin-top:16px;font-size:clamp(19px,1.8vw,26px);font-weight:300;color:rgba(245,243,239,0.7)">تعال وشاهد الطابق بنفسك.</div>
+        <p style="margin:26px auto 0;max-width:42ch;font-size:17px;font-weight:300;color:rgba(245,243,239,0.75)">Twenty minutes, coffee included. We'll walk the floor, you meet the people, and the space does the rest.</p>
+        <div style="display:flex;flex-wrap:wrap;justify-content:center;gap:14px;margin-top:44px">
+          <button onClick="{{ openTour }}" style="display:inline-flex;align-items:center;gap:10px;background:#F5F3EF;color:#0B0B0F;border:none;border-radius:999px;padding:18px 38px;font:500 16px 'Thmanyah Sans',sans-serif;line-height:1;cursor:pointer;transition:background 250ms,gap 250ms" style-hover="background:#FFFFFF;gap:14px">Book a tour<span>→</span></button>
+          <button onClick="{{ openBook }}" style="display:inline-flex;align-items:center;background:none;border:1px solid rgba(245,243,239,0.45);color:#F5F3EF;border-radius:999px;padding:18px 38px;font:500 16px 'Thmanyah Sans',sans-serif;line-height:1;cursor:pointer;transition:border-color 250ms,color 250ms" style-hover="border-color:#C86B3C;color:#C86B3C">Book a space</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer data-screen-label="Footer" style="background:#0B0B0F;border-top:1px solid rgba(245,243,239,0.1);padding:clamp(64px,9vh,104px) 0 48px">
+  <div style="max-width:1600px;margin:0 auto;padding:0 clamp(24px,4vw,72px)">
+    <div style="display:flex;flex-wrap:wrap;gap:clamp(40px,6vw,120px);justify-content:space-between">
+      <div style="flex:1 1 300px;max-width:420px">
+        <div style="display:flex;align-items:flex-end;gap:12px">
+          <img src="assets/mars-lockup-white.png" alt="MARS مارس" style="height:52px;display:block">
+          <span style="font-size:13px;font-weight:500;letter-spacing:0.1em;color:#A8A49D;padding-bottom:4px">SPACE</span>
+        </div>
+        <p style="margin:26px 0 0;font-size:15px;font-weight:300;color:#A8A49D;line-height:1.8">[Street address], [District]<br>Jeddah, Saudi Arabia<br><bdi>+966 [__ ___ ____]</bdi> · WhatsApp<br>hello@space.mars.sa</p>
+        <p style="margin:18px 0 0;font-size:14px;font-weight:300;color:#6B675F">Sunday to Thursday <bdi>[08:00–20:00]</bdi> · members 24/7</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:clamp(40px,5vw,96px)">
+        <div style="display:grid;gap:14px;align-content:start;justify-items:start;font-size:15px;font-weight:300">
+          <span style="font-weight:500;color:#F5F3EF;margin-bottom:4px">The floor</span>
+          <a href="#offices" style="color:#A8A49D">Private offices</a>
+          <a href="#explore" style="color:#A8A49D">Coworking</a>
+          <button onClick="{{ openBook }}" style="background:none;border:none;padding:0;cursor:pointer;font:300 15px 'Thmanyah Sans',sans-serif;color:#A8A49D;transition:color 200ms" style-hover="color:#C86B3C">Meeting rooms</button>
+          <button onClick="{{ openHall }}" style="background:none;border:none;padding:0;cursor:pointer;font:300 15px 'Thmanyah Sans',sans-serif;color:#A8A49D;transition:color 200ms" style-hover="color:#C86B3C">Community hall</button>
+        </div>
+        <div style="display:grid;gap:14px;align-content:start;justify-items:start;font-size:15px;font-weight:300">
+          <span style="font-weight:500;color:#F5F3EF;margin-bottom:4px">Visit</span>
+          <button onClick="{{ openTour }}" style="background:none;border:none;padding:0;cursor:pointer;font:300 15px 'Thmanyah Sans',sans-serif;color:#A8A49D;transition:color 200ms" style-hover="color:#C86B3C">Book a tour</button>
+          <button onClick="{{ openBook }}" style="background:none;border:none;padding:0;cursor:pointer;font:300 15px 'Thmanyah Sans',sans-serif;color:#A8A49D;transition:color 200ms" style-hover="color:#C86B3C">Book a space</button>
+          <button onClick="{{ planPicks.0 }}" style="background:none;border:none;padding:0;cursor:pointer;font:300 15px 'Thmanyah Sans',sans-serif;color:#A8A49D;transition:color 200ms" style-hover="color:#C86B3C">Day pass</button>
+          <button onClick="{{ openOffice }}" style="background:none;border:none;padding:0;cursor:pointer;font:300 15px 'Thmanyah Sans',sans-serif;color:#A8A49D;transition:color 200ms" style-hover="color:#C86B3C">Lease an office</button>
+        </div>
+        <div style="display:grid;gap:14px;align-content:start;justify-items:start;font-size:15px;font-weight:300">
+          <span style="font-weight:500;color:#F5F3EF;margin-bottom:4px">Mars</span>
+          <a href="#top" style="color:#A8A49D">Mars Ventures ↗</a>
+          <a href="#top" style="color:#A8A49D">Terms</a>
+          <a href="#top" style="color:#A8A49D">Privacy</a>
+          <a href="#top" style="color:#A8A49D">House rules</a>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;gap:16px 32px;justify-content:space-between;align-items:center;margin-top:clamp(48px,7vh,80px);padding-top:24px;border-top:1px solid rgba(245,243,239,0.08);font-size:13px;font-weight:300;color:#6B675F">
+      <span>© 2026 Mars Space · part of Mars Ventures · CR <bdi>[__________]</bdi> · VAT <bdi>[_______________]</bdi></span>
+      <span style="display:flex;border:1px solid rgba(245,243,239,0.15);border-radius:999px;overflow:hidden;font-weight:500;line-height:1">
+        <span style="padding:6px 11px;color:#A8A49D">عربي</span>
+        <span style="padding:6px 11px;background:#F5F3EF;color:#0B0B0F">EN</span>
+      </span>
+    </div>
+  </div>
+</footer>
+
+<sc-if value="{{ flowOpen }}" hint-placeholder-val="{{ false }}">
+  <div data-screen-label="Booking flow" style="position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:clamp(0px,3vw,32px)">
+    <div onClick="{{ closeFlow }}" style="position:absolute;inset:0;background:rgba(11,11,15,0.74);backdrop-filter:blur(10px);animation:fadeIn 280ms ease both"></div>
+    <div style="position:relative;width:min(880px,100%);max-height:92vh;overflow:auto;background:#F5F3EF;color:#0B0B0F;padding:clamp(28px,4.5vw,56px);animation:heroRise 480ms cubic-bezier(0.16,1,0.30,1) both">
+      <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:24px">
+        <div>
+          <h3 style="margin:0;font-size:clamp(26px,2.4vw,36px);font-weight:400;letter-spacing:-0.02em">{{ flowTitle }}</h3>
+          <p style="margin:8px 0 0;font-size:14px;font-weight:300;color:#6B675F">{{ flowStepLabel }}</p>
+        </div>
+        <button onClick="{{ closeFlow }}" aria-label="Close" style="flex:none;border:1px solid rgba(11,11,15,0.2);background:none;border-radius:999px;width:42px;height:42px;font-size:15px;cursor:pointer;color:#0B0B0F;transition:border-color 250ms" style-hover="border-color:#8A4120">✕</button>
+      </div>
+
+      <sc-if value="{{ fSpace }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:32px">
+          <p style="margin:0 0 14px;font-size:14px;font-weight:500;color:#6B675F">Meeting rooms</p>
+          <div style="display:grid;gap:12px">
+            <sc-for list="{{ bkRooms }}" as="s" hint-placeholder-count="3">
+              <div onClick="{{ s.pick }}" style="cursor:pointer;display:flex;gap:18px;align-items:center;padding:14px;border:1px solid {{ s.bd }};background:{{ s.bg }};transition:border-color 250ms,background 250ms">
+                <span data-bgimg="{{ s.img }}" role="img" aria-label="{{ s.name }}" style="width:118px;height:82px;flex:none;background-color:#E5E1DA;background-size:cover;background-position:center;display:block"></span>
+                <div style="min-width:0">
+                  <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px">
+                    <span style="font-size:19px;font-weight:500">{{ s.name }}</span>
+                    <span style="font-size:14px;font-weight:300;color:#6B675F">{{ s.cap }} · SAR {{ s.rate }} / hr</span>
+                  </div>
+                  <p style="margin:6px 0 0;font-size:14px;font-weight:300;color:#6B675F;line-height:1.55">{{ s.teaser }}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+          <p style="margin:28px 0 14px;font-size:14px;font-weight:500;color:#6B675F">Community space</p>
+          <div style="display:grid;gap:12px">
+            <sc-for list="{{ bkHalls }}" as="s" hint-placeholder-count="1">
+              <div onClick="{{ s.pick }}" style="cursor:pointer;display:flex;gap:18px;align-items:center;padding:14px;border:1px solid {{ s.bd }};background:{{ s.bg }};transition:border-color 250ms,background 250ms">
+                <span data-bgimg="{{ s.img }}" role="img" aria-label="{{ s.name }}" style="width:118px;height:82px;flex:none;background-color:#E5E1DA;background-size:cover;background-position:center;display:block"></span>
+                <div style="min-width:0">
+                  <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px">
+                    <span style="font-size:19px;font-weight:500">{{ s.name }}</span>
+                    <span style="font-size:14px;font-weight:300;color:#6B675F">{{ s.cap }} · SAR {{ s.rate }} / hr</span>
+                  </div>
+                  <p style="margin:6px 0 0;font-size:14px;font-weight:300;color:#6B675F;line-height:1.55">{{ s.teaser }}</p>
+                </div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ fOptions }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:32px">
+          <div data-bgimg="{{ gMain }}" role="img" aria-label="{{ spName }}" style="aspect-ratio:16/9;background-color:#E5E1DA;background-size:cover;background-position:center"></div>
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <sc-for list="{{ gThumbs }}" as="g" hint-placeholder-count="3">
+              <span onClick="{{ g.pick }}" data-bgimg="{{ g.img }}" style="width:88px;height:60px;flex:none;background-color:#E5E1DA;background-size:cover;background-position:center;display:block;cursor:pointer;opacity:{{ g.op }};outline:2px solid {{ g.ol }};outline-offset:-2px;transition:opacity 250ms"></span>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:32px;margin-top:28px">
+            <div style="flex:1.2 1 280px">
+              <p style="margin:0 0 10px;font-size:14px;font-weight:500;color:#6B675F">In this room</p>
+              <div style="display:grid;gap:8px">
+                <sc-for list="{{ spFeatures }}" as="f" hint-placeholder-count="5">
+                  <div style="display:flex;gap:10px;align-items:baseline;font-size:15px;font-weight:300;color:#3D3A36"><span style="width:6px;height:6px;background:#8A4120;flex:none;transform:translateY(-2px)"></span>{{ f }}</div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex:1 1 280px">
+              <p style="margin:0 0 10px;font-size:14px;font-weight:500;color:#6B675F">Add to your booking</p>
+              <div style="display:grid;gap:8px">
+                <sc-for list="{{ bkAddons }}" as="ad" hint-placeholder-count="5">
+                  <div onClick="{{ ad.toggle }}" style="cursor:pointer;display:flex;align-items:center;gap:12px;padding:11px 14px;border:1px solid {{ ad.bd }};background:{{ ad.bg }};transition:border-color 250ms,background 250ms">
+                    <span style="width:18px;height:18px;flex:none;border:1.5px solid {{ ad.ck }};display:flex;align-items:center;justify-content:center;font-size:12px;color:#FFFFFF;background:{{ ad.ckbg }};transition:background 200ms">{{ ad.mark }}</span>
+                    <span style="flex:1;font-size:15px;font-weight:400">{{ ad.name }}</span>
+                    <span style="font-size:14px;font-weight:300;color:#6B675F;white-space:nowrap">{{ ad.priceLabel }}</span>
+                  </div>
+                </sc-for>
+              </div>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ fSchedule }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:32px">
+          <p style="margin:0 0 12px;font-size:14px;font-weight:500;color:#6B675F">Day</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <sc-for list="{{ bkDates }}" as="d" hint-placeholder-count="3">
+              <button onClick="{{ d.pick }}" style="border:1px solid {{ d.bd }};background:{{ d.bg }};color:{{ d.fg }};border-radius:999px;padding:12px 22px;font:400 15px 'Thmanyah Sans',sans-serif;line-height:1;cursor:pointer;transition:border-color 250ms,background 250ms,color 250ms">{{ d.label }}</button>
+            </sc-for>
+          </div>
+          <p style="margin:32px 0 12px;font-size:14px;font-weight:500;color:#6B675F">Hours · pick a start and stretch the block</p>
+          <div style="display:flex;gap:4px">
+            <sc-for list="{{ bkHours }}" as="h" hint-placeholder-count="12">
+              <div onClick="{{ h.pick }}" style="flex:1;min-width:0;cursor:{{ h.cur }}">
+                <div style="height:52px;background:{{ h.bg }};border:1px solid {{ h.bd }};position:relative;transition:background 200ms,border-color 200ms">
+                  <sc-if value="{{ h.booked }}" hint-placeholder-val="{{ false }}">
+                    <div style="position:absolute;inset:0;background:repeating-linear-gradient(45deg,rgba(11,11,15,0.10) 0 5px,transparent 5px 10px)"></div>
+                  </sc-if>
+                </div>
+                <div style="margin-top:6px;font-size:11px;font-weight:400;color:{{ h.fg }};text-align:center;white-space:nowrap;overflow:hidden">{{ h.label }}</div>
+              </div>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:10px 28px;margin-top:18px;font-size:13px;font-weight:300;color:#6B675F">
+            <span style="display:inline-flex;align-items:center;gap:8px"><span style="width:12px;height:12px;border:1px solid rgba(11,11,15,0.25)"></span>Available</span>
+            <span style="display:inline-flex;align-items:center;gap:8px"><span style="width:12px;height:12px;background:repeating-linear-gradient(45deg,rgba(11,11,15,0.18) 0 3px,rgba(11,11,15,0.06) 3px 6px)"></span>Booked</span>
+            <span style="display:inline-flex;align-items:center;gap:8px"><span style="width:12px;height:12px;background:#8A4120"></span>Your booking</span>
+          </div>
+          <p style="margin:22px 0 0;font-size:16px;font-weight:400;color:#0B0B0F">{{ schedSummary }}</p>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ fOffice }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:12px;margin-top:32px">
+          <sc-for list="{{ bkOffices }}" as="o" hint-placeholder-count="3">
+            <div onClick="{{ o.pick }}" style="cursor:pointer;display:flex;gap:18px;align-items:center;padding:14px;border:1px solid {{ o.bd }};background:{{ o.bg }};transition:border-color 250ms,background 250ms">
+              <span data-bgimg="{{ o.img }}" role="img" aria-label="{{ o.name }}" style="width:118px;height:82px;flex:none;background-color:#E5E1DA;background-size:cover;background-position:center;display:block"></span>
+              <div style="min-width:0">
+                <div style="display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 14px">
+                  <span style="font-size:19px;font-weight:500">{{ o.name }}</span>
+                  <span style="font-size:14px;font-weight:300;color:#6B675F">{{ o.size }} · {{ o.desks }}</span>
+                </div>
+                <p style="margin:6px 0 0;font-size:14px;font-weight:300;color:#6B675F">{{ o.loc }} · {{ o.price }}</p>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ fOfficeView }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:32px">
+          <div data-bgimg="{{ gMain }}" role="img" aria-label="{{ offName }}" style="aspect-ratio:16/9;background-color:#E5E1DA;background-size:cover;background-position:center"></div>
+          <div style="display:flex;gap:10px;margin-top:10px">
+            <sc-for list="{{ gThumbs }}" as="g" hint-placeholder-count="3">
+              <span onClick="{{ g.pick }}" data-bgimg="{{ g.img }}" style="width:88px;height:60px;flex:none;background-color:#E5E1DA;background-size:cover;background-position:center;display:block;cursor:pointer;opacity:{{ g.op }};outline:2px solid {{ g.ol }};outline-offset:-2px;transition:opacity 250ms"></span>
+            </sc-for>
+          </div>
+          <div style="display:flex;flex-wrap:wrap;gap:32px;margin-top:28px">
+            <div style="flex:1.2 1 280px">
+              <p style="margin:0 0 10px;font-size:14px;font-weight:500;color:#6B675F">Inside {{ offName }}</p>
+              <div style="display:grid;gap:8px">
+                <sc-for list="{{ offFeatures }}" as="f" hint-placeholder-count="4">
+                  <div style="display:flex;gap:10px;align-items:baseline;font-size:15px;font-weight:300;color:#3D3A36"><span style="width:6px;height:6px;background:#8A4120;flex:none;transform:translateY(-2px)"></span>{{ f }}</div>
+                </sc-for>
+              </div>
+            </div>
+            <div style="flex:1 1 240px">
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(11,11,15,0.12);font-size:15px"><span style="font-weight:300;color:#6B675F">Location</span><span style="font-weight:400;text-align:end">{{ offLoc }}</span></div>
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(11,11,15,0.12);font-size:15px"><span style="font-weight:300;color:#6B675F">Size</span><span style="font-weight:400">{{ offSize }}</span></div>
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(11,11,15,0.12);font-size:15px"><span style="font-weight:300;color:#6B675F">Workstations</span><span style="font-weight:400">{{ offDesks }}</span></div>
+              <div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-top:1px solid rgba(11,11,15,0.12);border-bottom:1px solid rgba(11,11,15,0.12);font-size:15px"><span style="font-weight:300;color:#6B675F">Lease</span><span style="font-weight:500;color:#8A4120">{{ offPrice }}</span></div>
+              <p style="margin:16px 0 0;font-size:13px;font-weight:300;color:#6B675F">Offices are contracted directly with our team. No payment is taken online.</p>
+            </div>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ fTime }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:32px">
+          <p style="margin:0 0 12px;font-size:14px;font-weight:500;color:#6B675F">Day</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <sc-for list="{{ bkDates }}" as="d" hint-placeholder-count="3">
+              <button onClick="{{ d.pick }}" style="border:1px solid {{ d.bd }};background:{{ d.bg }};color:{{ d.fg }};border-radius:999px;padding:12px 22px;font:400 15px 'Thmanyah Sans',sans-serif;line-height:1;cursor:pointer;transition:border-color 250ms,background 250ms,color 250ms">{{ d.label }}</button>
+            </sc-for>
+          </div>
+          <p style="margin:28px 0 12px;font-size:14px;font-weight:500;color:#6B675F">Time</p>
+          <div style="display:flex;flex-wrap:wrap;gap:10px">
+            <sc-for list="{{ bkTourTimes }}" as="t" hint-placeholder-count="6">
+              <button onClick="{{ t.pick }}" style="border:1px solid {{ t.bd }};background:{{ t.bg }};color:{{ t.fg }};border-radius:999px;padding:12px 20px;font:400 15px 'Thmanyah Sans',sans-serif;line-height:1;cursor:pointer;transition:border-color 250ms,background 250ms,color 250ms">{{ t.label }}</button>
+            </sc-for>
+          </div>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ fPlanStep }}" hint-placeholder-val="{{ false }}">
+        <div style="display:grid;gap:12px;margin-top:32px">
+          <sc-for list="{{ bkPlans }}" as="p" hint-placeholder-count="3">
+            <div onClick="{{ p.pick }}" style="cursor:pointer;display:flex;flex-wrap:wrap;align-items:baseline;justify-content:space-between;gap:8px 20px;padding:20px 22px;border:1px solid {{ p.bd }};background:{{ p.bg }};transition:border-color 250ms,background 250ms">
+              <span style="font-size:19px;font-weight:500">{{ p.name }}</span>
+              <span style="font-size:14px;font-weight:300;color:#6B675F">{{ p.meta }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ fDetails }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:32px">
+          <div style="background:rgba(11,11,15,0.05);padding:20px 24px">
+            <p style="margin:0;font-size:15px;font-weight:500">{{ flowSummary }}</p>
+            <sc-if value="{{ hasPrice }}" hint-placeholder-val="{{ false }}">
+              <div style="margin-top:14px">
+                <sc-for list="{{ priceRows }}" as="pr" hint-placeholder-count="2">
+                  <div style="display:flex;justify-content:space-between;gap:16px;padding:7px 0;font-size:14px;font-weight:300;color:#3D3A36"><span>{{ pr.label }}</span><span><bdi>{{ pr.amount }}</bdi></span></div>
+                </sc-for>
+                <div style="display:flex;justify-content:space-between;gap:16px;padding:10px 0 0;margin-top:6px;border-top:1px solid rgba(11,11,15,0.15);font-size:16px;font-weight:700"><span>Total, VAT included</span><span><bdi>SAR {{ totalLabel }}</bdi></span></div>
+              </div>
+            </sc-if>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px 28px;margin-top:28px">
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:500;color:#6B675F">Full name
+              <input type="text" placeholder="Your name" style="border:none;border-bottom:1px solid rgba(11,11,15,0.25);background:none;padding:10px 2px;font:300 16px 'Thmanyah Sans',sans-serif;color:#0B0B0F">
+            </label>
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:500;color:#6B675F">Company
+              <input type="text" placeholder="Optional" style="border:none;border-bottom:1px solid rgba(11,11,15,0.25);background:none;padding:10px 2px;font:300 16px 'Thmanyah Sans',sans-serif;color:#0B0B0F">
+            </label>
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:500;color:#6B675F">Email
+              <input type="email" placeholder="you@company.com" style="border:none;border-bottom:1px solid rgba(11,11,15,0.25);background:none;padding:10px 2px;font:300 16px 'Thmanyah Sans',sans-serif;color:#0B0B0F">
+            </label>
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:500;color:#6B675F">Phone / WhatsApp
+              <input type="tel" placeholder="+966" style="border:none;border-bottom:1px solid rgba(11,11,15,0.25);background:none;padding:10px 2px;font:300 16px 'Thmanyah Sans',sans-serif;color:#0B0B0F">
+            </label>
+          </div>
+          <label style="display:grid;gap:6px;margin-top:24px;font-size:13px;font-weight:500;color:#6B675F">Anything we should know?
+            <textarea rows="2" placeholder="Optional" style="border:none;border-bottom:1px solid rgba(11,11,15,0.25);background:none;padding:10px 2px;font:300 16px 'Thmanyah Sans',sans-serif;color:#0B0B0F;resize:vertical"></textarea>
+          </label>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ fPay }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:32px">
+          <div style="background:rgba(11,11,15,0.05);padding:20px 24px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:baseline;gap:12px">
+            <span style="font-size:15px;font-weight:400">{{ flowSummary }}</span>
+            <span style="font-size:22px;font-weight:700"><bdi>SAR {{ totalLabel }}</bdi></span>
+          </div>
+          <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px 28px;margin-top:28px">
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:500;color:#6B675F;grid-column:1 / -1">Name on card
+              <input type="text" placeholder="As printed on the card" style="border:none;border-bottom:1px solid rgba(11,11,15,0.25);background:none;padding:10px 2px;font:300 16px 'Thmanyah Sans',sans-serif;color:#0B0B0F">
+            </label>
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:500;color:#6B675F;grid-column:1 / -1">Card number
+              <input type="text" placeholder="0000 0000 0000 0000" style="border:none;border-bottom:1px solid rgba(11,11,15,0.25);background:none;padding:10px 2px;font:300 16px 'Thmanyah Sans',sans-serif;color:#0B0B0F">
+            </label>
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:500;color:#6B675F">Expiry
+              <input type="text" placeholder="MM / YY" style="border:none;border-bottom:1px solid rgba(11,11,15,0.25);background:none;padding:10px 2px;font:300 16px 'Thmanyah Sans',sans-serif;color:#0B0B0F">
+            </label>
+            <label style="display:grid;gap:6px;font-size:13px;font-weight:500;color:#6B675F">CVC
+              <input type="text" placeholder="123" style="border:none;border-bottom:1px solid rgba(11,11,15,0.25);background:none;padding:10px 2px;font:300 16px 'Thmanyah Sans',sans-serif;color:#0B0B0F">
+            </label>
+          </div>
+          <p style="margin:22px 0 0;font-size:13px;font-weight:300;color:#6B675F">Payments are processed securely. mada, Visa, Mastercard and Apple Pay accepted.</p>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ fDone }}" hint-placeholder-val="{{ false }}">
+        <div style="margin-top:44px;text-align:center;padding-bottom:12px">
+          <div style="width:64px;height:64px;border:1.5px solid #8A4120;border-radius:50%;display:flex;align-items:center;justify-content:center;margin:0 auto;font-size:24px;color:#8A4120">✓</div>
+          <h4 style="margin:28px 0 0;font-size:clamp(24px,2vw,32px);font-weight:400;letter-spacing:-0.015em">{{ doneTitle }}</h4>
+          <p style="margin:14px auto 0;max-width:46ch;font-size:16px;font-weight:300;color:#6B675F">{{ doneMsg }}</p>
+          <button onClick="{{ closeFlow }}" style="margin-top:32px;display:inline-flex;align-items:center;background:#8A4120;color:#FFFFFF;border:none;border-radius:999px;padding:15px 34px;font:500 15px 'Thmanyah Sans',sans-serif;line-height:1;cursor:pointer;transition:background 250ms" style-hover="background:#9A4B26">Done</button>
+        </div>
+      </sc-if>
+
+      <sc-if value="{{ fNav }}" hint-placeholder-val="{{ false }}">
+        <div style="display:flex;justify-content:space-between;align-items:center;gap:20px;margin-top:40px;padding-top:24px;border-top:1px solid rgba(11,11,15,0.12)">
+          <button onClick="{{ flowBack }}" style="background:none;border:none;padding:0;cursor:pointer;font:400 15px 'Thmanyah Sans',sans-serif;color:#6B675F;transition:color 200ms" style-hover="color:#0B0B0F">{{ backLabel }}</button>
+          <button onClick="{{ flowNext }}" style="display:inline-flex;align-items:center;gap:10px;background:{{ nextBg }};color:#FFFFFF;border:none;border-radius:999px;padding:15px 32px;font:500 15px 'Thmanyah Sans',sans-serif;line-height:1;cursor:pointer;transition:background 250ms,gap 250ms" style-hover="gap:14px">{{ nextLabel }}<span>→</span></button>
+        </div>
+      </sc-if>
+    </div>
+  </div>
+</sc-if>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;$preview&quot;:{&quot;width&quot;:1440,&quot;height&quot;:900},&quot;heroHeadline&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;default&quot;:&quot;Built for the people who build.&quot;,&quot;options&quot;:[&quot;Built for the people who build.&quot;,&quot;Where Jeddah builds.&quot;,&quot;One floor. All momentum.&quot;],&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;liveAvailability&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Availability&quot;}}">
+class Component extends DCLogic {
+  state = { area:0, quote:0, mounted:false, flow:null, step:0, done:false, space:0, office:0, gal:0, date:0, selStart:-1, selLen:0, tourTime:1, plan:0, addons:[false,false,false,false,false] };
+  hdr = React.createRef();
+  px = React.createRef();
+  exA = React.createRef();
+  exB = React.createRef();
+  quoteEl = React.createRef();
+  numRefs = [React.createRef(),React.createRef(),React.createRef(),React.createRef()];
+  flowsDef = { book:['space','options','schedule','details','pay'], office:['office','oview','details'], tour:['time','details'], plan:['plan','details'] };
+  spaces = [
+    {name:'Ventures', kind:'room', cap:'14 seats', rate:220, imgs:['assets/photo-glass-offices.jpg','assets/photo-vip-lounge.jpg','assets/photo-coworking.jpg'], teaser:'Boardroom table, 75" screen with video conferencing, whiteboard wall.', features:['Boardroom table seating 14','75" screen with video conferencing','Conference microphone and audio','Whiteboard wall with markers','Stationery, adapters and clickers']},
+    {name:'Lab', kind:'room', cap:'8 seats', rate:160, imgs:['assets/photo-coworking.jpg','assets/photo-glass-offices.jpg','assets/photo-lounge-velvet.jpg'], teaser:'Workshop tables, projector and 65" screen, full-wall whiteboard.', features:['Movable workshop tables for 8','65" screen and projector','Full-wall whiteboard','Workshop kit: sticky notes, markers, timer','Standing rail for pin-ups']},
+    {name:'VC', kind:'room', cap:'6 seats', rate:120, imgs:['assets/photo-vip-lounge.jpg','assets/photo-lounge-velvet.jpg','assets/photo-glass-offices.jpg'], teaser:'Round table for six, 55" screen, natural light, the quiet room.', features:['Round table seating 6','55" screen with wireless casting','Natural light, blackout blind','Acoustic panelling','Office essentials tray']},
+    {name:'Community hall', kind:'hall', cap:'up to 80', rate:400, imgs:['assets/photo-community-cinema.jpg','assets/photo-lounge-velvet.jpg','assets/photo-coworking.jpg'], teaser:'Screen wall, configurable seating and PA for talks, workshops and launches.', features:['Screen wall and projector','Theatre, classroom or circle seating','PA system and two microphones','Stage lighting presets','Pantry access for catering']}
+  ];
+  addonsData = [
+    {name:'Tea service', price:40},
+    {name:'Coffee service', price:60},
+    {name:'Water and soft drinks', price:35},
+    {name:'Extra whiteboard and workshop kit', price:30},
+    {name:'Catering', price:0}
+  ];
+  offices = [
+    {name:'Office 04', size:'22 m²', desks:'4 desks', loc:'North perimeter, window line', price:'from SAR 6,500 / month', imgs:['assets/photo-glass-offices.jpg','assets/photo-coworking.jpg','assets/photo-vip-lounge.jpg'], features:['4 height-adjustable desks with chairs','Lockable glass front, frosted band','Storage wall and personal lockers','Own network segment and printing']},
+    {name:'Office 11', size:'32 m²', desks:'6 desks', loc:'East corner, daylight on two sides', price:'from SAR 9,000 / month', imgs:['assets/photo-vip-lounge.jpg','assets/photo-glass-offices.jpg','assets/photo-lounge-velvet.jpg'], features:['6 desks with monitor arms','Corner glazing, double aspect','In-office meeting nook for 3','Own network segment and storage']},
+    {name:'Office 17', size:'48 m²', desks:'10 desks', loc:'South perimeter suite', price:'from SAR 14,000 / month', imgs:['assets/photo-coworking.jpg','assets/photo-vip-lounge.jpg','assets/photo-community-cinema.jpg'], features:['10 desks in two banks','Separable manager cabin','Dedicated storage room','Own network, AC zone control']}
+  ];
+  plansData = [
+    {name:'Day pass', meta:'SAR ___ / day'},
+    {name:'Open desk', meta:'SAR ___ / month'},
+    {name:'Dedicated desk', meta:'SAR ___ / month'}
+  ];
+  datesData = ['Today, Thu 23 Jul','Sun 26 Jul','Mon 27 Jul'];
+  hourLabels = ['8 AM','9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM'];
+  endLabels = ['9 AM','10 AM','11 AM','12 PM','1 PM','2 PM','3 PM','4 PM','5 PM','6 PM','7 PM','8 PM'];
+  bookedMap = {
+    0:[[2,3,7],[0,1,6],[5,6,11]],
+    1:[[4,5,10],[8,9],[1,2]],
+    2:[[0,1,9],[3,4,11],[6,7]],
+    3:[[6,7,8,9],[0,1,2],[10,11]]
+  };
+  tourTimes = ['10:00 AM','11:30 AM','1:00 PM','3:00 PM','4:30 PM'];
+  quotes = [
+    {text:'We moved in with three people and signed our Series A from the Ventures room a year later. The floor grew with us the whole way.', who:'Founder', role:'Resident fintech startup'},
+    {text:'I book the same room for every client workshop. It is the only space in Jeddah where the screen, the coffee and the quiet all just work.', who:'Principal consultant', role:'Independent strategy practice'},
+    {text:'The difference is who you sit next to. Half our hires and our first two customers came from conversations in the coffee lounge.', who:'CEO', role:'Resident SaaS company'}
+  ];
+  areas = [
+    {name:'Meeting rooms', ar:'قاعات الاجتماعات', img:'assets/photo-glass-offices.jpg', line:'Four glass rooms off the open floor: Ventures, Lab, VC and Consultancy, from a four-seat huddle to a fourteen-seat boardroom with a video wall.', meta:'4 rooms · screens and conferencing in each', status:'3 of 4 free right now'},
+    {name:'Private offices', ar:'المكاتب الخاصة', img:'assets/photo-glass-offices.jpg', line:'Twenty-one lockable offices around the perimeter, sized from two to ten. Your name on the door, your own network, and daylight on every desk.', meta:'21 offices · 24/7 access', status:'3 open right now'},
+    {name:'Coworking', ar:'العمل المشترك', img:'assets/photo-coworking.jpg', line:'The open centre of the floor, lit from both sides. Take any desk with a day pass or keep the same one every morning with a membership.', meta:'Open floor · hot and dedicated desks', status:'desks free today'},
+    {name:'Community hall', ar:'القاعة المجتمعية', img:'assets/photo-community-cinema.jpg', line:'The corner room with the screen wall. Theatre rows for a talk, loose circles for a workshop, cleared out for a launch night.', meta:'Configurable · full AV · catering handled', status:'hourly or half-day'},
+    {name:'Coffee lounge', ar:'ركن القهوة', img:'assets/photo-lounge-velvet.jpg', line:'Specialty coffee and low seating where the floor decompresses. Every plan and every booking includes it, and most introductions start here.', meta:'Open access · barista hours daily', status:'always open'},
+    {name:'Phone booths', ar:'كبائن الهاتف', img:'assets/photo-vip-lounge.jpg', line:'Three acoustic booths by the entrance for the call you need to take now. No booking, no key. Just close the door.', meta:'3 booths · one person each', status:'2 free right now'}
+  ];
+  openFlow(kind, pre){
+    document.body.style.overflow = 'hidden';
+    this.setState({flow:kind, step:0, done:false, gal:0, date:0, selStart:-1, selLen:0, tourTime:1, addons:[false,false,false,false,false],
+      space:(pre&&pre.space)!=null?pre.space:0, office:(pre&&pre.office)!=null?pre.office:0, plan:(pre&&pre.plan)!=null?pre.plan:0});
+  }
+  closeFlow(){
+    document.body.style.overflow = '';
+    this.setState({flow:null, done:false, step:0});
+  }
+  bookedSet(){ return this.bookedMap[this.state.space][this.state.date] || []; }
+  pickHour(h){
+    const booked = this.bookedSet();
+    if(booked.includes(h)) return;
+    let {selStart:s, selLen:l} = this.state;
+    if(s < 0 || l === 0){ this.setState({selStart:h, selLen:1}); return; }
+    const end = s + l - 1;
+    const blocked = (a,b)=>{ for(let i=a;i<=b;i++) if(booked.includes(i)) return true; return false; };
+    if(h === end + 1 && !blocked(s,h)) this.setState({selLen:l+1});
+    else if(h === s - 1 && !blocked(h,end)) this.setState({selStart:h, selLen:l+1});
+    else if(h >= s && h <= end){ h === end && l > 1 ? this.setState({selLen:l-1}) : this.setState({selStart:h, selLen:1}); }
+    else this.setState({selStart:h, selLen:1});
+  }
+  total(){
+    const sp = this.spaces[this.state.space];
+    const hrs = Math.max(this.state.selLen, 0);
+    let t = sp.rate * hrs;
+    this.addonsData.forEach((a,i)=>{ if(this.state.addons[i]) t += a.price; });
+    return t;
+  }
+  countUp(){
+    if(this._counted) return; this._counted = true;
+    const targets = [21,4,120,24];
+    this.numRefs.forEach((r,i)=>{
+      const el = r.current; if(!el) return;
+      const t0 = performance.now(), dur = 1400;
+      const tick = (t)=>{
+        const p = Math.min((t-t0)/dur,1), e = 1-Math.pow(1-p,3);
+        el.textContent = Math.round(targets[i]*e);
+        if(p<1) requestAnimationFrame(tick);
+      };
+      requestAnimationFrame(tick);
+    });
+  }
+  syncBgImgs(){
+    document.querySelectorAll('[data-bgimg]').forEach(el=>{
+      const u = el.getAttribute('data-bgimg');
+      if(u && u.indexOf('{{') === -1 && el.__bg !== u){
+        el.__bg = u;
+        el.style.backgroundImage = "url('" + u + "')";
+      }
+    });
+  }
+  syncExplore(prev){
+    const a = this.exA.current, b = this.exB.current;
+    if(!a || !b) return;
+    const img = this.areas[this.state.area].img;
+    if(prev === undefined){ a.style.backgroundImage = "url('" + img + "')"; return; }
+    if(prev === this.state.area) return;
+    const showA = a.style.opacity !== '0';
+    const front = showA ? b : a, back = showA ? a : b;
+    front.style.backgroundImage = "url('" + img + "')";
+    front.style.opacity = '1'; back.style.opacity = '0';
+  }
+  componentDidMount(){
+    this.setState({mounted:true});
+    this.syncExplore();
+    this.syncBgImgs();
+    const rm = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if(!rm){
+      const reveal = (t)=>{
+        const d = t.__rvDelay || 0;
+        t.style.transition = 'opacity 640ms cubic-bezier(0.16,1,0.30,1) ' + d + 'ms, transform 640ms cubic-bezier(0.16,1,0.30,1) ' + d + 'ms';
+        t.style.opacity='1'; t.style.transform='none';
+        t.__rvDone = true;
+      };
+      const hidden = [];
+      const prime = (el, kind, delay)=>{
+        el.__rvDelay = delay || 0;
+        el.style.opacity='0';
+        el.style.transform = kind==='zoom' ? 'scale(0.985)' : 'translateY(44px)';
+        hidden.push(el);
+      };
+      const io = new IntersectionObserver((es)=>{
+        es.forEach(e=>{
+          if(!e.isIntersecting) return;
+          const t = e.target;
+          if(t.__rvKids) t.__rvKids.forEach(reveal); else reveal(t);
+          io.unobserve(t);
+        });
+      },{threshold:0.05, rootMargin:'0px 0px -6% 0px'});
+      document.querySelectorAll('[data-reveal]').forEach(el=>{
+        if(el.getBoundingClientRect().top < innerHeight) return;
+        prime(el, el.getAttribute('data-reveal') || '');
+        io.observe(el);
+      });
+      document.querySelectorAll('[data-reveal-stagger]').forEach(el=>{
+        if(el.getBoundingClientRect().top < innerHeight) return;
+        const kids = Array.from(el.children);
+        kids.forEach((k,idx)=>prime(k, '', Math.min(idx,8)*110));
+        el.__rvKids = kids;
+        io.observe(el);
+      });
+      this._io = io;
+      this._revealCheck = ()=>{
+        hidden.forEach(el=>{
+          if(!el.__rvDone && el.getBoundingClientRect().top < innerHeight*0.96) reveal(el);
+        });
+      };
+      addEventListener('scroll', this._revealCheck, {passive:true});
+      this._revealTimer = setTimeout(()=>{
+        hidden.forEach(el=>{ if(!el.__rvDone && el.getBoundingClientRect().top < innerHeight) reveal(el); });
+      }, 4000);
+      this._parallax = ()=>{
+        if(this.px.current && scrollY < innerHeight*2.5){
+          const r = this.px.current.getBoundingClientRect();
+          this.px.current.style.transform = 'translateY(' + ((r.top - innerHeight/2) * -0.06) + 'px)';
+        }
+      };
+      addEventListener('scroll', this._parallax, {passive:true});
+      this._quoteTimer = setInterval(()=>{
+        this.setQuote((this.state.quote + 1) % this.quotes.length);
+      }, 7000);
+    }
+    const numHost = this.numRefs[0].current && this.numRefs[0].current.closest('[data-reveal-stagger]');
+    if(numHost){
+      if(rm){ this._counted = true; }
+      else{
+        const nio = new IntersectionObserver((es)=>{ if(es.some(e=>e.isIntersecting)){ this.countUp(); nio.disconnect(); } },{threshold:0.3});
+        nio.observe(numHost); this._nio = nio;
+        setTimeout(()=>{ if(!this._counted && numHost.getBoundingClientRect().top < innerHeight) this.countUp(); }, 4500);
+      }
+    }
+    this._onScroll = ()=>{ if(this.hdr.current) this.hdr.current.style.opacity = scrollY>60 ? '1':'0'; };
+    addEventListener('scroll', this._onScroll, {passive:true});
+    this._onScroll();
+    this._onKey = (e)=>{ if(e.key==='Escape' && this.state.flow) this.closeFlow(); };
+    addEventListener('keydown', this._onKey);
+  }
+  setQuote(i){
+    if(i === this.state.quote) return;
+    const el = this.quoteEl.current;
+    if(el){
+      el.style.opacity = '0';
+      setTimeout(()=>{ this.setState({quote:i}); el.style.opacity='1'; }, 450);
+    } else this.setState({quote:i});
+  }
+  componentDidUpdate(prevProps, prevState){ this.syncExplore(prevState && prevState.area); this.syncBgImgs(); }
+  componentWillUnmount(){
+    removeEventListener('scroll', this._onScroll);
+    removeEventListener('keydown', this._onKey);
+    if(this._revealCheck) removeEventListener('scroll', this._revealCheck);
+    if(this._parallax) removeEventListener('scroll', this._parallax);
+    if(this._revealTimer) clearTimeout(this._revealTimer);
+    if(this._quoteTimer) clearInterval(this._quoteTimer);
+    if(this._io) this._io.disconnect();
+    if(this._nio) this._nio.disconnect();
+    document.body.style.overflow = '';
+  }
+  renderVals(){
+    const a = this.areas[this.state.area];
+    const live = this.props.liveAvailability ?? true;
+    const heroTitle = this.props.heroHeadline ?? 'Built for the people who build.';
+    const flow = this.state.flow;
+    const steps = flow ? this.flowsDef[flow] : [];
+    const kind = this.state.done ? 'done' : (flow ? steps[this.state.step] : '');
+    const last = flow && this.state.step === steps.length - 1;
+    const sel = (on)=>({ bd: on?'#8A4120':'rgba(11,11,15,0.18)', bg: on?'rgba(138,65,32,0.07)':'transparent', fg: on?'#8A4120':'#0B0B0F' });
+    const sp = this.spaces[this.state.space];
+    const off = this.offices[this.state.office];
+    const gImgs = flow==='office' ? off.imgs : sp.imgs;
+    const gal = Math.min(this.state.gal, gImgs.length-1);
+    const booked = flow==='book' ? this.bookedSet() : [];
+    const s0 = this.state.selStart, l0 = this.state.selLen;
+    const hrs = l0;
+    const range = (s0>=0 && l0>0) ? this.hourLabels[s0]+' to '+this.endLabels[s0+l0-1] : '';
+    const dateLabel = this.datesData[this.state.date];
+    const total = this.total();
+    const fmt = (n)=>n.toLocaleString('en-US');
+    const scheduleOk = !(kind==='schedule') || (s0>=0 && l0>0);
+    const priceRows = [];
+    if(flow==='book'){
+      if(hrs>0) priceRows.push({label: sp.name+' · '+hrs+(hrs===1?' hour':' hours')+' × SAR '+sp.rate, amount:'SAR '+fmt(sp.rate*hrs)});
+      this.addonsData.forEach((ad,i)=>{
+        if(this.state.addons[i]) priceRows.push({label: ad.name, amount: ad.price>0 ? 'SAR '+fmt(ad.price) : 'quoted separately'});
+      });
+    }
+    const summary = flow==='book' ? sp.name+' · '+dateLabel+(range? ' · '+range:'')
+      : flow==='office' ? off.name+' · '+off.size+' · '+off.desks
+      : flow==='tour' ? 'Tour of the floor · '+dateLabel+' · '+this.tourTimes[this.state.tourTime]
+      : this.plansData[this.state.plan].name+' membership';
+    return {
+      mounted: this.state.mounted,
+      hdrRef: this.hdr, pxImg: this.px, exA: this.exA, exB: this.exB, quoteRef: this.quoteEl, nums: this.numRefs,
+      heroTitle,
+      area: a,
+      areaStatus: live ? a.status : 'book by the hour',
+      picks: this.areas.map((_,k)=>()=>this.setState({area:k})),
+      tc: this.areas.map((_,k)=>k===this.state.area ? '#C86B3C' : '#F5F3EF'),
+      quote: this.quotes[this.state.quote],
+      qPicks: this.quotes.map((_,k)=>()=>{ if(this._quoteTimer){clearInterval(this._quoteTimer); this._quoteTimer=null;} this.setQuote(k); }),
+      qc: this.quotes.map((_,k)=>k===this.state.quote ? '#C86B3C' : 'rgba(245,243,239,0.18)'),
+      officeCards: this.offices.map((o,k)=>({ name:o.name, size:o.size, desks:o.desks, loc:o.loc, img:o.imgs[0], open:()=>this.openFlow('office',{office:k}) })),
+      openBook: ()=>this.openFlow('book'),
+      openHall: ()=>this.openFlow('book',{space:3}),
+      openOffice: ()=>this.openFlow('office'),
+      openTour: ()=>this.openFlow('tour'),
+      planPicks: this.plansData.map((_,k)=>()=>this.openFlow('plan',{plan:k})),
+      closeFlow: ()=>this.closeFlow(),
+      flowOpen: !!flow,
+      fSpace: kind==='space', fOptions: kind==='options', fSchedule: kind==='schedule',
+      fOffice: kind==='office', fOfficeView: kind==='oview',
+      fTime: kind==='time', fPlanStep: kind==='plan',
+      fDetails: kind==='details', fPay: kind==='pay', fDone: kind==='done',
+      fNav: !!flow && kind!=='done',
+      flowTitle: flow==='book' ? 'Book a space' : flow==='office' ? 'Lease an office' : flow==='tour' ? 'Book a tour' : 'Join Mars Space',
+      flowStepLabel: kind==='done' ? '' : (flow ? 'Step '+(this.state.step+1)+' of '+steps.length : ''),
+      backLabel: this.state.step===0 ? 'Cancel' : 'Back',
+      nextLabel: !scheduleOk ? 'Select your hours' : last ? (flow==='book' ? 'Pay SAR '+fmt(total) : flow==='office' ? 'Send request' : flow==='tour' ? 'Request tour' : 'Send request') : 'Continue',
+      nextBg: scheduleOk ? '#8A4120' : '#A8A49D',
+      flowBack: ()=>{ this.state.step===0 ? this.closeFlow() : this.setState({step:this.state.step-1, gal:0}); },
+      flowNext: ()=>{ if(!scheduleOk) return; last ? this.setState({done:true}) : this.setState({step:this.state.step+1, gal:0}); },
+      flowSummary: summary,
+      hasPrice: flow==='book' && priceRows.length>0,
+      priceRows,
+      totalLabel: fmt(total),
+      doneTitle: flow==='book' ? 'Booking confirmed' : flow==='office' ? 'Request received' : flow==='tour' ? 'Tour requested' : 'Request received',
+      doneMsg: flow==='book' ? summary+'. Payment received, and your confirmation with the invoice is on its way to your email. The room will be ready when you are.'
+        : flow==='office' ? 'Thank you. We have your details for '+off.name+' and will contact you within one working day to arrange a visit and the contract.'
+        : flow==='tour' ? 'We will confirm your slot on WhatsApp shortly. Twenty minutes, coffee on us.'
+        : 'Thank you. Our team will come back to you within one working day to set up your '+this.plansData[this.state.plan].name.toLowerCase()+'.',
+      spName: sp.name,
+      spFeatures: sp.features,
+      bkRooms: this.spaces.filter(s=>s.kind==='room').map((s)=>{ const k=this.spaces.indexOf(s); return { name:s.name, cap:s.cap, rate:s.rate, teaser:s.teaser, img:s.imgs[0], pick:()=>this.setState({space:k, selStart:-1, selLen:0}), ...sel(k===this.state.space) }; }),
+      bkHalls: this.spaces.filter(s=>s.kind==='hall').map((s)=>{ const k=this.spaces.indexOf(s); return { name:s.name, cap:s.cap, rate:s.rate, teaser:s.teaser, img:s.imgs[0], pick:()=>this.setState({space:k, selStart:-1, selLen:0}), ...sel(k===this.state.space) }; }),
+      gMain: gImgs[gal],
+      gThumbs: gImgs.map((im,k)=>({ img:im, pick:()=>this.setState({gal:k}), op:k===gal?'1':'0.55', ol:k===gal?'#8A4120':'transparent' })),
+      bkAddons: this.addonsData.map((ad,k)=>{ const on=this.state.addons[k]; return { name:ad.name, priceLabel: ad.price>0 ? 'SAR '+ad.price : 'quoted', toggle:()=>{ const arr=this.state.addons.slice(); arr[k]=!arr[k]; this.setState({addons:arr}); }, bd:on?'#8A4120':'rgba(11,11,15,0.14)', bg:on?'rgba(138,65,32,0.06)':'transparent', ck:on?'#8A4120':'rgba(11,11,15,0.3)', ckbg:on?'#8A4120':'transparent', mark:on?'✓':'' }; }),
+      bkDates: this.datesData.map((d,k)=>({ label:d, pick:()=>this.setState({date:k, selStart:-1, selLen:0}), ...sel(k===this.state.date) })),
+      bkHours: this.hourLabels.map((lb,h)=>{
+        const isBooked = booked.includes(h);
+        const isSel = s0>=0 && h>=s0 && h<s0+l0;
+        return { label:lb, booked:isBooked, pick:()=>this.pickHour(h), cur:isBooked?'not-allowed':'pointer',
+          bg: isSel?'#8A4120':(isBooked?'rgba(11,11,15,0.05)':'#FFFFFF'),
+          bd: isSel?'#8A4120':'rgba(11,11,15,0.18)',
+          fg: isBooked?'#A8A49D':(isSel?'#8A4120':'#6B675F') };
+      }),
+      schedSummary: (s0>=0 && l0>0) ? sp.name+' · '+dateLabel+' · '+range+' · '+l0+(l0===1?' hour':' hours')+' · SAR '+fmt(sp.rate*l0) : 'No hours selected yet.',
+      bkOffices: this.offices.map((o,k)=>({ name:o.name, size:o.size, desks:o.desks, loc:o.loc, price:o.price, img:o.imgs[0], pick:()=>this.setState({office:k, gal:0}), ...sel(k===this.state.office) })),
+      offName: off.name, offFeatures: off.features, offLoc: off.loc, offSize: off.size, offDesks: off.desks, offPrice: off.price,
+      bkTourTimes: this.tourTimes.map((t,k)=>({ label:t, pick:()=>this.setState({tourTime:k}), ...sel(k===this.state.tourTime) })),
+      bkPlans: this.plansData.map((p,k)=>({ name:p.name, meta:p.meta, pick:()=>this.setState({plan:k}), ...sel(k===this.state.plan) }))
+    };
+  }
+}
+</script>
+</body>
+</html>

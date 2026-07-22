@@ -137,15 +137,15 @@ export const translations = {
           seats: "14 seats",
           display: "75\" screen · video conferencing",
           status: "Free now",
-          rate: "SAR ___",
+          rate: "SAR 220",
           img: "/assets/photo-vip-lounge.jpg"
         },
         {
           name: "Lab",
           seats: "8 seats",
-          display: "65\" screen · whiteboard",
+          display: "65\" screen · projector",
           status: "Free now",
-          rate: "SAR ___",
+          rate: "SAR 160",
           img: "/assets/photo-coworking.jpg"
         },
         {
@@ -153,16 +153,16 @@ export const translations = {
           seats: "6 seats",
           display: "55\" screen · natural light",
           status: "Free from 2:00 PM",
-          rate: "SAR ___",
+          rate: "SAR 120",
           img: "/assets/photo-glass-offices.jpg"
         },
         {
-          name: "Consultancy",
-          seats: "4 seats",
-          display: "55\" screen · phone-booth quiet",
-          status: "Booked today",
-          rate: "SAR ___",
-          img: "/assets/photo-lounge-velvet.jpg"
+          name: "Community Hall",
+          seats: "Up to 80 seats",
+          display: "Screen wall · stage lighting · PA",
+          status: "Free from 4:00 PM",
+          rate: "SAR 400",
+          img: "/assets/photo-community-cinema.jpg"
         }
       ]
     },
@@ -173,29 +173,29 @@ export const translations = {
       plans: [
         {
           name: "Day Pass",
-          price: "SAR ___",
+          price: "SAR 150",
           sub: "/ day",
           bullets: [
             "Any hot desk, 08:00 to 20:00",
             "Café and lounge included",
-            "Meeting rooms at guest rate"
+            "1 hr meeting room credit"
           ],
           cta: "Details →"
         },
         {
-          name: "Hot Desk",
-          price: "SAR ___",
+          name: "Open Desk",
+          price: "SAR 1,200",
           sub: "/ month",
           bullets: [
-            "24/7 access, any desk",
-            "[N] meeting-room hours / month",
+            "24/7 access, open coworking floor",
+            "5 meeting-room hours / month",
             "Mail and package handling"
           ],
           cta: "Details →"
         },
         {
           name: "Dedicated Desk",
-          price: "SAR ___",
+          price: "SAR 2,200",
           sub: "/ month",
           bullets: [
             "Your own desk and locker",

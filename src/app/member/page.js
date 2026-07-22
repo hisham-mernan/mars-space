@@ -2,12 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import BookingModal from '@/components/BookingModal';
 
 export default function MemberDashboard() {
   const { language, theme, mounted } = useLanguage();
   const [user, setUser] = useState(null);
   const [bookings, setBookings] = useState([]);
   const [invoices, setInvoices] = useState([]);
+  const [bookingOpen, setBookingOpen] = useState(false);
 
   useEffect(() => {
     const storedUser = localStorage.getItem('mars-user');
@@ -73,17 +75,19 @@ export default function MemberDashboard() {
         </div>
 
         <div style={{ position: 'relative', zIndex: 2, display: 'flex', gap: '12px' }}>
-          <a
-            href="/spaces"
+          <button
+            onClick={() => setBookingOpen(true)}
             className="btn-pill-primary"
             style={{
               padding: '12px 28px',
               fontSize: '13px',
               fontWeight: 600,
+              border: 'none',
+              cursor: 'pointer'
             }}
           >
             {language === 'ar' ? 'حجز مساحة عمل' : 'Reserve Space'}
-          </a>
+          </button>
         </div>
       </section>
 
@@ -218,6 +222,7 @@ export default function MemberDashboard() {
 
       </div>
 
+      <BookingModal isOpen={bookingOpen} onClose={() => setBookingOpen(false)} />
     </div>
   );
 }

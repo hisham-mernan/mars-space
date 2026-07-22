@@ -5,10 +5,13 @@ import { useLanguage } from '../context/LanguageContext';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import FloorPlanSection from '../components/FloorPlanSection';
+import BookingModal from '../components/BookingModal';
 
 export default function Home() {
   const { t, language, mounted } = useLanguage();
   const [heroTitleIndex, setHeroTitleIndex] = useState(0);
+  const [bookingModalOpen, setBookingModalOpen] = useState(false);
+  const [selectedInitialSpace, setSelectedInitialSpace] = useState('ventures');
 
   // States for Quick Book form
   const [quickDate, setQuickDate] = useState('today');
@@ -205,13 +208,13 @@ export default function Home() {
                 animation: 'heroRise 380ms cubic-bezier(0.16, 1, 0.30, 1) 700ms both',
               }}
             >
-              <a
-                href="#rooms"
+              <button
+                onClick={() => setBookingModalOpen(true)}
                 className="btn-pill-primary"
-                style={{ padding: '16px 34px', fontSize: '16px' }}
+                style={{ padding: '16px 34px', fontSize: '16px', border: 'none', cursor: 'pointer' }}
               >
                 {t.hero.bookCta}
-              </a>
+              </button>
               <a
                 href="#floor"
                 className="btn-pill-secondary"
@@ -329,18 +332,20 @@ export default function Home() {
               </label>
 
               {/* Submit CTA */}
-              <a
-                href="#rooms"
+              <button
+                onClick={() => setBookingModalOpen(true)}
                 className="btn-pill-primary"
                 style={{
                   padding: '15px 30px',
                   fontSize: '16px',
                   height: '50px',
                   boxSizing: 'border-box',
+                  border: 'none',
+                  cursor: 'pointer'
                 }}
               >
                 {t.quickBook.cta}
-              </a>
+              </button>
             </div>
 
             <div
@@ -990,6 +995,12 @@ export default function Home() {
       </main>
 
       <Footer />
+      
+      <BookingModal
+        isOpen={bookingModalOpen}
+        onClose={() => setBookingModalOpen(false)}
+        initialSpaceId={selectedInitialSpace}
+      />
     </>
   );
 }
