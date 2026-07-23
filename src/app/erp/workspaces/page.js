@@ -220,7 +220,7 @@ export default function WorkspaceManagement() {
       {/* Spaces Matrix Table */}
       <div style={{ background: 'var(--mars-slate)', borderRadius: '8px', border: '1px solid var(--border-color)', overflowX: 'auto' }}>
         {loading ? (
-          <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--copper-400)', fontFamily: 'monospace' }}>
+          <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--copper-400)' }}>
             LOADING WORKSPACES...
           </div>
         ) : (

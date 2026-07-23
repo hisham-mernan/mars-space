@@ -149,7 +149,7 @@ export default function BiAiCopilot() {
             );
           })}
           {loading && (
-            <div style={{ alignSelf: 'flex-start', color: 'var(--copper-400)', fontSize: '13px', fontFamily: 'monospace' }}>
+            <div style={{ alignSelf: 'flex-start', color: 'var(--copper-400)', fontSize: '13px' }}>
               AI IS PARSING DATA RECORDS...
             </div>
           )}

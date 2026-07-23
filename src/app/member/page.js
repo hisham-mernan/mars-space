@@ -200,7 +200,7 @@ export default function MemberDashboard() {
               </div>
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <span style={{ color: 'var(--text-secondary)' }}>{language === 'ar' ? 'ساعات الاجتماعات' : 'Meeting Credits'}</span>
-                <span style={{ fontWeight: 700, color: 'var(--copper-400)', fontFamily: 'monospace' }}>18 / 20 hrs</span>
+                <span style={{ fontWeight: 700, color: 'var(--copper-400)', fontVariantNumeric: 'tabular-nums' }}>18 / 20 hrs</span>
               </div>
             </div>
 

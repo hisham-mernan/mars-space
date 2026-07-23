@@ -76,7 +76,7 @@ export default function PublicSignContract({ params }) {
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh', background: 'var(--mars-void)' }}>
-        <div style={{ color: 'var(--copper-400)', fontFamily: 'monospace' }}>LOADING E-SIGNATURE PORTAL...</div>
+        <div style={{ color: 'var(--copper-400)' }}>LOADING E-SIGNATURE PORTAL...</div>
       </div>
     );
   }
@@ -157,7 +157,6 @@ export default function PublicSignContract({ params }) {
                   border: '1px solid var(--line-dark)',
                   maxHeight: '360px',
                   overflowY: 'auto',
-                  fontFamily: 'monospace',
                   fontSize: '13px',
                   lineHeight: 1.7,
                   color: '#FFFFFF',
@@ -215,7 +214,7 @@ export default function PublicSignContract({ params }) {
 
                   {/* Method Content */}
                   {sigMethod === 'Draw' && (
-                    <div style={{ background: 'var(--mars-void)', border: '2px dashed var(--copper-400)', height: '140px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--copper-400)', fontFamily: 'cursive', fontSize: '24px' }}>
+                    <div style={{ background: 'var(--mars-void)', border: '2px dashed var(--copper-400)', height: '140px', borderRadius: '6px', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--copper-400)', fontSize: '24px' }}>
                       {signatoryName || 'Draw Signature Here'}
                     </div>
                   )}
@@ -228,7 +227,7 @@ export default function PublicSignContract({ params }) {
                         required
                         value={typeSignature}
                         onChange={(e) => setTypeSignature(e.target.value)}
-                        style={{ background: 'var(--mars-void)', border: '1px solid var(--line-dark)', borderRadius: '4px', padding: '16px', color: 'var(--copper-400)', fontFamily: 'cursive', fontSize: '26px', outline: 'none' }}
+                        style={{ background: 'var(--mars-void)', border: '1px solid var(--line-dark)', borderRadius: '4px', padding: '16px', color: 'var(--copper-400)', fontSize: '26px', outline: 'none' }}
                       />
                     </label>
                   )}

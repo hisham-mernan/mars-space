@@ -161,7 +161,7 @@ export default function MyBookings() {
 
       {/* Bookings listing grid */}
       {loading ? (
-        <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--copper-400)', fontFamily: 'monospace' }}>
+        <div style={{ textAlign: 'center', padding: '48px 0', color: 'var(--copper-400)' }}>
           LOADING BOOKINGS...
         </div>
       ) : filteredBookings.length === 0 ? (

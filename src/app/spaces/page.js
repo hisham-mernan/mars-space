@@ -203,7 +203,7 @@ export default function SpacesListing() {
           <div className="container">
             {loading ? (
               <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
-                <span style={{ fontSize: '18px', color: 'var(--copper-400)', fontFamily: 'monospace' }}>
+                <span style={{ fontSize: '18px', color: 'var(--copper-400)' }}>
                   {language === 'ar' ? 'جاري التحميل...' : 'LOADING SPACES...'}
                 </span>
               </div>

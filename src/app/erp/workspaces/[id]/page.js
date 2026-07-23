@@ -66,7 +66,7 @@ export default function WorkspaceDetail() {
   if (loading) {
     return (
       <div style={{ background: '#0B0B0F', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <div style={{ color: '#C86B3C', fontSize: '18px', fontFamily: 'monospace' }}>LOADING DEVICE STATUS...</div>
+        <div style={{ color: '#C86B3C', fontSize: '18px' }}>LOADING DEVICE STATUS...</div>
       </div>
     );
   }

@@ -103,7 +103,7 @@ export default function MemberLayout({ children }) {
             fontSize: '12px',
           }}>
             <span style={{ color: 'var(--text-muted-dark)' }}>{language === 'ar' ? 'رمز الباب:' : 'Keycode:'}</span>
-            <span style={{ fontWeight: 700, color: 'var(--copper-400)', fontFamily: 'monospace' }}>#8842-MS</span>
+            <span style={{ fontWeight: 700, color: 'var(--copper-400)', fontVariantNumeric: 'tabular-nums' }}>#8842-MS</span>
           </div>
 
           {/* Theme Toggle */}

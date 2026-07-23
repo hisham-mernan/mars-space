@@ -82,7 +82,7 @@ export default function Failed() {
         <div className="container">
           <Suspense fallback={
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-              <div style={{ color: 'var(--copper-400)', fontFamily: 'monospace' }}>LOADING...</div>
+              <div style={{ color: 'var(--copper-400)' }}>LOADING...</div>
             </div>
           }>
             <FailedContent />

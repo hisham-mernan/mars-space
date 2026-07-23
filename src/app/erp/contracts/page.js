@@ -404,7 +404,7 @@ export default function ErpContractsCLM() {
           <div style={{ flex: 1, overflowY: 'auto', marginTop: '24px', display: 'grid', gap: '24px', fontSize: '13px', textAlign: 'start' }}>
             
             {/* Interpolated Contract Content Preview */}
-            <div style={{ background: 'var(--mars-void)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)', whiteSpace: 'pre-wrap', lineHeight: 1.6, color: 'var(--text-primary)', fontFamily: 'monospace', fontSize: '12px' }}>
+            <div style={{ background: 'var(--mars-void)', padding: '20px', borderRadius: '8px', border: '1px solid var(--border-color)', whiteSpace: 'pre-wrap', lineHeight: 1.6, color: 'var(--text-primary)', fontSize: '12px' }}>
               {selectedContract.content}
             </div>
 

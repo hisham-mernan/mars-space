@@ -109,7 +109,7 @@ export default function ErpOperations() {
             }}
           >
             <div style={{ fontSize: '12px', color: 'var(--text-secondary)', fontWeight: 600 }}>{kpi.label}</div>
-            <div style={{ fontSize: '24px', fontWeight: 700, color: kpi.color, marginTop: '8px', fontFamily: 'monospace' }}>{kpi.val}</div>
+            <div style={{ fontSize: '24px', fontWeight: 700, color: kpi.color, marginTop: '8px', fontVariantNumeric: 'tabular-nums' }}>{kpi.val}</div>
             <div style={{ fontSize: '11px', color: 'var(--text-muted-dark)', marginTop: '4px' }}>{kpi.sub}</div>
           </div>
         ))}

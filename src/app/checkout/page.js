@@ -48,7 +48,7 @@ function CheckoutContent() {
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-        <div style={{ color: 'var(--copper-400)', fontFamily: 'monospace' }}>LOADING CHECKOUT...</div>
+        <div style={{ color: 'var(--copper-400)' }}>LOADING CHECKOUT...</div>
       </div>
     );
   }
@@ -260,7 +260,7 @@ export default function Checkout() {
         <div className="container">
           <Suspense fallback={
             <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh' }}>
-              <div style={{ color: 'var(--copper-400)', fontFamily: 'monospace' }}>LOADING CHECKOUT...</div>
+              <div style={{ color: 'var(--copper-400)' }}>LOADING CHECKOUT...</div>
             </div>
           }>
             <CheckoutContent />

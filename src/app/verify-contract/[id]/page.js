@@ -34,7 +34,7 @@ export default function VerifyContract({ params }) {
   if (loading) {
     return (
       <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', minHeight: '60vh', background: 'var(--mars-void)' }}>
-        <div style={{ color: 'var(--copper-400)', fontFamily: 'monospace' }}>VERIFYING DIGITAL SIGNATURE...</div>
+        <div style={{ color: 'var(--copper-400)' }}>VERIFYING DIGITAL SIGNATURE...</div>
       </div>
     );
   }
@@ -101,7 +101,7 @@ export default function VerifyContract({ params }) {
 
                 <div>
                   <div style={{ color: 'var(--text-muted-dark)' }}>Cryptographic SHA-256 Signature Hash</div>
-                  <div style={{ fontSize: '11px', fontFamily: 'monospace', color: 'var(--copper-400)', marginTop: '4px', wordBreak: 'break-all', background: 'var(--mars-void)', padding: '10px', borderRadius: '4px' }}>
+                  <div style={{ fontSize: '11px', color: 'var(--copper-400)', marginTop: '4px', wordBreak: 'break-all', background: 'var(--mars-void)', padding: '10px', borderRadius: '4px' }}>
                     {cert.signatureHash || 'e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855'}
                   </div>
                 </div>
