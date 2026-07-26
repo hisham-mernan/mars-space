@@ -12,11 +12,11 @@ const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
 
 const thmanyahSans = localFont({
   src: [
-    { path: "../../public/fonts/thmanyahsans/otf/thmanyahsans-Light.otf", weight: "300", style: "normal" },
-    { path: "../../public/fonts/thmanyahsans/otf/thmanyahsans-Regular.otf", weight: "400", style: "normal" },
-    { path: "../../public/fonts/thmanyahsans/otf/thmanyahsans-Medium.otf", weight: "500", style: "normal" },
-    { path: "../../public/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf", weight: "700", style: "normal" },
-    { path: "../../public/fonts/thmanyahsans/otf/thmanyahsans-Black.otf", weight: "900", style: "normal" },
+    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Light.otf", weight: "300", style: "normal" },
+    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Regular.otf", weight: "400", style: "normal" },
+    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Medium.otf", weight: "500", style: "normal" },
+    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Bold.otf", weight: "700", style: "normal" },
+    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Black.otf", weight: "900", style: "normal" },
   ],
   variable: "--font-thmanyah-sans",
   fallback: ["IBM Plex Sans Arabic", "system-ui", "-apple-system", "sans-serif"],
