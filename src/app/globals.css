@@ -1,9 +1,10 @@
 /* Mars Space Global Stylesheet - World-Class Handcrafted Design System */
 
-/* Local Font Face Declarations for Thmanyah Sans (OTF) */
+/* Comprehensive Local Font Face Declarations for Thmanyah Sans (OTF Primary, WOFF2 Secondary) */
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Light.otf') format('opentype');
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Light.otf') format('opentype'),
+       url('/fonts/thmanyahsans/woff2/thmanyahsans-Light.woff2') format('woff2');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -11,7 +12,8 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Regular.otf') format('opentype');
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Regular.otf') format('opentype'),
+       url('/fonts/thmanyahsans/woff2/thmanyahsans-Regular.woff2') format('woff2');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -19,7 +21,8 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Medium.otf') format('opentype');
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Medium.otf') format('opentype'),
+       url('/fonts/thmanyahsans/woff2/thmanyahsans-Medium.woff2') format('woff2');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -27,7 +30,17 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype');
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype'),
+       url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2');
+  font-weight: 600;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thmanyah Sans';
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype'),
+       url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -35,7 +48,17 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype');
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype'),
+       url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2');
+  font-weight: 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Thmanyah Sans';
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype'),
+       url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -138,7 +161,7 @@ label,
 table,
 td,
 th {
-  font-family: 'Thmanyah Sans', var(--font-thmanyah-sans), var(--font-ibm-plex-sans-arabic), 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif !important;
+  font-family: 'Thmanyah Sans', var(--font-thmanyah-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   box-sizing: border-box;
 }
 
