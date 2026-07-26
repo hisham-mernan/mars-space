@@ -161,7 +161,7 @@ label,
 table,
 td,
 th {
-  font-family: 'Thmanyah Sans', var(--font-thmanyah-sans), system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family: 'IBM Plex Sans Arabic', var(--font-ibm-plex-sans-arabic), 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   box-sizing: border-box;
 }
 

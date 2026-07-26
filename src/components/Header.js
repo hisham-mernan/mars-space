@@ -148,7 +148,7 @@ export default function Header() {
               border: 'none',
               borderRadius: '999px',
               padding: '12px 26px',
-              font: "500 15px 'Thmanyah Sans', sans-serif",
+              font: "500 15px 'IBM Plex Sans Arabic', sans-serif",
               lineHeight: 1,
               whiteSpace: 'nowrap',
               cursor: 'pointer',

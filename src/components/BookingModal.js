@@ -721,7 +721,7 @@ export default function BookingModal({
                       color: sel.color,
                       borderRadius: '999px',
                       padding: '12px 22px',
-                      font: "400 15px 'Thmanyah Sans', sans-serif",
+                      font: "400 15px 'IBM Plex Sans Arabic', sans-serif",
                       lineHeight: 1,
                       cursor: 'pointer',
                       transition: 'border-color 250ms, background 250ms, color 250ms'
@@ -910,7 +910,7 @@ export default function BookingModal({
                       color: sel.color,
                       borderRadius: '999px',
                       padding: '12px 22px',
-                      font: "400 15px 'Thmanyah Sans', sans-serif",
+                      font: "400 15px 'IBM Plex Sans Arabic', sans-serif",
                       lineHeight: 1,
                       cursor: 'pointer'
                     }}
@@ -937,7 +937,7 @@ export default function BookingModal({
                       color: sel.color,
                       borderRadius: '999px',
                       padding: '12px 20px',
-                      font: "400 15px 'Thmanyah Sans', sans-serif",
+                      font: "400 15px 'IBM Plex Sans Arabic', sans-serif",
                       lineHeight: 1,
                       cursor: 'pointer'
                     }}
@@ -1011,7 +1011,7 @@ export default function BookingModal({
                   placeholder={language === 'ar' ? 'اسمك' : 'Your name'}
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'Thmanyah Sans', sans-serif", color: '#0B0B0F', outline: 'none' }}
+                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
                 />
               </label>
 
@@ -1022,7 +1022,7 @@ export default function BookingModal({
                   placeholder={language === 'ar' ? 'اختياري' : 'Optional'}
                   value={company}
                   onChange={(e) => setCompany(e.target.value)}
-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'Thmanyah Sans', sans-serif", color: '#0B0B0F', outline: 'none' }}
+                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
                 />
               </label>
 
@@ -1033,7 +1033,7 @@ export default function BookingModal({
                   placeholder="you@company.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'Thmanyah Sans', sans-serif", color: '#0B0B0F', outline: 'none' }}
+                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
                 />
               </label>
 
@@ -1044,7 +1044,7 @@ export default function BookingModal({
                   placeholder="+966"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'Thmanyah Sans', sans-serif", color: '#0B0B0F', outline: 'none' }}
+                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
                 />
               </label>
             </div>
@@ -1056,7 +1056,7 @@ export default function BookingModal({
                 placeholder={language === 'ar' ? 'اختياري' : 'Optional'}
                 value={notes}
                 onChange={(e) => setNotes(e.target.value)}
-                style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'Thmanyah Sans', sans-serif", color: '#0B0B0F', resize: 'vertical', outline: 'none' }}
+                style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', resize: 'vertical', outline: 'none' }}
               />
             </label>
           </div>
@@ -1078,7 +1078,7 @@ export default function BookingModal({
                   placeholder={language === 'ar' ? 'الاسم على البطاقة' : 'As printed on the card'}
                   value={cardName}
                   onChange={(e) => setCardName(e.target.value)}
-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'Thmanyah Sans', sans-serif", color: '#0B0B0F', outline: 'none' }}
+                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
                 />
               </label>
 
@@ -1089,7 +1089,7 @@ export default function BookingModal({
                   placeholder="0000 0000 0000 0000"
                   value={cardNumber}
                   onChange={(e) => setCardNumber(e.target.value)}
-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'Thmanyah Sans', sans-serif", color: '#0B0B0F', outline: 'none' }}
+                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
                 />
               </label>
 
@@ -1100,7 +1100,7 @@ export default function BookingModal({
                   placeholder="MM / YY"
                   value={cardExpiry}
                   onChange={(e) => setCardExpiry(e.target.value)}
-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'Thmanyah Sans', sans-serif", color: '#0B0B0F', outline: 'none' }}
+                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
                 />
               </label>
 
@@ -1111,7 +1111,7 @@ export default function BookingModal({
                   placeholder="123"
                   value={cardCvc}
                   onChange={(e) => setCardCvc(e.target.value)}
-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'Thmanyah Sans', sans-serif", color: '#0B0B0F', outline: 'none' }}
+                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
                 />
               </label>
             </div>
@@ -1153,7 +1153,7 @@ export default function BookingModal({
 
             <button
               onClick={onClose}
-              style={{ marginTop: '32px', display: 'inline-flex', alignItems: 'center', background: '#8A4120', color: '#FFFFFF', border: 'none', borderRadius: '999px', padding: '15px 34px', font: "500 15px 'Thmanyah Sans', sans-serif", lineHeight: 1, cursor: 'pointer', transition: 'background 250ms' }}
+              style={{ marginTop: '32px', display: 'inline-flex', alignItems: 'center', background: '#8A4120', color: '#FFFFFF', border: 'none', borderRadius: '999px', padding: '15px 34px', font: "500 15px 'IBM Plex Sans Arabic', sans-serif", lineHeight: 1, cursor: 'pointer', transition: 'background 250ms' }}
             >
               {language === 'ar' ? 'تم' : 'Done'}
             </button>
@@ -1165,7 +1165,7 @@ export default function BookingModal({
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px', marginTop: '40px', paddingTop: '24px', borderTop: '1px solid rgba(11, 11, 15, 0.12)' }}>
             <button
               onClick={handleBack}
-              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "400 15px 'Thmanyah Sans', sans-serif", color: '#6B675F', transition: 'color 200ms' }}
+              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "400 15px 'IBM Plex Sans Arabic', sans-serif", color: '#6B675F', transition: 'color 200ms' }}
             >
               {backLabel}
             </button>
@@ -1182,7 +1182,7 @@ export default function BookingModal({
                 border: 'none',
                 borderRadius: '999px',
                 padding: '15px 32px',
-                font: "500 15px 'Thmanyah Sans', sans-serif",
+                font: "500 15px 'IBM Plex Sans Arabic', sans-serif",
                 lineHeight: 1,
                 cursor: isScheduleOk ? 'pointer' : 'not-allowed',
                 transition: 'background 250ms, gap 250ms'

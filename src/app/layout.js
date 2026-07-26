@@ -4,7 +4,7 @@ import { LanguageProvider } from "../context/LanguageContext";
 import "./globals.css";
 
 const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
-  subsets: ["arabic"],
+  subsets: ["arabic", "latin"],
   weight: ["300", "400", "500", "600", "700"],
   variable: "--font-ibm-plex-sans-arabic",
   display: "swap",
@@ -42,7 +42,7 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ar" dir="rtl" className={`${thmanyahSans.variable} ${ibmPlexSansArabic.variable} ${thmanyahSans.className} h-full antialiased`}>
+    <html lang="ar" dir="rtl" className={`${ibmPlexSansArabic.variable} ${thmanyahSans.variable} ${ibmPlexSansArabic.className} h-full antialiased`}>
       <head>
         <link rel="icon" type="image/png" href="/icon.png" />
         <link rel="shortcut icon" href="/favicon.ico" />
@@ -51,7 +51,7 @@ export default function RootLayout({ children }) {
         <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
         <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className={`${thmanyahSans.className} h-full`}>
+      <body className={`${ibmPlexSansArabic.className} h-full`}>
         <LanguageProvider>
           {children}
         </LanguageProvider>
