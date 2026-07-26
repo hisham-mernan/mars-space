@@ -1,9 +1,9 @@
 /* Mars Space Global Stylesheet - World-Class Handcrafted Design System */
 
-/* Local Font Face Declarations for Thmanyah Sans */
+/* Local Font Face Declarations for Thmanyah Sans (OTF) */
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Light.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Light.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -11,7 +11,7 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Regular.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -19,7 +19,7 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Medium.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -27,7 +27,7 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -35,7 +35,7 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
@@ -138,7 +138,7 @@ label,
 table,
 td,
 th {
-  font-family: var(--font-thmanyah-sans), 'Thmanyah Sans', var(--font-ibm-plex-sans-arabic), 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif !important;
+  font-family: 'Thmanyah Sans', var(--font-thmanyah-sans), var(--font-ibm-plex-sans-arabic), 'IBM Plex Sans Arabic', system-ui, -apple-system, sans-serif !important;
   box-sizing: border-box;
 }
 
