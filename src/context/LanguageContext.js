@@ -27,10 +27,13 @@ export function LanguageProvider({ children }) {
     localStorage.setItem('mars-lang', language);
   }, [language, mounted]);
 
-  // Update HTML theme class when theme changes
+  // Update HTML theme class when theme changes.
+  // Toggle only the theme class — assigning to className would wipe the
+  // classes the root layout puts on <html> (next/font variables, h-full,
+  // antialiased) and the site would silently lose its fonts on hydration.
   useEffect(() => {
     if (!mounted) return;
-    document.documentElement.className = theme === 'light' ? 'theme-light' : '';
+    document.documentElement.classList.toggle('theme-light', theme === 'light');
     localStorage.setItem('mars-theme', theme);
   }, [theme, mounted]);
 

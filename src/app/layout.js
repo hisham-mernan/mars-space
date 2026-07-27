@@ -1,24 +1,19 @@
 import localFont from "next/font/local";
-import { IBM_Plex_Sans_Arabic } from "next/font/google";
 import { LanguageProvider } from "../context/LanguageContext";
 import "./globals.css";
 
-const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
-  subsets: ["arabic", "latin"],
-  weight: ["300", "400", "500", "600", "700"],
-  variable: "--font-ibm-plex-sans-arabic",
-  display: "swap",
-});
-
+// Thmanyah Sans covers Latin, Arabic and Arabic-Indic digits, so one family
+// serves both languages. WOFF2 only — every browser we support reads it, and
+// it is ~3x smaller than the OTF originals.
 const thmanyahSans = localFont({
   src: [
-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Light.otf", weight: "300", style: "normal" },
-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Regular.otf", weight: "400", style: "normal" },
-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Medium.otf", weight: "500", style: "normal" },
-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Bold.otf", weight: "600", style: "normal" },
-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Bold.otf", weight: "700", style: "normal" },
-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Black.otf", weight: "800", style: "normal" },
-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Black.otf", weight: "900", style: "normal" },
+    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Light.woff2", weight: "300", style: "normal" },
+    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Regular.woff2", weight: "400", style: "normal" },
+    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Medium.woff2", weight: "500", style: "normal" },
+    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2", weight: "600", style: "normal" },
+    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2", weight: "700", style: "normal" },
+    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2", weight: "800", style: "normal" },
+    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2", weight: "900", style: "normal" },
   ],
   variable: "--font-thmanyah-sans",
   fallback: ["system-ui", "-apple-system", "sans-serif"],
@@ -42,16 +37,13 @@ export const viewport = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="ar" dir="rtl" className={`${ibmPlexSansArabic.variable} ${thmanyahSans.variable} ${ibmPlexSansArabic.className} h-full antialiased`}>
+    <html lang="ar" dir="rtl" className={`${thmanyahSans.variable} ${thmanyahSans.className} h-full antialiased`}>
       <head>
         <link rel="icon" type="image/png" href="/icon.png" />
         <link rel="shortcut icon" href="/favicon.ico" />
         <link rel="apple-touch-icon" href="/apple-icon.png" />
-        <link rel="preconnect" href="https://fonts.googleapis.com" />
-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
-        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
       </head>
-      <body className={`${ibmPlexSansArabic.className} h-full`}>
+      <body className={`${thmanyahSans.className} h-full`}>
         <LanguageProvider>
           {children}
         </LanguageProvider>

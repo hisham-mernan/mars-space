@@ -1,0 +1,467 @@
+From c6a21e20ee3d33246ceb6180cb4d19f2f9aed604 Mon Sep 17 00:00:00 2001
+From: Claude <noreply@anthropic.com>
+Date: Mon, 27 Jul 2026 12:22:46 +0000
+Subject: [PATCH] Use Thmanyah Sans as the single font for Arabic and English
+
+The site was pinned to IBM Plex Sans Arabic and Thmanyah Sans could not be
+applied. Two things were blocking it:
+
+- globals.css forced `font-family: 'IBM Plex Sans Arabic' ... !important` on a
+  universal selector, overriding every other font declaration on the page.
+- LanguageContext assigned to `document.documentElement.className` on mount,
+  which wiped the classes the root layout sets on <html>. That destroyed the
+  next/font variable class (along with `h-full` and `antialiased`), so the font
+  was lost at hydration no matter how layout.js was configured.
+
+Changes:
+
+- Load Thmanyah Sans via next/font/local from WOFF2 instead of OTF (~3x
+  smaller) and drop IBM Plex, including the render-blocking Google Fonts
+  <link> and its preconnects.
+- Add a --font-sans token that resolves to the next/font family and falls back
+  to the plain @font-face declaration, then to system UI fonts.
+- Point the universal rule at --font-sans and replace the hardcoded IBM Plex
+  strings in inline styles.
+- Toggle the theme class instead of overwriting className.
+
+Thmanyah Sans covers Latin, Arabic and Arabic-Indic digits, so one family
+serves both languages. Verified in Chromium: every element on /, /spaces,
+/book-tour, /checkout, /erp, /erp/crm, /member, /member/billing and /auth
+resolves to Thmanyah Sans in both locales and in light and dark themes, with
+no duplicate font downloads.
+---
+ src/app/globals.css            | 42 +++++++++++++++++++++-------------
+ src/app/layout.js              | 32 ++++++++++----------------
+ src/app/page.js                | 18 +++++++--------
+ src/components/BookingModal.js | 30 ++++++++++++------------
+ src/components/Header.js       |  2 +-
+ src/context/LanguageContext.js |  7 ++++--
+ 6 files changed, 68 insertions(+), 63 deletions(-)
+
+diff --git a/src/app/globals.css b/src/app/globals.css
+index 9537ae7..1be6272 100644
+--- a/src/app/globals.css
++++ b/src/app/globals.css
+@@ -1,10 +1,14 @@
+ /* Mars Space Global Stylesheet - World-Class Handcrafted Design System */
+ 
+-/* Comprehensive Local Font Face Declarations for Thmanyah Sans (OTF Primary, WOFF2 Secondary) */
++/* Thmanyah Sans — plain-CSS fallback layer.
++   The primary load path is next/font/local in app/layout.js (self-hosted +
++   preloaded, exposed as --font-thmanyah-sans). These @font-face rules only
++   come into play if that variable is ever unavailable, so the browser will
++   normally never fetch them. WOFF2 first, OTF for older engines. */
+ @font-face {
+   font-family: 'Thmanyah Sans';
+-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Light.otf') format('opentype'),
+-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Light.woff2') format('woff2');
++  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Light.woff2') format('woff2'),
++       url('/fonts/thmanyahsans/otf/thmanyahsans-Light.otf') format('opentype');
+   font-weight: 300;
+   font-style: normal;
+   font-display: swap;
+@@ -12,8 +16,8 @@
+ 
+ @font-face {
+   font-family: 'Thmanyah Sans';
+-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Regular.otf') format('opentype'),
+-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Regular.woff2') format('woff2');
++  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Regular.woff2') format('woff2'),
++       url('/fonts/thmanyahsans/otf/thmanyahsans-Regular.otf') format('opentype');
+   font-weight: 400;
+   font-style: normal;
+   font-display: swap;
+@@ -21,8 +25,8 @@
+ 
+ @font-face {
+   font-family: 'Thmanyah Sans';
+-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Medium.otf') format('opentype'),
+-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Medium.woff2') format('woff2');
++  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Medium.woff2') format('woff2'),
++       url('/fonts/thmanyahsans/otf/thmanyahsans-Medium.otf') format('opentype');
+   font-weight: 500;
+   font-style: normal;
+   font-display: swap;
+@@ -30,8 +34,8 @@
+ 
+ @font-face {
+   font-family: 'Thmanyah Sans';
+-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype'),
+-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2');
++  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2'),
++       url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype');
+   font-weight: 600;
+   font-style: normal;
+   font-display: swap;
+@@ -39,8 +43,8 @@
+ 
+ @font-face {
+   font-family: 'Thmanyah Sans';
+-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype'),
+-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2');
++  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2'),
++       url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype');
+   font-weight: 700;
+   font-style: normal;
+   font-display: swap;
+@@ -48,8 +52,8 @@
+ 
+ @font-face {
+   font-family: 'Thmanyah Sans';
+-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype'),
+-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2');
++  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2'),
++       url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype');
+   font-weight: 800;
+   font-style: normal;
+   font-display: swap;
+@@ -57,14 +61,20 @@
+ 
+ @font-face {
+   font-family: 'Thmanyah Sans';
+-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype'),
+-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2');
++  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2'),
++       url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype');
+   font-weight: 900;
+   font-style: normal;
+   font-display: swap;
+ }
+ 
+ :root {
++  /* Typography — single family for Arabic and English.
++     Falls back to the plain @font-face name above if next/font's variable
++     is ever missing, then to system UI fonts. */
++  --font-sans: var(--font-thmanyah-sans, 'Thmanyah Sans'), 'Thmanyah Sans',
++    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
++
+   /* Brand Core Palette - Handcrafted Deep Obsidian & Copper Spectrum */
+   --mars-void: #07070A;
+   --mars-slate: #111116;
+@@ -161,7 +171,7 @@ label,
+ table,
+ td,
+ th {
+-  font-family: 'IBM Plex Sans Arabic', var(--font-ibm-plex-sans-arabic), 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
++  font-family: var(--font-sans) !important;
+   box-sizing: border-box;
+ }
+ 
+diff --git a/src/app/layout.js b/src/app/layout.js
+index 2d4146a..1cc85ec 100644
+--- a/src/app/layout.js
++++ b/src/app/layout.js
+@@ -1,24 +1,19 @@
+ import localFont from "next/font/local";
+-import { IBM_Plex_Sans_Arabic } from "next/font/google";
+ import { LanguageProvider } from "../context/LanguageContext";
+ import "./globals.css";
+ 
+-const ibmPlexSansArabic = IBM_Plex_Sans_Arabic({
+-  subsets: ["arabic", "latin"],
+-  weight: ["300", "400", "500", "600", "700"],
+-  variable: "--font-ibm-plex-sans-arabic",
+-  display: "swap",
+-});
+-
++// Thmanyah Sans covers Latin, Arabic and Arabic-Indic digits, so one family
++// serves both languages. WOFF2 only — every browser we support reads it, and
++// it is ~3x smaller than the OTF originals.
+ const thmanyahSans = localFont({
+   src: [
+-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Light.otf", weight: "300", style: "normal" },
+-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Regular.otf", weight: "400", style: "normal" },
+-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Medium.otf", weight: "500", style: "normal" },
+-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Bold.otf", weight: "600", style: "normal" },
+-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Bold.otf", weight: "700", style: "normal" },
+-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Black.otf", weight: "800", style: "normal" },
+-    { path: "./fonts/thmanyahsans/otf/thmanyahsans-Black.otf", weight: "900", style: "normal" },
++    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Light.woff2", weight: "300", style: "normal" },
++    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Regular.woff2", weight: "400", style: "normal" },
++    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Medium.woff2", weight: "500", style: "normal" },
++    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2", weight: "600", style: "normal" },
++    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2", weight: "700", style: "normal" },
++    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2", weight: "800", style: "normal" },
++    { path: "./fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2", weight: "900", style: "normal" },
+   ],
+   variable: "--font-thmanyah-sans",
+   fallback: ["system-ui", "-apple-system", "sans-serif"],
+@@ -42,16 +37,13 @@ export const viewport = {
+ 
+ export default function RootLayout({ children }) {
+   return (
+-    <html lang="ar" dir="rtl" className={`${ibmPlexSansArabic.variable} ${thmanyahSans.variable} ${ibmPlexSansArabic.className} h-full antialiased`}>
++    <html lang="ar" dir="rtl" className={`${thmanyahSans.variable} ${thmanyahSans.className} h-full antialiased`}>
+       <head>
+         <link rel="icon" type="image/png" href="/icon.png" />
+         <link rel="shortcut icon" href="/favicon.ico" />
+         <link rel="apple-touch-icon" href="/apple-icon.png" />
+-        <link rel="preconnect" href="https://fonts.googleapis.com" />
+-        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+-        <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+       </head>
+-      <body className={`${ibmPlexSansArabic.className} h-full`}>
++      <body className={`${thmanyahSans.className} h-full`}>
+         <LanguageProvider>
+           {children}
+         </LanguageProvider>
+diff --git a/src/app/page.js b/src/app/page.js
+index 902c313..9410666 100644
+--- a/src/app/page.js
++++ b/src/app/page.js
+@@ -239,7 +239,7 @@ export default function Home() {
+                     border: 'none',
+                     borderRadius: '999px',
+                     padding: '18px 36px',
+-                    font: "500 16px 'IBM Plex Sans Arabic', sans-serif",
++                    font: "500 16px var(--font-sans)",
+                     lineHeight: 1,
+                     cursor: 'pointer',
+                     transition: 'background 250ms, gap 250ms'
+@@ -259,7 +259,7 @@ export default function Home() {
+                     color: '#F5F3EF',
+                     borderRadius: '999px',
+                     padding: '18px 36px',
+-                    font: "500 16px 'IBM Plex Sans Arabic', sans-serif",
++                    font: "500 16px var(--font-sans)",
+                     lineHeight: 1,
+                     cursor: 'pointer',
+                     transition: 'border-color 250ms, color 250ms'
+@@ -543,7 +543,7 @@ export default function Home() {
+                       border: 'none',
+                       borderRadius: '999px',
+                       padding: '16px 32px',
+-                      font: "500 15px 'IBM Plex Sans Arabic', sans-serif",
++                      font: "500 15px var(--font-sans)",
+                       lineHeight: 1,
+                       cursor: 'pointer',
+                       transition: 'background 250ms, gap 250ms'
+@@ -626,7 +626,7 @@ export default function Home() {
+                 </div>
+                 <button
+                   onClick={() => openPlanFlow(0)}
+-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'IBM Plex Sans Arabic', sans-serif", color: '#8A4120' }}
++                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
+                 >
+                   {language === 'ar' ? 'احصل على تصريح' : 'Get a pass'}
+                   <span>→</span>
+@@ -649,7 +649,7 @@ export default function Home() {
+                 </div>
+                 <button
+                   onClick={() => openPlanFlow(1)}
+-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'IBM Plex Sans Arabic', sans-serif", color: '#8A4120' }}
++                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
+                 >
+                   {language === 'ar' ? 'انضم الآن' : 'Join'}
+                   <span>→</span>
+@@ -672,7 +672,7 @@ export default function Home() {
+                 </div>
+                 <button
+                   onClick={() => openPlanFlow(2)}
+-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'IBM Plex Sans Arabic', sans-serif", color: '#8A4120' }}
++                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
+                 >
+                   {language === 'ar' ? 'انضم الآن' : 'Join'}
+                   <span>→</span>
+@@ -695,7 +695,7 @@ export default function Home() {
+                 </div>
+                 <button
+                   onClick={() => openOfficeFlow(0)}
+-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'IBM Plex Sans Arabic', sans-serif", color: '#8A4120' }}
++                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
+                 >
+                   {language === 'ar' ? 'عرض المكاتب' : 'See offices'}
+                   <span>→</span>
+@@ -778,7 +778,7 @@ export default function Home() {
+                       border: 'none',
+                       borderRadius: '999px',
+                       padding: '18px 38px',
+-                      font: "500 16px 'IBM Plex Sans Arabic', sans-serif",
++                      font: "500 16px var(--font-sans)",
+                       lineHeight: 1,
+                       cursor: 'pointer',
+                       transition: 'background 250ms, gap 250ms'
+@@ -798,7 +798,7 @@ export default function Home() {
+                       color: '#F5F3EF',
+                       borderRadius: '999px',
+                       padding: '18px 38px',
+-                      font: "500 16px 'IBM Plex Sans Arabic', sans-serif",
++                      font: "500 16px var(--font-sans)",
+                       lineHeight: 1,
+                       cursor: 'pointer',
+                       transition: 'border-color 250ms, color 250ms'
+diff --git a/src/components/BookingModal.js b/src/components/BookingModal.js
+index 3578265..80b8474 100644
+--- a/src/components/BookingModal.js
++++ b/src/components/BookingModal.js
+@@ -721,7 +721,7 @@ export default function BookingModal({
+                       color: sel.color,
+                       borderRadius: '999px',
+                       padding: '12px 22px',
+-                      font: "400 15px 'IBM Plex Sans Arabic', sans-serif",
++                      font: "400 15px var(--font-sans)",
+                       lineHeight: 1,
+                       cursor: 'pointer',
+                       transition: 'border-color 250ms, background 250ms, color 250ms'
+@@ -910,7 +910,7 @@ export default function BookingModal({
+                       color: sel.color,
+                       borderRadius: '999px',
+                       padding: '12px 22px',
+-                      font: "400 15px 'IBM Plex Sans Arabic', sans-serif",
++                      font: "400 15px var(--font-sans)",
+                       lineHeight: 1,
+                       cursor: 'pointer'
+                     }}
+@@ -937,7 +937,7 @@ export default function BookingModal({
+                       color: sel.color,
+                       borderRadius: '999px',
+                       padding: '12px 20px',
+-                      font: "400 15px 'IBM Plex Sans Arabic', sans-serif",
++                      font: "400 15px var(--font-sans)",
+                       lineHeight: 1,
+                       cursor: 'pointer'
+                     }}
+@@ -1011,7 +1011,7 @@ export default function BookingModal({
+                   placeholder={language === 'ar' ? 'اسمك' : 'Your name'}
+                   value={fullName}
+                   onChange={(e) => setFullName(e.target.value)}
+-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
++                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px var(--font-sans)", color: '#0B0B0F', outline: 'none' }}
+                 />
+               </label>
+ 
+@@ -1022,7 +1022,7 @@ export default function BookingModal({
+                   placeholder={language === 'ar' ? 'اختياري' : 'Optional'}
+                   value={company}
+                   onChange={(e) => setCompany(e.target.value)}
+-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
++                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px var(--font-sans)", color: '#0B0B0F', outline: 'none' }}
+                 />
+               </label>
+ 
+@@ -1033,7 +1033,7 @@ export default function BookingModal({
+                   placeholder="you@company.com"
+                   value={email}
+                   onChange={(e) => setEmail(e.target.value)}
+-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
++                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px var(--font-sans)", color: '#0B0B0F', outline: 'none' }}
+                 />
+               </label>
+ 
+@@ -1044,7 +1044,7 @@ export default function BookingModal({
+                   placeholder="+966"
+                   value={phone}
+                   onChange={(e) => setPhone(e.target.value)}
+-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
++                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px var(--font-sans)", color: '#0B0B0F', outline: 'none' }}
+                 />
+               </label>
+             </div>
+@@ -1056,7 +1056,7 @@ export default function BookingModal({
+                 placeholder={language === 'ar' ? 'اختياري' : 'Optional'}
+                 value={notes}
+                 onChange={(e) => setNotes(e.target.value)}
+-                style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', resize: 'vertical', outline: 'none' }}
++                style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px var(--font-sans)", color: '#0B0B0F', resize: 'vertical', outline: 'none' }}
+               />
+             </label>
+           </div>
+@@ -1078,7 +1078,7 @@ export default function BookingModal({
+                   placeholder={language === 'ar' ? 'الاسم على البطاقة' : 'As printed on the card'}
+                   value={cardName}
+                   onChange={(e) => setCardName(e.target.value)}
+-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
++                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px var(--font-sans)", color: '#0B0B0F', outline: 'none' }}
+                 />
+               </label>
+ 
+@@ -1089,7 +1089,7 @@ export default function BookingModal({
+                   placeholder="0000 0000 0000 0000"
+                   value={cardNumber}
+                   onChange={(e) => setCardNumber(e.target.value)}
+-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
++                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px var(--font-sans)", color: '#0B0B0F', outline: 'none' }}
+                 />
+               </label>
+ 
+@@ -1100,7 +1100,7 @@ export default function BookingModal({
+                   placeholder="MM / YY"
+                   value={cardExpiry}
+                   onChange={(e) => setCardExpiry(e.target.value)}
+-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
++                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px var(--font-sans)", color: '#0B0B0F', outline: 'none' }}
+                 />
+               </label>
+ 
+@@ -1111,7 +1111,7 @@ export default function BookingModal({
+                   placeholder="123"
+                   value={cardCvc}
+                   onChange={(e) => setCardCvc(e.target.value)}
+-                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px 'IBM Plex Sans Arabic', sans-serif", color: '#0B0B0F', outline: 'none' }}
++                  style={{ border: 'none', borderBottom: '1px solid rgba(11, 11, 15, 0.25)', background: 'none', padding: '10px 2px', font: "300 16px var(--font-sans)", color: '#0B0B0F', outline: 'none' }}
+                 />
+               </label>
+             </div>
+@@ -1153,7 +1153,7 @@ export default function BookingModal({
+ 
+             <button
+               onClick={onClose}
+-              style={{ marginTop: '32px', display: 'inline-flex', alignItems: 'center', background: '#8A4120', color: '#FFFFFF', border: 'none', borderRadius: '999px', padding: '15px 34px', font: "500 15px 'IBM Plex Sans Arabic', sans-serif", lineHeight: 1, cursor: 'pointer', transition: 'background 250ms' }}
++              style={{ marginTop: '32px', display: 'inline-flex', alignItems: 'center', background: '#8A4120', color: '#FFFFFF', border: 'none', borderRadius: '999px', padding: '15px 34px', font: "500 15px var(--font-sans)", lineHeight: 1, cursor: 'pointer', transition: 'background 250ms' }}
+             >
+               {language === 'ar' ? 'تم' : 'Done'}
+             </button>
+@@ -1165,7 +1165,7 @@ export default function BookingModal({
+           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '20px', marginTop: '40px', paddingTop: '24px', borderTop: '1px solid rgba(11, 11, 15, 0.12)' }}>
+             <button
+               onClick={handleBack}
+-              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "400 15px 'IBM Plex Sans Arabic', sans-serif", color: '#6B675F', transition: 'color 200ms' }}
++              style={{ background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "400 15px var(--font-sans)", color: '#6B675F', transition: 'color 200ms' }}
+             >
+               {backLabel}
+             </button>
+@@ -1182,7 +1182,7 @@ export default function BookingModal({
+                 border: 'none',
+                 borderRadius: '999px',
+                 padding: '15px 32px',
+-                font: "500 15px 'IBM Plex Sans Arabic', sans-serif",
++                font: "500 15px var(--font-sans)",
+                 lineHeight: 1,
+                 cursor: isScheduleOk ? 'pointer' : 'not-allowed',
+                 transition: 'background 250ms, gap 250ms'
+diff --git a/src/components/Header.js b/src/components/Header.js
+index 6b8cbb2..aaa4177 100644
+--- a/src/components/Header.js
++++ b/src/components/Header.js
+@@ -148,7 +148,7 @@ export default function Header() {
+               border: 'none',
+               borderRadius: '999px',
+               padding: '12px 26px',
+-              font: "500 15px 'IBM Plex Sans Arabic', sans-serif",
++              font: "500 15px var(--font-sans)",
+               lineHeight: 1,
+               whiteSpace: 'nowrap',
+               cursor: 'pointer',
+diff --git a/src/context/LanguageContext.js b/src/context/LanguageContext.js
+index 849d9ed..3e2cc8b 100644
+--- a/src/context/LanguageContext.js
++++ b/src/context/LanguageContext.js
+@@ -27,10 +27,13 @@ export function LanguageProvider({ children }) {
+     localStorage.setItem('mars-lang', language);
+   }, [language, mounted]);
+ 
+-  // Update HTML theme class when theme changes
++  // Update HTML theme class when theme changes.
++  // Toggle only the theme class — assigning to className would wipe the
++  // classes the root layout puts on <html> (next/font variables, h-full,
++  // antialiased) and the site would silently lose its fonts on hydration.
+   useEffect(() => {
+     if (!mounted) return;
+-    document.documentElement.className = theme === 'light' ? 'theme-light' : '';
++    document.documentElement.classList.toggle('theme-light', theme === 'light');
+     localStorage.setItem('mars-theme', theme);
+   }, [theme, mounted]);
+ 
+-- 
+2.43.0
+

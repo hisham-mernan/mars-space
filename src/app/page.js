@@ -239,7 +239,7 @@ export default function Home() {
                     border: 'none',
                     borderRadius: '999px',
                     padding: '18px 36px',
-                    font: "500 16px 'IBM Plex Sans Arabic', sans-serif",
+                    font: "500 16px var(--font-sans)",
                     lineHeight: 1,
                     cursor: 'pointer',
                     transition: 'background 250ms, gap 250ms'
@@ -259,7 +259,7 @@ export default function Home() {
                     color: '#F5F3EF',
                     borderRadius: '999px',
                     padding: '18px 36px',
-                    font: "500 16px 'IBM Plex Sans Arabic', sans-serif",
+                    font: "500 16px var(--font-sans)",
                     lineHeight: 1,
                     cursor: 'pointer',
                     transition: 'border-color 250ms, color 250ms'
@@ -543,7 +543,7 @@ export default function Home() {
                       border: 'none',
                       borderRadius: '999px',
                       padding: '16px 32px',
-                      font: "500 15px 'IBM Plex Sans Arabic', sans-serif",
+                      font: "500 15px var(--font-sans)",
                       lineHeight: 1,
                       cursor: 'pointer',
                       transition: 'background 250ms, gap 250ms'
@@ -626,7 +626,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={() => openPlanFlow(0)}
-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'IBM Plex Sans Arabic', sans-serif", color: '#8A4120' }}
+                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
                 >
                   {language === 'ar' ? 'احصل على تصريح' : 'Get a pass'}
                   <span>→</span>
@@ -649,7 +649,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={() => openPlanFlow(1)}
-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'IBM Plex Sans Arabic', sans-serif", color: '#8A4120' }}
+                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
                 >
                   {language === 'ar' ? 'انضم الآن' : 'Join'}
                   <span>→</span>
@@ -672,7 +672,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={() => openPlanFlow(2)}
-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'IBM Plex Sans Arabic', sans-serif", color: '#8A4120' }}
+                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
                 >
                   {language === 'ar' ? 'انضم الآن' : 'Join'}
                   <span>→</span>
@@ -695,7 +695,7 @@ export default function Home() {
                 </div>
                 <button
                   onClick={() => openOfficeFlow(0)}
-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px 'IBM Plex Sans Arabic', sans-serif", color: '#8A4120' }}
+                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
                 >
                   {language === 'ar' ? 'عرض المكاتب' : 'See offices'}
                   <span>→</span>
@@ -778,7 +778,7 @@ export default function Home() {
                       border: 'none',
                       borderRadius: '999px',
                       padding: '18px 38px',
-                      font: "500 16px 'IBM Plex Sans Arabic', sans-serif",
+                      font: "500 16px var(--font-sans)",
                       lineHeight: 1,
                       cursor: 'pointer',
                       transition: 'background 250ms, gap 250ms'
@@ -798,7 +798,7 @@ export default function Home() {
                       color: '#F5F3EF',
                       borderRadius: '999px',
                       padding: '18px 38px',
-                      font: "500 16px 'IBM Plex Sans Arabic', sans-serif",
+                      font: "500 16px var(--font-sans)",
                       lineHeight: 1,
                       cursor: 'pointer',
                       transition: 'border-color 250ms, color 250ms'

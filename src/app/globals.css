@@ -1,10 +1,14 @@
 /* Mars Space Global Stylesheet - World-Class Handcrafted Design System */
 
-/* Comprehensive Local Font Face Declarations for Thmanyah Sans (OTF Primary, WOFF2 Secondary) */
+/* Thmanyah Sans — plain-CSS fallback layer.
+   The primary load path is next/font/local in app/layout.js (self-hosted +
+   preloaded, exposed as --font-thmanyah-sans). These @font-face rules only
+   come into play if that variable is ever unavailable, so the browser will
+   normally never fetch them. WOFF2 first, OTF for older engines. */
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Light.otf') format('opentype'),
-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Light.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Light.woff2') format('woff2'),
+       url('/fonts/thmanyahsans/otf/thmanyahsans-Light.otf') format('opentype');
   font-weight: 300;
   font-style: normal;
   font-display: swap;
@@ -12,8 +16,8 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Regular.otf') format('opentype'),
-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Regular.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Regular.woff2') format('woff2'),
+       url('/fonts/thmanyahsans/otf/thmanyahsans-Regular.otf') format('opentype');
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -21,8 +25,8 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Medium.otf') format('opentype'),
-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Medium.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Medium.woff2') format('woff2'),
+       url('/fonts/thmanyahsans/otf/thmanyahsans-Medium.otf') format('opentype');
   font-weight: 500;
   font-style: normal;
   font-display: swap;
@@ -30,8 +34,8 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype'),
-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2'),
+       url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype');
   font-weight: 600;
   font-style: normal;
   font-display: swap;
@@ -39,8 +43,8 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype'),
-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Bold.woff2') format('woff2'),
+       url('/fonts/thmanyahsans/otf/thmanyahsans-Bold.otf') format('opentype');
   font-weight: 700;
   font-style: normal;
   font-display: swap;
@@ -48,8 +52,8 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype'),
-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2'),
+       url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype');
   font-weight: 800;
   font-style: normal;
   font-display: swap;
@@ -57,14 +61,20 @@
 
 @font-face {
   font-family: 'Thmanyah Sans';
-  src: url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype'),
-       url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2');
+  src: url('/fonts/thmanyahsans/woff2/thmanyahsans-Black.woff2') format('woff2'),
+       url('/fonts/thmanyahsans/otf/thmanyahsans-Black.otf') format('opentype');
   font-weight: 900;
   font-style: normal;
   font-display: swap;
 }
 
 :root {
+  /* Typography — single family for Arabic and English.
+     Falls back to the plain @font-face name above if next/font's variable
+     is ever missing, then to system UI fonts. */
+  --font-sans: var(--font-thmanyah-sans, 'Thmanyah Sans'), 'Thmanyah Sans',
+    system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
   /* Brand Core Palette - Handcrafted Deep Obsidian & Copper Spectrum */
   --mars-void: #07070A;
   --mars-slate: #111116;
@@ -161,7 +171,7 @@ label,
 table,
 td,
 th {
-  font-family: 'IBM Plex Sans Arabic', var(--font-ibm-plex-sans-arabic), 'Inter', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
+  font-family: var(--font-sans) !important;
   box-sizing: border-box;
 }
 
