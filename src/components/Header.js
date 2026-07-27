@@ -3,11 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
 import BookingModal from './BookingModal';
+import MegaMenu from './MegaMenu';
 
 export default function Header() {
   const { language, toggleLanguage } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
+  const [megaOpen, setMegaOpen] = useState(false);
   const [user, setUser] = useState(null);
 
   useEffect(() => {
@@ -56,7 +58,7 @@ export default function Header() {
           }}
         >
           {/* Brand Logo & Lockup */}
-          <a href="#top" style={{ display: 'flex', alignItems: 'flex-end', gap: '12px' }}>
+          <a href="/" style={{ display: 'flex', alignItems: 'flex-end', gap: '12px' }}>
             <img
               src="/assets/mars-lockup-white.png"
               alt="MARS مارس"
@@ -90,12 +92,21 @@ export default function Header() {
             }}
             className="desktop-nav"
           >
-            <a href="#space" className="nav-link">{language === 'ar' ? 'المساحة' : 'The Space'}</a>
-            <a href="#explore" className="nav-link">{language === 'ar' ? 'استكشف' : 'Explore'}</a>
-            <a href="#offices" className="nav-link">{language === 'ar' ? 'المكاتب' : 'Offices'}</a>
-            <a href="#membership" className="nav-link">{language === 'ar' ? 'العضويات' : 'Membership'}</a>
-            <a href="#community" className="nav-link">{language === 'ar' ? 'المجتمع' : 'Community'}</a>
-            <a href="#visit" className="nav-link">{language === 'ar' ? 'زيارة' : 'Visit'}</a>
+            <div
+              onMouseEnter={() => setMegaOpen(true)}
+              style={{ position: 'relative', display: 'inline-block' }}
+            >
+              <a href="/spaces" className="nav-link">
+                {language === 'ar' ? 'المساحات ▾' : 'Workspaces ▾'}
+              </a>
+              <MegaMenu isOpen={megaOpen} onClose={() => setMegaOpen(false)} />
+            </div>
+
+            <a href="/about" className="nav-link">{language === 'ar' ? 'عن مارس' : 'About'}</a>
+            <a href="/pricing" className="nav-link">{language === 'ar' ? 'الأسعار' : 'Pricing'}</a>
+            <a href="/events" className="nav-link">{language === 'ar' ? 'الفعاليات' : 'Events'}</a>
+            <a href="/faq" className="nav-link">{language === 'ar' ? 'الأسئلة الشائعة' : 'FAQ'}</a>
+            <a href="/contact" className="nav-link">{language === 'ar' ? 'تواصل معنا' : 'Contact'}</a>
           </nav>
 
           {/* Language Switcher Pill */}

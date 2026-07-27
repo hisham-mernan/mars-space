@@ -21,15 +21,29 @@ export default function Login() {
     setErrorMsg('');
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 800));
+      const res = await fetch('/api/v1/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
 
-      if (email === 'ahmed@example.com' && password === 'password') {
-        // Success
-        localStorage.setItem('mars-user', JSON.stringify({ id: 'usr-01', name: 'Ahmed Alharbi', email: 'ahmed@example.com' }));
-        window.location.href = '/member';
+      if (data.success && data.data?.user) {
+        const user = data.data.user;
+        localStorage.setItem('mars-user', JSON.stringify(user));
+        
+        const params = new URLSearchParams(window.location.search);
+        const redirectTarget = params.get('redirect');
+        
+        if (redirectTarget) {
+          window.location.href = redirectTarget;
+        } else if (user.role === 'ERP_ADMIN' || user.role === 'STAFF') {
+          window.location.href = '/erp';
+        } else {
+          window.location.href = '/member';
+        }
       } else {
-        setErrorMsg(language === 'ar' ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة' : 'Invalid email or password');
+        setErrorMsg(data.error?.message || (language === 'ar' ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة' : 'Invalid email or password'));
       }
     } catch (err) {
       setErrorMsg('Network error, please try again.');

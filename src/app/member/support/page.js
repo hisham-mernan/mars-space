@@ -36,25 +36,54 @@ export default function SupportDesk() {
 
   if (!mounted || !user) return null;
 
-  const handleCreateTicket = (e) => {
+  const handleCreateTicket = async (e) => {
     e.preventDefault();
     if (!subject || !description) return;
 
-    const newTicket = {
-      id: `MSP-${Math.floor(1000 + Math.random() * 9000)}`,
-      subject,
-      category,
-      priority,
-      status: 'Submitted',
-      lastUpdate: 'Just now'
-    };
+    try {
+      const res = await fetch('/api/v1/member/support', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          userId: user.id,
+          userName: user.name,
+          userEmail: user.email,
+          subject,
+          category,
+          priority,
+          description
+        })
+      });
 
-    setTickets([newTicket, ...tickets]);
-    setNewTicketModal(false);
-    
-    // Clear inputs
-    setSubject('');
-    setDescription('');
+      const data = await res.json();
+      if (data.success && data.data) {
+        const newTicket = {
+          id: data.data.id || `MSP-${Math.floor(1000 + Math.random() * 9000)}`,
+          subject: data.data.subject || subject,
+          category: data.data.category || category,
+          priority: data.data.priority || priority,
+          status: data.data.status || 'Submitted',
+          lastUpdate: 'Just now'
+        };
+        setTickets([newTicket, ...tickets]);
+      } else {
+        const newTicket = {
+          id: `MSP-${Math.floor(1000 + Math.random() * 9000)}`,
+          subject,
+          category,
+          priority,
+          status: 'Submitted',
+          lastUpdate: 'Just now'
+        };
+        setTickets([newTicket, ...tickets]);
+      }
+    } catch (err) {
+      console.error('Failed to post support ticket', err);
+    } finally {
+      setNewTicketModal(false);
+      setSubject('');
+      setDescription('');
+    }
   };
 
   const handleSendMessage = (e) => {

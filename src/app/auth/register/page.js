@@ -83,16 +83,33 @@ export default function Register() {
     setStep(3);
   };
 
-  const handleStep3Submit = (e) => {
+  const handleStep3Submit = async (e) => {
     e.preventDefault();
-    // Save simulated profile updates and login
-    localStorage.setItem('mars-user', JSON.stringify({
-      id: `usr-${Date.now()}`,
-      name: `${firstName} ${lastName}`,
-      email,
-      company: companyName
-    }));
-    window.location.href = '/member';
+    setErrorMsg('');
+
+    try {
+      const res = await fetch('/api/v1/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: `${firstName} ${lastName}`,
+          email,
+          password,
+          company: companyName,
+          role: 'MEMBER'
+        })
+      });
+
+      const data = await res.json();
+      if (data.success && data.data?.user) {
+        localStorage.setItem('mars-user', JSON.stringify(data.data.user));
+        window.location.href = '/member';
+      } else {
+        setErrorMsg(data.error?.message || (language === 'ar' ? 'حدث خطأ أثناء التسجيل' : 'Registration failed'));
+      }
+    } catch (err) {
+      setErrorMsg('Network error, please try again.');
+    }
   };
 
   const handleResendOtp = () => {
