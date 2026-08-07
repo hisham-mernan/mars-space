@@ -224,37 +224,35 @@ export default function SpaceDetail() {
                 ))}
               </div>
 
-              {/* Specifications Block */}
+              {/* Specifications Block (§8) */}
               <div style={{ marginTop: '48px', background: 'var(--mars-slate)', padding: '28px', borderRadius: '8px', border: '1px solid var(--line-dark)' }}>
                 <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 600, color: '#FFFFFF', borderBottom: '1px solid rgba(245, 245, 245, 0.08)', paddingBottom: '16px' }}>
-                  {language === 'ar' ? 'المواصفات والتفاصيل' : 'Space Specifications'}
+                  {t?.sharedLabels?.theDetails || (language === 'ar' ? 'التفاصيل' : 'The details')}
                 </h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '20px', marginTop: '20px' }}>
                   <div>
-                    <div style={{ fontSize: '13px', color: 'var(--text-muted-dark)' }}>{language === 'ar' ? 'السعة القصوى' : 'Max Capacity'}</div>
+                    <div style={{ fontSize: '13px', color: 'var(--text-muted-dark)' }}>{t?.sharedLabels?.capacity || (language === 'ar' ? 'السعة' : 'Capacity')}</div>
                     <div style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginTop: '4px' }}>{space.capacity} {language === 'ar' ? 'أشخاص' : 'People'}</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: '13px', color: 'var(--text-muted-dark)' }}>{language === 'ar' ? 'المساحة' : 'Area Size'}</div>
-                    <div style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginTop: '4px' }}>{space.size} sqm</div>
-                  </div>
-                  <div>
-                    <div style={{ fontSize: '13px', color: 'var(--text-muted-dark)' }}>{language === 'ar' ? 'الطابق' : 'Floor Location'}</div>
+                    <div style={{ fontSize: '13px', color: 'var(--text-muted-dark)' }}>{t?.sharedLabels?.whereItSits || (language === 'ar' ? 'موقعها في الطابق' : 'Where it sits')}</div>
                     <div style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginTop: '4px' }}>{space.floor}</div>
                   </div>
                   <div>
-                    <div style={{ fontSize: '13px', color: 'var(--text-muted-dark)' }}>{language === 'ar' ? 'الحالة اليوم' : 'Status Today'}</div>
-                    <div style={{ fontSize: '18px', fontWeight: 600, color: 'var(--copper-400)', marginTop: '4px' }}>
-                      {space.status === 'Available' ? (language === 'ar' ? 'متاح' : 'Available') : (language === 'ar' ? 'محجوز' : 'Occupied')}
-                    </div>
+                    <div style={{ fontSize: '13px', color: 'var(--text-muted-dark)' }}>{t?.sharedLabels?.rates || (language === 'ar' ? 'الأسعار' : 'Rates')}</div>
+                    <div style={{ fontSize: '18px', fontWeight: 600, color: '#FFFFFF', marginTop: '4px' }}>{space.rate} <span style={{ fontSize: '12px', fontWeight: 400, color: 'var(--text-muted-dark)' }}>{t?.sharedLabels?.perHour || '/ hr'}</span></div>
+                  </div>
+                  <div>
+                    <div style={{ fontSize: '13px', color: 'var(--text-muted-dark)' }}>{t?.sharedLabels?.vatIncluded || (language === 'ar' ? 'شامل الضريبة' : 'VAT included')}</div>
+                    <div style={{ fontSize: '18px', fontWeight: 600, color: 'var(--copper-400)', marginTop: '4px' }}>15%</div>
                   </div>
                 </div>
               </div>
 
-              {/* Amenities Grid */}
+              {/* Amenities Grid (§8) */}
               <div style={{ marginTop: '48px' }}>
                 <h3 style={{ margin: '0 0 20px', fontSize: '22px', fontWeight: 600, color: '#FFFFFF' }}>
-                  {language === 'ar' ? 'الميزات المتوفرة' : 'What this space offers'}
+                  {t?.sharedLabels?.whatsIncluded || (language === 'ar' ? 'ما تشمله' : 'What\'s included')}
                 </h3>
                 <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
                   {(language === 'ar' ? space.amenitiesAr : space.amenities || []).map((am, idx) => (

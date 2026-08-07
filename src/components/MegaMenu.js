@@ -4,46 +4,46 @@ import React from 'react';
 import { useLanguage } from '@/context/LanguageContext';
 
 export default function MegaMenu({ isOpen, onClose }) {
-  const { language } = useLanguage();
+  const { language, t } = useLanguage();
 
   if (!isOpen) return null;
 
   const categories = [
     {
-      title: language === 'ar' ? 'مكاتب خاصة' : 'Private Offices',
-      desc: language === 'ar' ? 'أجنحة زجاجية مغلقة تتسع لـ 2 إلى 20 شخصاً' : 'Enclosed glass suites seating 2 to 20 people',
+      title: t?.megaMenu?.offices || (language === 'ar' ? 'مكاتب خاصة' : 'Private Offices'),
+      desc: t?.megaMenu?.officesDesc || (language === 'ar' ? 'مكاتب قابلة للإغلاق للفرق، مُسجّلة باسمك' : 'Lockable offices for teams, registered to your name'),
       href: '/spaces?category=private_office',
       icon: '🏢'
     },
     {
-      title: language === 'ar' ? 'قاعات اجتماعات' : 'Meeting Rooms',
-      desc: language === 'ar' ? 'شاشات ذكية وأنظمة اتصال مرئي فائق الوضوح' : 'Smart 75" screens and HD video conferencing',
+      title: t?.megaMenu?.desks || (language === 'ar' ? 'مكاتب مشتركة' : 'Coworking Desks'),
+      desc: t?.megaMenu?.desksDesc || (language === 'ar' ? 'مكاتب مرنة باليوم، ومكاتب مُخصّصة بالشهر' : 'Hot desks by the day, dedicated desks by the month'),
+      href: '/spaces?category=coworking',
+      icon: '🖥️'
+    },
+    {
+      title: t?.megaMenu?.rooms || (language === 'ar' ? 'قاعات اجتماعات' : 'Meeting Rooms'),
+      desc: t?.megaMenu?.roomsDesc || (language === 'ar' ? 'قاعات مُجهّزة كما ينبغي، قابلة للحجز بالساعة' : 'Properly equipped rooms, bookable by the hour'),
       href: '/spaces?category=meeting_room',
       icon: '🎙️'
     },
     {
-      title: language === 'ar' ? 'مكاتب مخصصة' : 'Dedicated Desks',
-      desc: language === 'ar' ? 'نفس المكتب والكرسي والخزانة الشخصية كل يوم' : 'Your reserved desk, ergonomic chair & locker daily',
-      href: '/spaces?category=dedicated_desk',
-      icon: '🖥️'
-    },
-    {
-      title: language === 'ar' ? 'مكاتب مشتركة' : 'Hot Desks',
-      desc: language === 'ar' ? 'تصاريح مرنة يومية وشهرية في الصالة المفتوحة' : 'Flexible daily & monthly open lounge seating',
-      href: '/spaces?category=hot_desk',
-      icon: '☕'
-    },
-    {
-      title: language === 'ar' ? 'كبائن التركيز' : 'Focus Pods',
-      desc: language === 'ar' ? 'مساحات عازلة للصوت للمكالمات والعمل المنفرد' : 'Soundproof pods for private calls & deep work',
+      title: t?.megaMenu?.pods || (language === 'ar' ? 'غرف تركيز' : 'Focus Pods'),
+      desc: t?.megaMenu?.podsDesc || (language === 'ar' ? 'غرف لشخص واحد للمكالمات والعمل العميق' : 'Single-occupancy rooms for calls and deep work'),
       href: '/spaces?category=focus_pod',
       icon: '🎧'
     },
     {
-      title: language === 'ar' ? 'قاعة الفعاليات' : 'Event Space',
-      desc: language === 'ar' ? 'تتسع لـ 80 شخصاً مع تجهيزات الصوت والإضاءة' : 'Hosts up to 80 guests with full A/V & lighting',
-      href: '/spaces?category=event_space',
+      title: t?.megaMenu?.community || (language === 'ar' ? 'مساحة مجتمعية' : 'Community Space'),
+      desc: t?.megaMenu?.communityDesc || (language === 'ar' ? 'مُهيّأة للمحاضرات والورش والإطلاقات' : 'Arranged for talks, workshops and launches'),
+      href: '/events',
       icon: '✨'
+    },
+    {
+      title: t?.megaMenu?.cafe || (language === 'ar' ? 'المقهى والاستراحة' : 'Café & Lounge'),
+      desc: t?.megaMenu?.cafeDesc || (language === 'ar' ? 'قهوة مختصة وجلسات هادئة ضمن كل باقة' : 'Specialty coffee and quiet seating included'),
+      href: '/spaces?category=cafe',
+      icon: '☕'
     }
   ];
 
@@ -65,11 +65,11 @@ export default function MegaMenu({ isOpen, onClose }) {
     >
       <div style={{ maxWidth: '1440px', margin: '0 auto' }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-          <span style={{ fontSize: '12px', fontWeight: 700, letterSpacing: '0.08em', color: 'var(--copper-400)', textTransform: 'uppercase' }}>
-            {language === 'ar' ? 'استكشف مساحات مارس' : 'EXPLORE MARS WORKSPACES'}
+          <span style={{ fontSize: '14px', fontWeight: 700, letterSpacing: '0.05em', color: 'var(--copper-400)', textTransform: 'uppercase' }}>
+            {t?.megaMenu?.heading || (language === 'ar' ? 'طابقٌ واحد منتقى' : 'One curated floor')}
           </span>
           <a href="/spaces" style={{ fontSize: '13px', fontWeight: 600, color: '#FFFFFF', textDecoration: 'underline' }}>
-            {language === 'ar' ? 'عرض جميع المساحات ←' : 'View all spaces →'}
+            {language === 'ar' ? 'استعرض الطابق ←' : 'See the floor →'}
           </a>
         </div>
 
@@ -105,6 +105,11 @@ export default function MegaMenu({ isOpen, onClose }) {
               </div>
             </a>
           ))}
+        </div>
+
+        {/* Footer line of the mega menu */}
+        <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid rgba(245,243,239,0.08)', fontSize: '13px', color: '#A8A49D', fontStyle: 'italic', textAlign: language === 'ar' ? 'right' : 'left' }}>
+          {t?.megaMenu?.footerLine || (language === 'ar' ? 'كل شيء على بُعد خطوات.' : 'Everything is a few steps apart.')}
         </div>
       </div>
     </div>

@@ -80,17 +80,32 @@ export default function SpacesListing() {
       <Header />
 
       <main style={{ minHeight: '100vh', background: 'var(--mars-void)', paddingTop: '100px', boxSizing: 'border-box' }}>
-        {/* Hero Banner Section */}
+        {/* Hero Banner Section (§3) */}
         <section style={{ padding: '60px 0 40px', borderBottom: '1px solid var(--line-dark)' }}>
           <div className="container">
-            <h1 style={{ fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 200, letterSpacing: '-0.02em', color: '#FFFFFF' }}>
-              {language === 'ar' ? 'استكشف مساحاتنا' : 'Explore Our Spaces'}
+            <span style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '0.1em', color: 'var(--copper-400)', textTransform: 'uppercase' }}>
+              {t?.nav?.space || (language === 'ar' ? 'المساحة' : 'THE SPACE')}
+            </span>
+            <h1 style={{ fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 200, letterSpacing: '-0.02em', color: '#FFFFFF', margin: '12px 0 0' }}>
+              {t?.theSpacePage?.h1 || (language === 'ar' ? 'طابقٌ واحد، مُنسَّق بعناية وقصد.' : 'One floor, curated with intent.')}
             </h1>
-            <p style={{ margin: '14px 0 0', color: 'var(--text-muted-dark)', maxWidth: '60ch' }}>
-              {language === 'ar' 
-                ? 'ابحث عن مساحة العمل المثالية التي تناسب احتياجاتك، من المكاتب الخاصة المغلقة وقاعات الاجتماعات المجهزة بالكامل إلى مساحات العمل المشتركة المرنة.'
-                : 'Discover the ideal workspace tailored for your business needs, ranging from private lockable offices and fully equipped meeting rooms to flexible hot-desking zones.'}
+            <p style={{ margin: '14px 0 0', color: 'var(--text-secondary)', maxWidth: '65ch', fontSize: '17px', lineHeight: 1.6 }}>
+              {t?.theSpacePage?.sub || (language === 'ar' 
+                ? 'العمل المركّز، والعمل المجدول، وكل ما بينهما — لكلٍّ مكانه اللائق هنا، ولا يبعد أيٌّ منها سوى خطوات عن الآخر.'
+                : 'Focused work, scheduled work, and everything in between — each has a proper place here, and none is more than a short walk from the rest.')}
             </p>
+
+            {/* Why One Floor (§3) */}
+            <div style={{ marginTop: '32px', padding: '24px 28px', background: 'var(--surface-1)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
+              <h3 style={{ fontSize: '18px', fontWeight: 500, color: 'var(--copper-400)', margin: '0 0 8px' }}>
+                {t?.theSpacePage?.whyOneFloorTitle || (language === 'ar' ? 'أبقيناه طابقاً واحداً عن قصد.' : 'We kept it to one floor on purpose.')}
+              </h3>
+              <p style={{ margin: 0, fontSize: '15px', color: 'var(--text-muted-dark)', lineHeight: 1.6 }}>
+                {t?.theSpacePage?.whyOneFloorBody || (language === 'ar'
+                  ? 'طابقٌ واحد يعني أن كل شيء قريب، وكل شيء مُتسق، وكل شيء خاضع للمعيار نفسه. إدارة مساحةٍ منتقاة بإتقان أسهل حين تكون في مكان واحد — والتنقُّل خلال يومك أسلس، بلا عوائق.'
+                  : 'One floor means everything is close, everything is consistent, and everything is held to the same standard. It\'s easier to run a curated space well when it\'s all in one place — and easier for you to move through your day without friction.')}
+              </p>
+            </div>
           </div>
         </section>
 

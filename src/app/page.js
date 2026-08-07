@@ -7,7 +7,7 @@ import Footer from '../components/Footer';
 import BookingModal from '../components/BookingModal';
 
 export default function Home() {
-  const { language, mounted } = useLanguage();
+  const { language, t, mounted } = useLanguage();
 
   // Booking Modal State
   const [bookingOpen, setBookingOpen] = useState(false);
@@ -26,67 +26,67 @@ export default function Home() {
   const [numsCounted, setNumsCounted] = useState(false);
   const [numValues, setNumValues] = useState([0, 0, 0, 0]);
 
-  // Explore Areas Data (Matching v2 specification)
+  // Explore Areas Data (§2.3 - Six kinds of space)
   const areas = [
     {
-      name: language === 'ar' ? 'قاعات الاجتماعات' : 'Meeting rooms',
-      ar: 'قاعات الاجتماعات',
+      name: t?.spacesOverview?.zones?.privateOffices?.name || (language === 'ar' ? 'مكاتب خاصة' : 'Private Offices'),
+      ar: 'مكاتب خاصة',
       img: '/assets/photo-glass-offices.jpg',
-      line: language === 'ar'
-        ? 'أربع قاعات زجاجية متصلة بالصالة الفسيحة: فينتشرز، اللاب، VC، والقاعة المجتمعية، تتسع من ٤ أشخاص حتى ١٤ شخصاً مع شاشات فائقة الدقة.'
-        : 'Four glass rooms off the open floor: Ventures, Lab, VC and Community Hall, from a six-seat huddle to a fourteen-seat boardroom with a video wall.',
-      meta: language === 'ar' ? '٤ قاعات · شاشات وعقد مؤتمرات في كل قاعة' : '4 rooms · screens and conferencing in each',
-      status: language === 'ar' ? '٣ قاعات متاحة الآن' : '3 of 4 free right now'
+      line: t?.spacesOverview?.zones?.privateOffices?.desc || (language === 'ar'
+        ? 'مكاتب قابلة للإغلاق للفرق، مُجهّزة بمستوىً راقٍ ومُسجّلة باسمك. مساحتك الخاصة، جاهزة من اليوم الأول.'
+        : 'Lockable offices for teams, finished to a standard and registered to your name. Your own space, ready from day one.'),
+      meta: language === 'ar' ? 'مكاتب خاصة · تسجيل باسم المنشأة' : 'Private offices · registered to your name',
+      status: language === 'ar' ? 'جاهزة من اليوم الأول' : 'ready from day one'
     },
     {
-      name: language === 'ar' ? 'المكاتب الخاصة' : 'Private offices',
-      ar: 'المكاتب الخاصة',
-      img: '/assets/photo-glass-offices.jpg',
-      line: language === 'ar'
-        ? 'واحد وعشرون مكتباً خاصاً مغلقاً على الواجهات الزجاجية، تسع من شخصين حتى عشرة أشخاص. اسم شركتك على الباب وتأمين شبكة خاص ودخول ٢٤/٧.'
-        : 'Twenty-one lockable offices around the perimeter, sized from two to ten. Your name on the door, your own network, and daylight on every desk.',
-      meta: language === 'ar' ? '٢١ مكتباً · دخول على مدار الساعة' : '21 offices · 24/7 access',
-      status: language === 'ar' ? '٣ مكاتب متاحة حالياً' : '3 open right now'
-    },
-    {
-      name: language === 'ar' ? 'العمل المشترك' : 'Coworking',
-      ar: 'العمل المشترك',
+      name: t?.spacesOverview?.zones?.coworkingDesks?.name || (language === 'ar' ? 'مكاتب مشتركة' : 'Coworking Desks'),
+      ar: 'مكاتب مشتركة',
       img: '/assets/photo-coworking.jpg',
-      line: language === 'ar'
-        ? 'قلب الطابق المفتوح المضاء بنور الشمس من الجانبين. اختر أي مكتب بتصريح يومي أو حافظ على نفس المكتب يومياً بعضوية مخصصة.'
-        : 'The open centre of the floor, lit from both sides. Take any desk with a day pass or keep the same one every morning with a membership.',
-      meta: language === 'ar' ? 'مساحة مفتوحة · مكاتب مشتركة ومخصصة' : 'Open floor · hot and dedicated desks',
-      status: language === 'ar' ? 'مكاتب متاحة اليوم' : 'desks free today'
+      line: t?.spacesOverview?.zones?.coworkingDesks?.desc || (language === 'ar'
+        ? 'طابقٌ مشتركٌ مدروس — مكاتب مرنة باليوم، ومكاتب مُخصّصة بالشهر. هادئ ومريح وغير مزدحم أبداً.'
+        : 'A considered shared floor — hot desks by the day, dedicated desks by the month. Quiet, comfortable, never overcrowded.'),
+      meta: language === 'ar' ? 'مكاتب مرنة ومخصصة' : 'Hot & dedicated desks',
+      status: language === 'ar' ? 'غير مزدحم أبداً' : 'never overcrowded'
     },
     {
-      name: language === 'ar' ? 'القاعة المجتمعية' : 'Community hall',
-      ar: 'القاعة المجتمعية',
-      img: '/assets/photo-community-cinema.jpg',
-      line: language === 'ar'
-        ? 'القاعة الركنية المزودة بجدار شاشة عرض ومكبرات صوت. صفوف مسرحية للمحاضرات، دوائر لورش العمل، أو مساحة مفتوحة لليالي الإطلاق.'
-        : 'The corner room with the screen wall. Theatre rows for a talk, loose circles for a workshop, cleared out for a launch night.',
-      meta: language === 'ar' ? 'مرنة التجهيز · نظام صوتي كامل · ضيافة متكاملة' : 'Configurable · full AV · catering handled',
-      status: language === 'ar' ? 'حجز بالساعة أو نصف يوم' : 'hourly or half-day'
+      name: t?.spacesOverview?.zones?.meetingRooms?.name || (language === 'ar' ? 'قاعات اجتماعات' : 'Meeting Rooms'),
+      ar: 'قاعات اجتماعات',
+      img: '/assets/photo-glass-offices.jpg',
+      line: t?.spacesOverview?.zones?.meetingRooms?.desc || (language === 'ar'
+        ? 'قاعاتٌ مُجهّزة كما ينبغي وجاهزة فعلاً. احجز بالساعة — عضواً كنت أو ضيفاً، القاعات نفسها والأسعار نفسها.'
+        : 'Rooms that are properly equipped and genuinely ready. Book by the hour — member or guest, same rooms, same rates.'),
+      meta: language === 'ar' ? 'حجز بالساعة · للأعضاء والضيوف' : 'Hourly booking · members & guests',
+      status: language === 'ar' ? 'تحديث لحظي للتوفّر' : 'real-time availability'
     },
     {
-      name: language === 'ar' ? 'ركن القهوة' : 'Coffee lounge',
-      ar: 'ركن القهوة',
-      img: '/assets/photo-lounge-velvet.jpg',
-      line: language === 'ar'
-        ? 'قهوة مختصة وجلسات مريحة للاستراحة وتبادل الأحاديث. متضمنة في جميع الباقات والحجوزات، ومعظم الشراكات تبدأ من هنا.'
-        : 'Specialty coffee and low seating where the floor decompresses. Every plan and every booking includes it, and most introductions start here.',
-      meta: language === 'ar' ? 'دخول مفتوح · باريستا يومياً' : 'Open access · barista hours daily',
-      status: language === 'ar' ? 'مفتوح دائماً' : 'always open'
-    },
-    {
-      name: language === 'ar' ? 'كبائن الهاتف' : 'Phone booths',
-      ar: 'كبائن الهاتف',
+      name: t?.spacesOverview?.zones?.focusPods?.name || (language === 'ar' ? 'غرف تركيز' : 'Focus Pods'),
+      ar: 'غرف تركيز',
       img: '/assets/photo-vip-lounge.jpg',
-      line: language === 'ar'
-        ? 'ثلاث كبائن معزولة صوتياً بجوار المدخل للمكالمات الفردية والتركيز العالي. بدون حجز أو مفتاح، اغلق الباب وابدأ.'
-        : 'Three acoustic booths by the entrance for the call you need to take now. No booking, no key. Just close the door.',
-      meta: language === 'ar' ? '٣ كبائن · شخص واحد لكل كبينة' : '3 booths · one person each',
-      status: language === 'ar' ? 'كبينتان متاحتان الآن' : '2 free right now'
+      line: t?.spacesOverview?.zones?.focusPods?.desc || (language === 'ar'
+        ? 'غرفٌ لشخص واحد للمكالمات والعمل العميق، حين يتطلّب اليوم هدوءاً.'
+        : 'Single-occupancy rooms for calls and deep work, for when the day needs quiet.'),
+      meta: language === 'ar' ? 'شخص واحد · عزل صوتي' : 'Single-occupancy · acoustic design',
+      status: language === 'ar' ? 'هدوء تـام' : 'quiet work'
+    },
+    {
+      name: t?.spacesOverview?.zones?.communitySpace?.name || (language === 'ar' ? 'مساحة مجتمعية' : 'Community Space'),
+      ar: 'مساحة مجتمعية',
+      img: '/assets/photo-community-cinema.jpg',
+      line: t?.spacesOverview?.zones?.communitySpace?.desc || (language === 'ar'
+        ? 'مساحةٌ صُمّمت للّقاءات — محاضرات، وورش، وإطلاقات، تُنظَّم وتُستضاف كما ينبغي.'
+        : 'A room made for gatherings — talks, workshops and launches, arranged and hosted properly.'),
+      meta: language === 'ar' ? 'محاضرات وورش وإطلاقات' : 'Talks, workshops & launches',
+      status: language === 'ar' ? 'تجهيز واستضافة كاملة' : 'full setup & hosting'
+    },
+    {
+      name: t?.spacesOverview?.zones?.cafeLounge?.name || (language === 'ar' ? 'المقهى والاستراحة' : 'Café & Lounge'),
+      ar: 'المقهى والاستراحة',
+      img: '/assets/photo-lounge-velvet.jpg',
+      line: t?.spacesOverview?.zones?.cafeLounge?.desc || (language === 'ar'
+        ? 'قهوةٌ جيدة وجلساتٌ هادئة، ضمن كل باقة. الجزء من الطابق الذي لا يحتاج إلى موعد.'
+        : 'Good coffee and quiet seating, included with every plan. The part of the floor nobody has to schedule.'),
+      meta: language === 'ar' ? 'مشمول في كل باقة' : 'Included with every plan',
+      status: language === 'ar' ? 'دون مواعيد' : 'no schedule needed'
     }
   ];
 
@@ -198,7 +198,7 @@ export default function Home() {
       <Header />
 
       <main style={{ background: '#0B0B0F', color: '#F5F3EF' }}>
-        {/* Section 1: Hero Section */}
+        {/* Section 1: Hero Section (§2.1) */}
         <section id="top" data-screen-label="Hero" style={{ position: 'relative', minHeight: '100vh', display: 'flex', alignItems: 'flex-end', background: '#0B0B0F', overflow: 'hidden' }}>
           <div style={{ position: 'absolute', inset: 0, overflow: 'hidden' }}>
             <img
@@ -216,15 +216,19 @@ export default function Home() {
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(11,11,15,0.94) 0%, rgba(11,11,15,0.42) 45%, rgba(11,11,15,0.30) 100%)' }} />
 
           <div style={{ position: 'relative', width: '100%', maxWidth: '1600px', margin: '0 auto', padding: '200px clamp(24px, 4vw, 72px) clamp(96px, 14vh, 150px)', boxSizing: 'border-box' }}>
-            <h1 style={{ margin: 0, fontSize: 'clamp(52px, 7.5vw, 124px)', fontWeight: 300, letterSpacing: '-0.035em', lineHeight: 1.0, maxWidth: '12ch', animation: 'heroRise 700ms cubic-bezier(0.16,1,0.30,1) 200ms both' }}>
-              {language === 'ar' ? 'صُمِّم للذين يبنون.' : 'Built for the people who build.'}
+            <div style={{ fontSize: '14px', fontWeight: 600, letterSpacing: '0.12em', color: '#C86B3C', textTransform: 'uppercase', marginBottom: '16px' }}>
+              {t?.hero?.eyebrow || (language === 'ar' ? 'مارس سبيس — جدة' : 'MARS SPACE — JEDDAH')}
+            </div>
+
+            <h1 style={{ margin: 0, fontSize: 'clamp(48px, 6.5vw, 110px)', fontWeight: 300, letterSpacing: '-0.035em', lineHeight: 1.0, maxWidth: '14ch', animation: 'heroRise 700ms cubic-bezier(0.16,1,0.30,1) 200ms both' }}>
+              {t?.hero?.headline || (language === 'ar' ? 'مساحةٌ مدروسة لعملٍ جاد.' : 'Considered space for serious work.')}
             </h1>
 
             <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '32px', marginTop: 'clamp(32px, 5vh, 56px)' }}>
-              <p style={{ margin: 0, maxWidth: '44ch', fontSize: 'clamp(18px, 1.5vw, 22px)', fontWeight: 300, lineHeight: 1.65, color: 'rgba(245,243,239,0.9)', animation: 'heroRise 700ms cubic-bezier(0.16,1,0.30,1) 450ms both' }}>
-                {language === 'ar'
-                  ? 'طابق عمل خاص في جدة: مكاتب، قاعات اجتماعات وقاعة مجتمعية، تُدار بأسلوب وفلسفة حاضنة الأعمال التي تعمل هنا أيضاً.'
-                  : 'A private working floor in Jeddah: offices, rooms and a community hall, run by the venture builder that works here too.'}
+              <p style={{ margin: 0, maxWidth: '46ch', fontSize: 'clamp(18px, 1.5vw, 22px)', fontWeight: 300, lineHeight: 1.65, color: 'rgba(245,243,239,0.9)', animation: 'heroRise 700ms cubic-bezier(0.16,1,0.30,1) 450ms both' }}>
+                {t?.hero?.subHeadline || (language === 'ar'
+                  ? 'طابقٌ واحدٌ منتقى في جدة — مكاتب خاصة، وقاعات اجتماعات، ومساحات هادئة، اختير كُلٌّ منها وأُدير بعناية. احجز قاعةً اليوم، أو اتّخذ الطابق مقراً لك.'
+                  : 'A single, curated floor in Jeddah — private offices, meeting rooms and quiet space, each one chosen and run with care. Book a room today, or make the floor your own.')}
               </p>
 
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '14px', animation: 'heroRise 700ms cubic-bezier(0.16,1,0.30,1) 650ms both' }}>
@@ -245,12 +249,15 @@ export default function Home() {
                     transition: 'background 250ms, gap 250ms'
                   }}
                 >
-                  {language === 'ar' ? 'احجز مساحة' : 'Book a space'}
+                  {t?.hero?.bookCta || (language === 'ar' ? 'احجز قاعة' : 'Book a room')}
                   <span>→</span>
                 </button>
                 
                 <button
-                  onClick={openTourFlow}
+                  onClick={() => {
+                    const el = document.getElementById('space');
+                    if (el) el.scrollIntoView({ behavior: 'smooth' });
+                  }}
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
@@ -265,66 +272,44 @@ export default function Home() {
                     transition: 'border-color 250ms, color 250ms'
                   }}
                 >
-                  {language === 'ar' ? 'احجز جولة' : 'Book a tour'}
+                  {t?.hero?.seeFloorCta || (language === 'ar' ? 'استعرض الطابق' : 'See the floor')}
                 </button>
               </div>
             </div>
-
-            <div dir="rtl" style={{ marginTop: 'clamp(40px, 6vh, 64px)', paddingTop: '28px', borderTop: '1px solid rgba(245,243,239,0.18)', fontSize: '17px', fontWeight: 300, color: 'rgba(245,243,239,0.75)', animation: 'fadeIn 900ms 900ms both' }}>
-              مارس سبيس، جدة. طابقٌ خاص للعمل، من مارس فينتشرز.
-            </div>
           </div>
         </section>
 
-        {/* Section 2: Philosophy Statement */}
-        <section data-screen-label="Philosophy" style={{ background: '#0B0B0F', padding: 'clamp(120px, 18vh, 220px) 0' }}>
+        {/* Section 2: Curated Floor Section (§2.2 - Replaces "One floor, deliberately small") */}
+        <section id="space" data-screen-label="The Space" style={{ background: '#0B0B0F', padding: 'clamp(100px, 14vh, 180px) 0 0' }}>
           <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 clamp(24px, 4vw, 72px)', boxSizing: 'border-box' }}>
-            <p style={{ margin: '0 auto', maxWidth: '28ch', fontSize: 'clamp(30px, 3.6vw, 56px)', fontWeight: 300, letterSpacing: '-0.02em', lineHeight: 1.3, textAlign: 'center', textWrap: 'pretty' }}>
-              {language === 'ar' ? (
-                <>أغلب مساحات العمل تؤجرك مكتباً. <span style={{ color: '#C86B3C' }}>نحن بنينا الطابق الذي نحتاجه لبناء الشركات.</span> ثم فتحنا الباب.</>
-              ) : (
-                <>Most workspaces rent you a desk. <span style={{ color: '#C86B3C' }}>We built the floor we needed to build companies.</span> Then we opened the door.</>
-              )}
-            </p>
-            <p style={{ margin: '48px auto 0', maxWidth: '52ch', textAlign: 'center', fontSize: '18px', fontWeight: 300, color: 'rgba(245,243,239,0.65)' }}>
-              {language === 'ar'
-                ? 'مارس فينتشرز تأخذ الشركات من الفكرة حتى الاستحواذ. مارس سبيس هو الطابق الذي يحدث فيه ذلك: مستوى واحد، ستة أنواع من القاعات، وكل شيء مُصمم للزخم والإنتاجية.'
-                : 'Mars Ventures takes companies from idea to exit. Mars Space is the floor where that happens: one level, six kinds of room, and everything tuned for momentum rather than amenity theatre.'}
-            </p>
-          </div>
-        </section>
+            <div style={{ flex: '1 1 480px', background: '#F5F3EF', color: '#0B0B0F', padding: 'clamp(40px, 4.5vw, 72px)', borderRadius: '8px', boxSizing: 'border-box' }}>
+              <span style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '0.1em', color: '#8A4120', textTransform: 'uppercase' }}>
+                {t?.curatedFloor?.eyebrow || (language === 'ar' ? 'بعناية فائقة' : 'CURATED')}
+              </span>
+              
+              <h2 style={{ margin: '16px 0 0', fontSize: 'clamp(32px, 3.2vw, 48px)', fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1.15 }}>
+                {t?.curatedFloor?.headline || (language === 'ar' ? 'طابقٌ مُصمَّم حول طريقتك في العمل.' : 'A floor arranged around how you work.')}
+              </h2>
+              
+              <p style={{ margin: '24px 0 0', fontSize: '17px', fontWeight: 300, lineHeight: 1.75, color: '#3D3A36' }}>
+                {t?.curatedFloor?.body || (language === 'ar'
+                  ? 'لا شيء هنا عامٌّ أو اعتباطي. كل مكتب، وكل قاعة، وكل ركنٍ هادئ اختير لأسلوب عملٍ محدَّد — وعضويتك تُهيَّأ بالطريقة نفسها. أخبرنا كيف يسير يومك، ونرّتب الطابق حولك: المكتب الذي يناسبك، والقاعات التي ستستخدمها فعلاً، وساعات الدخول التي تلائم جدولك، والتفاصيل التي نتكفّل بها قبل أن تطلبها.'
+                  : 'Nothing here is generic. Every desk, every room and every quiet corner was chosen for a specific way of working — and your membership is set up the same way. Tell us how your day runs, and we arrange the floor around it: the desk that suits you, the rooms you\'ll actually use, the access hours that fit your schedule, and the details handled before you have to ask.')}
+              </p>
 
-        {/* Section 3: The Space */}
-        <section id="space" data-screen-label="The Space" style={{ background: '#0B0B0F', padding: '0 0 clamp(120px, 16vh, 200px)' }}>
-          <div style={{ position: 'relative', height: 'clamp(420px, 80vh, 860px)', overflow: 'hidden' }}>
-            <img src="/assets/photo-community-cinema.jpg" alt="The community hall, screening night" style={{ width: '100%', height: '116%', objectFit: 'cover', display: 'block' }} />
-            <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(11,11,15,0.55), rgba(11,11,15,0) 45%)' }} />
-          </div>
-          <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 clamp(24px, 4vw, 72px)', boxSizing: 'border-box' }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(40px, 6vw, 120px)', marginTop: 'clamp(-80px, -6vw, -120px)', position: 'relative' }}>
-              <div style={{ flex: '1 1 480px', background: '#F5F3EF', color: '#0B0B0F', padding: 'clamp(40px, 4.5vw, 72px)', maxWidth: '640px', boxSizing: 'border-box' }}>
-                <h2 style={{ margin: 0, fontSize: 'clamp(32px, 3.2vw, 48px)', fontWeight: 400, letterSpacing: '-0.02em', lineHeight: 1.15 }}>
-                  {language === 'ar' ? <>طابق واحد،<br />صغير عن قصد.</> : <>One floor,<br />deliberately small.</>}
-                </h2>
-                <p style={{ margin: '28px 0 0', fontSize: '17px', fontWeight: 300, lineHeight: 1.75, color: '#3D3A36' }}>
-                  {language === 'ar'
-                    ? 'خمس ثوانٍ من مكتبك إلى قاعة الاجتماعات. عشر ثوانٍ للقهوة. المكاتب تحيط بالنور الطبيعي على المحيط الخارجي، الصالة المفتوحة في المنتصف، والقاعة المجتمعية تأخذ الركن مع شاشة العرض.'
-                    : 'Five seconds from your desk to a meeting room. Ten to coffee. Offices ring the daylight on the perimeter, the open floor holds the middle, and the community hall takes the corner with the screen wall.'}
-                </p>
-                <div dir="rtl" style={{ marginTop: '24px', fontSize: '16px', fontWeight: 300, color: '#6B675F' }}>
-                  طابق واحد، صغير عن قصد. كل شيء على بُعد خطوات.
-                </div>
-              </div>
-
-              <div style={{ flex: '1 1 380px', alignSelf: 'flex-end', paddingTop: 'clamp(96px, 10vw, 160px)' }}>
-                <div style={{ overflow: 'hidden' }}>
-                  <img src="/assets/photo-glass-offices.jpg" alt="Glass-walled offices along the perimeter" style={{ width: '100%', aspectRatio: '4/3', objectFit: 'cover', display: 'block' }} />
-                </div>
-                <p style={{ margin: '18px 0 0', fontSize: '15px', fontWeight: 300, color: 'rgba(245,243,239,0.55)' }}>
-                  {language === 'ar'
-                    ? 'واحد وعشرون مكتباً زجاجياً تحيط بالمحيط الخارجي ليغمر الضوء الطبيعي الطابق بالكامل.'
-                    : 'Twenty-one glass offices hold the perimeter, so the light crosses the whole floor.'}
-                </p>
+              {/* Three Supporting Pillars (§2.2) */}
+              <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '24px', marginTop: '40px', paddingTop: '32px', borderTop: '1px solid rgba(11,11,15,0.15)' }}>
+                {(t?.curatedFloor?.pillars || [
+                  { title: language === 'ar' ? 'اختيار لا حشو' : 'Chosen, not filled', line: language === 'ar' ? 'نُقدّم مساحاتٍ أقل ومُتقنة، لا طابقاً محشواً حتى الجدران.' : 'We offer fewer spaces done properly, never a floor packed to the walls.' },
+                  { title: language === 'ar' ? 'مُهيَّأ لك' : 'Set up to you', line: language === 'ar' ? 'باقتك، ودخولك، وقاعاتك مضبوطة على أسلوب عملك الحقيقي.' : 'Your plan, your access and your rooms are tuned to how you actually work.' },
+                  { title: language === 'ar' ? 'يُدار بعناية' : 'Run with care', line: language === 'ar' ? 'فريقٌ يحافظ على الطابق بأكمله بمستوىً واحد، كل يوم.' : 'A team keeps the whole floor to one standard, every single day.' }
+                ]).map((p, pIdx) => (
+                  <div key={pIdx}>
+                    <div style={{ fontSize: '13px', fontWeight: 700, color: '#8A4120', marginBottom: '6px' }}>0{pIdx + 1}</div>
+                    <h4 style={{ margin: '0 0 6px', fontSize: '17px', fontWeight: 600, color: '#0B0B0F' }}>{p.title}</h4>
+                    <p style={{ margin: 0, fontSize: '14px', color: '#55524D', lineHeight: 1.5 }}>{p.line}</p>
+                  </div>
+                ))}
               </div>
             </div>
           </div>
@@ -515,29 +500,46 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Section 8: Community Hall Feature */}
+        {/* Section 8: Community Hall Feature (§2.6 & §7) */}
         <section id="community" data-screen-label="Community" style={{ position: 'relative', background: '#0B0B0F', overflow: 'hidden' }}>
           <div style={{ position: 'relative', height: 'clamp(480px, 90vh, 900px)' }}>
             <img src="/assets/photo-lounge-velvet.jpg" alt="Evening gathering in the lounge" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
             <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to right, rgba(11,11,15,0.82) 0%, rgba(11,11,15,0.25) 65%, rgba(11,11,15,0.1) 100%)' }} />
             <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center' }}>
               <div style={{ maxWidth: '1600px', width: '100%', margin: '0 auto', padding: '0 clamp(24px, 4vw, 72px)', boxSizing: 'border-box' }}>
-                <div style={{ maxWidth: '560px' }}>
-                  <h2 style={{ margin: 0, fontSize: 'clamp(34px, 3.8vw, 60px)', fontWeight: 300, letterSpacing: '-0.025em', lineHeight: 1.12 }}>
-                    {language === 'ar' ? 'القاعة التي يعرض فيها رواد المدينة أعمالهم.' : "The room where the city's builders show their work."}
+                <div style={{ maxWidth: '580px' }}>
+                  <span style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '0.1em', color: '#C86B3C', textTransform: 'uppercase' }}>
+                    {language === 'ar' ? 'المساحة المجتمعية' : 'COMMUNITY SPACE'}
+                  </span>
+
+                  <h2 style={{ margin: '16px 0 0', fontSize: 'clamp(34px, 3.8vw, 60px)', fontWeight: 300, letterSpacing: '-0.025em', lineHeight: 1.12 }}>
+                    {t?.communityBand?.headline || (language === 'ar' ? 'استضفها على طابقنا.' : 'Host it on our floor.')}
                   </h2>
-                  <p style={{ margin: '26px 0 0', fontSize: '17px', fontWeight: 300, lineHeight: 1.75, color: 'rgba(245,243,239,0.8)' }}>
-                    {language === 'ar'
-                      ? 'محاضرات، عروض أفلام، أيام استعراض المشاريع وعشاء هادئ. القاعة المجتمعية تعيد تشكيل نفسها لما يحتاجه الأسبوع، مع شاشة العرض والمقاعد والضيافة من قِبلنا.'
-                      : 'Talks, screenings, demo days and quiet dinners. The community hall reconfigures around whatever the week needs, with the screen wall, seating and catering handled by us.'}
+
+                  <p style={{ margin: '20px 0 0', fontSize: '17px', fontWeight: 300, lineHeight: 1.75, color: 'rgba(245,243,239,0.85)' }}>
+                    {t?.communityBand?.body || (language === 'ar'
+                      ? 'المساحة المجتمعية مُهيّأة للمحاضرات والورش والإطلاقات — حتى [N] ضيف، مع تكفّلنا بالتجهيز والصوتيات والاستضافة.'
+                      : 'The community space is arranged for talks, workshops and launches — up to [N] guests, with the setup, AV and hosting handled by us.')}
                   </p>
+
+                  <div style={{ marginTop: '24px', paddingTop: '20px', borderTop: '1px solid rgba(245,243,239,0.12)' }}>
+                    <h4 style={{ margin: 0, fontSize: '18px', fontWeight: 500, color: '#F5F3EF' }}>
+                      {t?.communityBand?.whatWeHandle?.title || (language === 'ar' ? 'أنت تُحضر الضيوف، ونحن نتكفّل بالباقي.' : 'You bring the guests. We handle the rest.')}
+                    </h4>
+                    <p style={{ margin: '8px 0 0', fontSize: '15px', fontWeight: 300, color: 'rgba(245,243,239,0.65)', lineHeight: 1.6 }}>
+                      {t?.communityBand?.whatWeHandle?.body || (language === 'ar'
+                        ? 'التهيئة، والصوتيات، والجلوس، والضيافة، والاستقبال — كلها مُرتّبةٌ لك. أخبرنا بطبيعة الفعالية، وتكون المساحة جاهزةً قبل وصول أول ضيف.'
+                        : 'Configuration, AV, seating, catering and front-of-house are all arranged for you. Tell us the shape of the event, and the room is ready before your first guest arrives.')}
+                    </p>
+                  </div>
+
                   <button
                     onClick={() => openBookFlow(3)}
                     style={{
                       display: 'inline-flex',
                       alignItems: 'center',
                       gap: '10px',
-                      marginTop: '36px',
+                      marginTop: '32px',
                       background: '#F5F3EF',
                       color: '#0B0B0F',
                       border: 'none',
@@ -549,7 +551,7 @@ export default function Home() {
                       transition: 'background 250ms, gap 250ms'
                     }}
                   >
-                    {language === 'ar' ? 'احجز القاعة المجتمعية' : 'Book the hall'}
+                    {t?.communityBand?.cta || (language === 'ar' ? 'تحقّق من المواعيد' : 'Check dates')}
                     <span>→</span>
                   </button>
                 </div>
@@ -557,257 +559,221 @@ export default function Home() {
             </div>
           </div>
 
+          {/* Amenities Strip (§2.7) */}
           <div style={{ maxWidth: '1600px', margin: '0 auto', padding: 'clamp(64px, 8vh, 104px) clamp(24px, 4vw, 72px)', boxSizing: 'border-box' }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 'clamp(28px, 4vw, 72px)' }}>
-              <div style={{ flex: '1 1 260px' }}>
-                <p style={{ margin: 0, fontSize: '16px', fontWeight: 300, lineHeight: 1.75, color: 'rgba(245,243,239,0.65)' }}>
-                  <span style={{ color: '#F5F3EF', fontWeight: 500 }}>
-                    {language === 'ar' ? 'ألياف ضوئية فائقة السرعة.' : 'Fibre that disappears.'}
-                  </span>{' '}
-                  {language === 'ar'
-                    ? 'إنترنت متماثل وسريع جداً على كل مقعد، لتنغمس في عملك دون انقطاع.'
-                    : 'Symmetric fibre and clean Wi-Fi on every seat. The internet is only noticed when it\'s gone, so it never is.'}
-                </p>
-              </div>
+            <h3 style={{ margin: '0 0 32px', fontSize: 'clamp(24px, 2.5vw, 36px)', fontWeight: 300, color: '#F5F3EF' }}>
+              {t?.amenitiesStrip?.headline || (language === 'ar' ? 'التفاصيل، مُدارة سلفاً.' : 'The details, already handled.')}
+            </h3>
 
-              <div style={{ flex: '1 1 260px' }}>
-                <p style={{ margin: 0, fontSize: '16px', fontWeight: 300, lineHeight: 1.75, color: 'rgba(245,243,239,0.65)' }}>
-                  <span style={{ color: '#F5F3EF', fontWeight: 500 }}>
-                    {language === 'ar' ? 'عنوان تجاري موثوق.' : 'A real address.'}
-                  </span>{' '}
-                  {language === 'ar'
-                    ? 'عنوان تجاري مسجل، استقبال وتمرير البريد والطرود، واستقبال زوارك باسم شركتك.'
-                    : 'Registered business address, mail and package handling, and a reception that greets your guests by company name.'}
-                </p>
-              </div>
-
-              <div style={{ flex: '1 1 260px' }}>
-                <p style={{ margin: 0, fontSize: '16px', fontWeight: 300, lineHeight: 1.75, color: 'rgba(245,243,239,0.65)' }}>
-                  <span style={{ color: '#F5F3EF', fontWeight: 500 }}>
-                    {language === 'ar' ? 'البنية التحتية المكتملة.' : 'The quiet infrastructure.'}
-                  </span>{' '}
-                  {language === 'ar'
-                    ? 'مصلى في نفس الطابق، دورات مياه وخزائن، طباعة ومواقف سيارات بالأسفل لتتفرغ للعمل.'
-                    : 'Prayer room on the floor, showers, lockers, printing, parking below, all arranged so you stop thinking about them.'}
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-
-        {/* Section 9: Membership Plans (Light Background Layout) */}
-        <section id="membership" data-screen-label="Membership" style={{ background: '#F5F3EF', color: '#0B0B0F', padding: 'clamp(100px, 14vh, 180px) 0' }}>
-          <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 clamp(24px, 4vw, 72px)', boxSizing: 'border-box' }}>
-            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '32px' }}>
-              <h2 style={{ margin: 0, fontSize: 'clamp(36px, 4vw, 64px)', fontWeight: 300, letterSpacing: '-0.025em', lineHeight: 1.1 }}>
-                {language === 'ar' ? 'أربع طرق للانضمام.' : 'Four ways in.'}
-              </h2>
-              <p style={{ margin: 0, maxWidth: '40ch', fontSize: '17px', fontWeight: 300, color: '#6B675F' }}>
-                {language === 'ar'
-                  ? 'ابدأ بتصريح يومي، استمر بمكتب مشترك، وانمو إلى مكتب خاص. كل باقة تشمل الطابق بالكامل: الاستراحة، القهوة، والمجتمع.'
-                  : 'Start with a day, stay for a desk, grow into an office. Every plan includes the whole floor: the lounge, the coffee, the community.'}
-              </p>
-            </div>
-
-            <div style={{ marginTop: 'clamp(48px, 6vh, 80px)' }}>
-              {/* Row 1: Day Pass */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '16px clamp(24px, 4vw, 64px)', padding: 'clamp(28px, 3vw, 40px) 0', borderTop: '1px solid rgba(11,11,15,0.15)', transition: 'all 300ms' }}>
-                <h3 style={{ margin: 0, flex: '1 1 220px', fontSize: 'clamp(24px, 2.2vw, 34px)', fontWeight: 400, letterSpacing: '-0.015em' }}>
-                  {language === 'ar' ? 'تصريح يومي' : 'Day pass'}
-                </h3>
-                <p style={{ margin: 0, flex: '2.2 1 320px', fontSize: '16px', fontWeight: 300, color: '#6B675F' }}>
-                  {language === 'ar' ? 'أي مكتب مفتوح من ٨ صباحاً حتى ٨ مساءً، القهوة والاستراحة متضمنتان.' : 'Any open desk from eight to eight, coffee and lounge included. Come see how the floor works.'}
-                </p>
-                <div style={{ flex: 'none', display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                  <span style={{ fontSize: 'clamp(20px, 1.6vw, 26px)', fontWeight: 700, letterSpacing: '-0.01em' }}>
-                    <bdi>SAR 150</bdi>
-                  </span>
-                  <span style={{ fontSize: '14px', fontWeight: 300, color: '#6B675F' }}>{language === 'ar' ? '/ يومي' : '/ day'}</span>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '20px' }}>
+              {(t?.amenitiesStrip?.items || [
+                language === 'ar' ? 'إنترنت ليفي فائق السرعة' : 'High-speed fibre',
+                language === 'ar' ? 'طباعة ومسح ضوئي' : 'Printing & scanning',
+                language === 'ar' ? 'مصلّى في الطابق' : 'Prayer room on the floor',
+                language === 'ar' ? 'موقف سيارات [N]' : '[N] parking bays',
+                language === 'ar' ? 'دخول للأعضاء على مدار الساعة' : '24/7 member access',
+                language === 'ar' ? 'عنوان تجاري مُسجّـل' : 'Registered business address',
+                language === 'ar' ? 'استلام البريد والطرود' : 'Mail & package handling',
+                language === 'ar' ? 'تنظيف يومي' : 'Daily housekeeping',
+                language === 'ar' ? 'مطبخ مُجهّز بالكامل' : 'Fully equipped kitchen',
+                language === 'ar' ? 'استقبال واستضافة الزوار' : 'Reception & guest handling'
+              ]).map((item, itemIdx) => (
+                <div key={itemIdx} style={{ padding: '16px 20px', background: '#111014', border: '1px solid rgba(245,243,239,0.08)', borderRadius: '6px', fontSize: '15px', color: 'rgba(245,243,239,0.85)', display: 'flex', alignItems: 'center', gap: '10px' }}>
+                  <span style={{ color: '#C86B3C', fontSize: '12px' }}>✓</span>
+                  <span>{item}</span>
                 </div>
-                <button
-                  onClick={() => openPlanFlow(0)}
-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
-                >
-                  {language === 'ar' ? 'احصل على تصريح' : 'Get a pass'}
-                  <span>→</span>
-                </button>
-              </div>
-
-              {/* Row 2: Open Desk */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '16px clamp(24px, 4vw, 64px)', padding: 'clamp(28px, 3vw, 40px) 0', borderTop: '1px solid rgba(11,11,15,0.15)', transition: 'all 300ms' }}>
-                <h3 style={{ margin: 0, flex: '1 1 220px', fontSize: 'clamp(24px, 2.2vw, 34px)', fontWeight: 400, letterSpacing: '-0.015em' }}>
-                  {language === 'ar' ? 'مكتب مشترك' : 'Open desk'}
-                </h3>
-                <p style={{ margin: 0, flex: '2.2 1 320px', fontSize: '16px', fontWeight: 300, color: '#6B675F' }}>
-                  {language === 'ar' ? 'أي مكتب في أي وقت على مدار الساعة، مع ساعات قاعات اجتماعات شهرياً واستلام البريد.' : 'Any desk, any hour, 24/7, with monthly meeting-room hours and your mail handled at reception.'}
-                </p>
-                <div style={{ flex: 'none', display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                  <span style={{ fontSize: 'clamp(20px, 1.6vw, 26px)', fontWeight: 700, letterSpacing: '-0.01em' }}>
-                    <bdi>SAR 1,200</bdi>
-                  </span>
-                  <span style={{ fontSize: '14px', fontWeight: 300, color: '#6B675F' }}>{language === 'ar' ? '/ شهرياً' : '/ month'}</span>
-                </div>
-                <button
-                  onClick={() => openPlanFlow(1)}
-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
-                >
-                  {language === 'ar' ? 'انضم الآن' : 'Join'}
-                  <span>→</span>
-                </button>
-              </div>
-
-              {/* Row 3: Dedicated Desk */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '16px clamp(24px, 4vw, 64px)', padding: 'clamp(28px, 3vw, 40px) 0', borderTop: '1px solid rgba(11,11,15,0.15)', transition: 'all 300ms' }}>
-                <h3 style={{ margin: 0, flex: '1 1 220px', fontSize: 'clamp(24px, 2.2vw, 34px)', fontWeight: 400, letterSpacing: '-0.015em' }}>
-                  {language === 'ar' ? 'مكتب مخصص' : 'Dedicated desk'}
-                </h3>
-                <p style={{ margin: 0, flex: '2.2 1 320px', fontSize: '16px', fontWeight: 300, color: '#6B675F' }}>
-                  {language === 'ar' ? 'نفس الكرسي كل صباح، خزانة شخصية، وعنوان تجاري مسجل لشركتك.' : 'The same chair every morning, a locker, a registered business address: a fixed point for a moving company.'}
-                </p>
-                <div style={{ flex: 'none', display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                  <span style={{ fontSize: 'clamp(20px, 1.6vw, 26px)', fontWeight: 700, letterSpacing: '-0.01em' }}>
-                    <bdi>SAR 2,200</bdi>
-                  </span>
-                  <span style={{ fontSize: '14px', fontWeight: 300, color: '#6B675F' }}>{language === 'ar' ? '/ شهرياً' : '/ month'}</span>
-                </div>
-                <button
-                  onClick={() => openPlanFlow(2)}
-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
-                >
-                  {language === 'ar' ? 'انضم الآن' : 'Join'}
-                  <span>→</span>
-                </button>
-              </div>
-
-              {/* Row 4: Private Office */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '16px clamp(24px, 4vw, 64px)', padding: 'clamp(28px, 3vw, 40px) 0', borderTop: '1px solid rgba(11,11,15,0.15)', borderBottom: '1px solid rgba(11,11,15,0.15)', transition: 'all 300ms' }}>
-                <h3 style={{ margin: 0, flex: '1 1 220px', fontSize: 'clamp(24px, 2.2vw, 34px)', fontWeight: 400, letterSpacing: '-0.015em', color: '#8A4120' }}>
-                  {language === 'ar' ? 'مكتب خاص' : 'Private office'}
-                </h3>
-                <p style={{ margin: 0, flex: '2.2 1 320px', fontSize: '16px', fontWeight: 300, color: '#6B675F' }}>
-                  {language === 'ar' ? 'مكتب زجاجي مغلق لشخصين إلى عشرة أشخاص، اسمك على الباب وتأمين شبكي خاص.' : 'A lockable glass office for two to ten, your name on the door, your own network. Leased on contract, arranged in person.'}
-                </p>
-                <div style={{ flex: 'none', display: 'flex', alignItems: 'baseline', gap: '8px' }}>
-                  <span style={{ fontSize: 'clamp(20px, 1.6vw, 26px)', fontWeight: 700, letterSpacing: '-0.01em' }}>
-                    <bdi>SAR 6,500</bdi>
-                  </span>
-                  <span style={{ fontSize: '14px', fontWeight: 300, color: '#6B675F' }}>{language === 'ar' ? '/ شهرياً' : '/ month'}</span>
-                </div>
-                <button
-                  onClick={() => openOfficeFlow(0)}
-                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
-                >
-                  {language === 'ar' ? 'عرض المكاتب' : 'See offices'}
-                  <span>→</span>
-                </button>
-              </div>
-            </div>
-
-            <p style={{ margin: '28px 0 0', fontSize: '15px', fontWeight: 300, color: '#6B675F' }}>
-              {language === 'ar'
-                ? 'قاعات الاجتماعات والقاعة المجتمعية مفتوحة للجميع. الأعضاء والزوار يحجزون نفس المساحات بنفس الأسعار.'
-                : 'Meeting rooms and the community hall are open to everyone. Members and visitors book the same spaces at the same rates.'}
-            </p>
-          </div>
-        </section>
-
-        {/* Section 10: Testimonials Slider */}
-        <section data-screen-label="Testimonial" style={{ background: '#111014', padding: 'clamp(110px, 16vh, 200px) 0' }}>
-          <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 clamp(24px, 4vw, 72px)', boxSizing: 'border-box' }}>
-            <div style={{ maxWidth: '900px', margin: '0 auto', textAlign: 'center', transition: 'opacity 450ms ease' }}>
-              <p style={{ margin: 0, fontSize: 'clamp(26px, 3vw, 44px)', fontWeight: 300, letterSpacing: '-0.015em', lineHeight: 1.4, textWrap: 'pretty' }}>
-                “{quotes[activeQuote].text}”
-              </p>
-              <p style={{ margin: '36px 0 0', fontSize: '16px', fontWeight: 500, color: '#C86B3C' }}>
-                {quotes[activeQuote].who}
-              </p>
-              <p style={{ margin: '4px 0 0', fontSize: '15px', fontWeight: 300, color: '#6B675F' }}>
-                {quotes[activeQuote].role}
-              </p>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'center', gap: '12px', marginTop: '56px' }}>
-              {[0, 1, 2].map((idx) => (
-                <button
-                  key={idx}
-                  onClick={() => setActiveQuote(idx)}
-                  aria-label={`Quote ${idx + 1}`}
-                  style={{
-                    width: '32px',
-                    height: '4px',
-                    border: 'none',
-                    padding: 0,
-                    cursor: 'pointer',
-                    background: activeQuote === idx ? '#C86B3C' : 'rgba(245,243,239,0.15)',
-                    transition: 'background 300ms'
-                  }}
-                />
               ))}
             </div>
           </div>
         </section>
 
-        {/* Section 11: Visit / Book a Tour */}
-        <section id="visit" data-screen-label="Book a tour" style={{ position: 'relative', background: '#0B0B0F', overflow: 'hidden' }}>
-          <div style={{ position: 'relative', height: 'clamp(520px, 88vh, 860px)' }}>
-            <img src="/assets/photo-coworking.jpg" alt="Morning light across the coworking floor" style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }} />
-            <div style={{ position: 'absolute', inset: 0, background: 'rgba(11,11,15,0.72)' }} />
-            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', textAlign: 'center', padding: '0 24px' }}>
+        {/* Section 9: Membership Band (§2.5 & §6) */}
+        <section id="membership" data-screen-label="Membership" style={{ background: '#F5F3EF', color: '#0B0B0F', padding: 'clamp(100px, 14vh, 180px) 0' }}>
+          <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 clamp(24px, 4vw, 72px)', boxSizing: 'border-box' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'flex-end', justifyContent: 'space-between', gap: '32px' }}>
               <div>
-                <h2 style={{ margin: 0, fontSize: 'clamp(40px, 5.5vw, 88px)', fontWeight: 300, letterSpacing: '-0.03em', lineHeight: 1.05 }}>
-                  {language === 'ar' ? 'شاهده بنفسك.' : 'See it in person.'}
+                <span style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '0.1em', color: '#8A4120', textTransform: 'uppercase' }}>
+                  {t?.membershipBand?.eyebrow || (language === 'ar' ? 'العضوية' : 'MEMBERSHIP')}
+                </span>
+                <h2 style={{ margin: '12px 0 0', fontSize: 'clamp(36px, 4vw, 64px)', fontWeight: 300, letterSpacing: '-0.025em', lineHeight: 1.1 }}>
+                  {t?.membershipBand?.headline || (language === 'ar' ? 'عضويةٌ مضبوطة على طريقتك في العمل.' : 'A membership set to how you work.')}
                 </h2>
-                <div dir="rtl" style={{ marginTop: '16px', fontSize: 'clamp(19px, 1.8vw, 26px)', fontWeight: 300, color: 'rgba(245,243,239,0.7)' }}>
-                  تعال وشاهد الطابق بنفسك.
-                </div>
-                <p style={{ margin: '26px auto 0', maxWidth: '42ch', fontSize: '17px', fontWeight: 300, color: 'rgba(245,243,239,0.75)' }}>
-                  {language === 'ar'
-                    ? 'عشرون دقيقة، والقهوة علينا. نتجول في الطابق، تلتقي بالأعضاء، والمساحة تتحدث عن نفسها.'
-                    : "Twenty minutes, coffee included. We'll walk the floor, you meet the people, and the space does the rest."}
-                </p>
-
-                <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '14px', marginTop: '44px' }}>
-                  <button
-                    onClick={openTourFlow}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      gap: '10px',
-                      background: '#F5F3EF',
-                      color: '#0B0B0F',
-                      border: 'none',
-                      borderRadius: '999px',
-                      padding: '18px 38px',
-                      font: "500 16px var(--font-sans)",
-                      lineHeight: 1,
-                      cursor: 'pointer',
-                      transition: 'background 250ms, gap 250ms'
-                    }}
-                  >
-                    {language === 'ar' ? 'احجز جولة' : 'Book a tour'}
-                    <span>→</span>
-                  </button>
-
-                  <button
-                    onClick={() => openBookFlow(0)}
-                    style={{
-                      display: 'inline-flex',
-                      alignItems: 'center',
-                      background: 'none',
-                      border: '1px solid rgba(245,243,239,0.45)',
-                      color: '#F5F3EF',
-                      borderRadius: '999px',
-                      padding: '18px 38px',
-                      font: "500 16px var(--font-sans)",
-                      lineHeight: 1,
-                      cursor: 'pointer',
-                      transition: 'border-color 250ms, color 250ms'
-                    }}
-                  >
-                    {language === 'ar' ? 'احجز مساحة' : 'Book a space'}
-                  </button>
-                </div>
               </div>
+              <p style={{ margin: 0, maxWidth: '40ch', fontSize: '17px', fontWeight: 300, color: '#6B675F' }}>
+                {t?.membershipBand?.body || (language === 'ar'
+                  ? 'أربع باقات، طابقٌ واحدٌ منتقى، دون ارتباطات طويلة. تشمل كل باقة رصيداً من ساعات القاعات، والمقهى، ودخولاً على مدار الساعة.'
+                  : 'Four plans, one curated floor, no long lock-ins. Every plan includes meeting-room credits, the café, and around-the-clock access.')}
+              </p>
+            </div>
+
+            <div style={{ marginTop: 'clamp(48px, 6vh, 80px)' }}>
+              {/* Row 1: Day Pass */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '16px clamp(24px, 4vw, 64px)', padding: 'clamp(28px, 3vw, 40px) 0', borderTop: '1px solid rgba(11,11,15,0.15)' }}>
+                <h3 style={{ margin: 0, flex: '1 1 220px', fontSize: 'clamp(24px, 2.2vw, 34px)', fontWeight: 400, letterSpacing: '-0.015em' }}>
+                  {language === 'ar' ? 'بطاقة يوم' : 'Day Pass'}
+                </h3>
+                <p style={{ margin: 0, flex: '2.2 1 320px', fontSize: '16px', fontWeight: 300, color: '#6B675F' }}>
+                  {language === 'ar' ? 'يومٌ كاملٌ على الطابق — يشمل المقهى والمساحات الهادئة.' : 'A full day on the floor — café and quiet space included.'}
+                </p>
+                <button
+                  onClick={() => openPlanFlow(0)}
+                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
+                >
+                  {t?.membershipBand?.cta || (language === 'ar' ? 'قارن الباقات' : 'Compare plans')}
+                  <span>→</span>
+                </button>
+              </div>
+
+              {/* Row 2: Hot Desk */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '16px clamp(24px, 4vw, 64px)', padding: 'clamp(28px, 3vw, 40px) 0', borderTop: '1px solid rgba(11,11,15,0.15)' }}>
+                <h3 style={{ margin: 0, flex: '1 1 220px', fontSize: 'clamp(24px, 2.2vw, 34px)', fontWeight: 400, letterSpacing: '-0.015em' }}>
+                  {language === 'ar' ? 'مكتب مرن' : 'Hot Desk'}
+                </h3>
+                <p style={{ margin: 0, flex: '2.2 1 320px', fontSize: '16px', fontWeight: 300, color: '#6B675F' }}>
+                  {language === 'ar' ? 'أي مكتبٍ متاح، وقتما حضرت، مع رصيدٍ شهري من ساعات القاعات.' : 'Any open desk, whenever you come in, plus monthly meeting-room credits.'}
+                </p>
+                <button
+                  onClick={() => openPlanFlow(1)}
+                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
+                >
+                  {t?.membershipBand?.cta || (language === 'ar' ? 'قارن الباقات' : 'Compare plans')}
+                  <span>→</span>
+                </button>
+              </div>
+
+              {/* Row 3: Dedicated Desk */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '16px clamp(24px, 4vw, 64px)', padding: 'clamp(28px, 3vw, 40px) 0', borderTop: '1px solid rgba(11,11,15,0.15)' }}>
+                <h3 style={{ margin: 0, flex: '1 1 220px', fontSize: 'clamp(24px, 2.2vw, 34px)', fontWeight: 400, letterSpacing: '-0.015em' }}>
+                  {language === 'ar' ? 'مكتب مخصص' : 'Dedicated Desk'}
+                </h3>
+                <p style={{ margin: 0, flex: '2.2 1 320px', fontSize: '16px', fontWeight: 300, color: '#6B675F' }}>
+                  {language === 'ar' ? 'مكتبك الخاص، يبقى كما تركته، مع رصيدٍ أكبر وخزانة.' : 'Your own desk, kept as you left it, with more credits and a locker.'}
+                </p>
+                <button
+                  onClick={() => openPlanFlow(2)}
+                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
+                >
+                  {t?.membershipBand?.cta || (language === 'ar' ? 'قارن الباقات' : 'Compare plans')}
+                  <span>→</span>
+                </button>
+              </div>
+
+              {/* Row 4: Private Office */}
+              <div style={{ display: 'flex', flexWrap: 'wrap', alignItems: 'baseline', gap: '16px clamp(24px, 4vw, 64px)', padding: 'clamp(28px, 3vw, 40px) 0', borderTop: '1px solid rgba(11,11,15,0.15)', borderBottom: '1px solid rgba(11,11,15,0.15)' }}>
+                <h3 style={{ margin: 0, flex: '1 1 220px', fontSize: 'clamp(24px, 2.2vw, 34px)', fontWeight: 400, letterSpacing: '-0.015em', color: '#8A4120' }}>
+                  {language === 'ar' ? 'مكتب خاص' : 'Private Office'}
+                </h3>
+                <p style={{ margin: 0, flex: '2.2 1 320px', fontSize: '16px', fontWeight: 300, color: '#6B675F' }}>
+                  {language === 'ar' ? 'مكتبٌ قابلٌ للإغلاق لفريقك — مُجهّزٌ ومُسجَّلٌ باسمك.' : 'A lockable office for your team — finished and registered to your name.'}
+                </p>
+                <button
+                  onClick={() => openOfficeFlow(0)}
+                  style={{ flex: 'none', display: 'inline-flex', alignItems: 'center', gap: '8px', background: 'none', border: 'none', padding: 0, cursor: 'pointer', font: "500 15px var(--font-sans)", color: '#8A4120' }}
+                >
+                  {t?.membershipBand?.cta || (language === 'ar' ? 'قارن الباقات' : 'Compare plans')}
+                  <span>→</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Included in every plan (§6) */}
+            <div style={{ marginTop: '48px', padding: '32px', background: '#EAE6E1', borderRadius: '8px' }}>
+              <h4 style={{ margin: '0 0 8px', fontSize: '18px', fontWeight: 600, color: '#0B0B0F' }}>
+                {t?.membershipBand?.includedInEveryPlan?.title || (language === 'ar' ? 'مشمولٌ في كل باقة' : 'Included in every plan')}
+              </h4>
+              <p style={{ margin: 0, fontSize: '15px', color: '#4A4742', lineHeight: 1.6 }}>
+                {t?.membershipBand?.includedInEveryPlan?.body || (language === 'ar'
+                  ? 'رصيدٌ من ساعات القاعات، والمقهى، ودخولٌ على مدار الساعة، وعنوانٌ تجاري مُسجّل، واستلام البريد، وخصمٌ على المساحة المجتمعية. دون رسوم تجهيز، ودون مفاجآت.'
+                  : 'Meeting-room credits, the café, 24/7 access, a registered business address, mail handling, and a discount on the community space. No setup fees, no surprises.')}
+              </p>
+              <p style={{ margin: '16px 0 0', fontSize: '14px', color: '#7A756F' }}>
+                {t?.membershipBand?.reassuranceLine || (language === 'ar' ? 'تشمل الأسعار ضريبة القيمة المضافة 15%. يمكنك تغيير باقتك أو إلغاؤها بإشعارٍ قبل [30] يوماً.' : 'Prices include 15% VAT. Change or cancel your plan with [30] days\' notice.')}
+              </p>
+            </div>
+          </div>
+        </section>
+
+        {/* Section 10: Mars Ecosystem (§2.9) */}
+        <section id="ecosystem" data-screen-label="Mars Ecosystem" style={{ background: '#0B0B0F', padding: 'clamp(100px, 14vh, 180px) 0' }}>
+          <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 clamp(24px, 4vw, 72px)', boxSizing: 'border-box' }}>
+            <span style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '0.1em', color: '#C86B3C', textTransform: 'uppercase' }}>
+              {t?.ecosystem?.eyebrow || (language === 'ar' ? 'جزء من مارس' : 'PART OF MARS')}
+            </span>
+
+            <h2 style={{ margin: '16px 0 0', fontSize: 'clamp(36px, 4vw, 64px)', fontWeight: 300, letterSpacing: '-0.025em', lineHeight: 1.1 }}>
+              {t?.ecosystem?.headline || (language === 'ar' ? 'بدعمٍ من مارس فينتشرز.' : 'Backed by Mars Ventures.')}
+            </h2>
+
+            <p style={{ margin: '24px 0 0', maxWidth: '64ch', fontSize: '18px', fontWeight: 300, lineHeight: 1.7, color: 'rgba(245,243,239,0.75)' }}>
+              {t?.ecosystem?.body || (language === 'ar'
+                ? 'مارس فينتشرز تبني الشركات من الفكرة حتى التخارج. مارس سبيس هي المكان الذي يجري فيه ذلك العمل — وهي مفتوحةٌ لكل من يبني شيئاً يستحق البناء.'
+                : 'Mars Ventures builds companies from idea to exit. Mars Space is where that work happens — and it\'s open to everyone building something worth building.')}
+            </p>
+
+            {/* Marquee of five lockups (§2.9) */}
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '32px', marginTop: '48px', paddingTop: '32px', borderTop: '1px solid rgba(245,243,239,0.1)' }}>
+              {(t?.ecosystem?.marquee || ["MARS Ventures", "MARS Lab", "MARS VC", "MARS Consultancy", "MARS Space"]).map((item, idx) => (
+                <div key={idx} style={{ fontSize: '16px', fontWeight: 500, letterSpacing: '0.08em', color: idx === 4 ? '#C86B3C' : 'rgba(245,243,239,0.5)', textTransform: 'uppercase' }}>
+                  {item}
+                </div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* Section 11: Closing CTA (§2.10) */}
+        <section id="visit" data-screen-label="Book a tour" style={{ position: 'relative', background: '#111014', padding: 'clamp(100px, 14vh, 180px) 0' }}>
+          <div style={{ maxWidth: '1600px', margin: '0 auto', padding: '0 clamp(24px, 4vw, 72px)', boxSizing: 'border-box', textAlign: 'center' }}>
+            <h2 style={{ margin: 0, fontSize: 'clamp(40px, 5.5vw, 88px)', fontWeight: 300, letterSpacing: '-0.03em', lineHeight: 1.05 }}>
+              {t?.closingCta?.headline || (language === 'ar' ? 'تعال وشاهد الطابق.' : 'Come see the floor.')}
+            </h2>
+
+            <p style={{ margin: '24px auto 0', maxWidth: '44ch', fontSize: '18px', fontWeight: 300, color: 'rgba(245,243,239,0.75)' }}>
+              {t?.closingCta?.body || (language === 'ar'
+                ? 'احجز جولةً خاصة، أو احجز قاعةً وجرّبها بنفسك.'
+                : 'Book a private tour, or reserve a room and experience it for yourself.')}
+            </p>
+
+            <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '16px', marginTop: '44px' }}>
+              <button
+                onClick={openTourFlow}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '10px',
+                  background: '#F5F3EF',
+                  color: '#0B0B0F',
+                  border: 'none',
+                  borderRadius: '999px',
+                  padding: '18px 38px',
+                  font: "500 16px var(--font-sans)",
+                  lineHeight: 1,
+                  cursor: 'pointer',
+                  transition: 'background 250ms, gap 250ms'
+                }}
+              >
+                {t?.closingCta?.bookTour || (language === 'ar' ? 'احجز جولة' : 'Book a tour')}
+                <span>→</span>
+              </button>
+
+              <button
+                onClick={() => openBookFlow(0)}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  background: 'none',
+                  border: '1px solid rgba(245,243,239,0.45)',
+                  color: '#F5F3EF',
+                  borderRadius: '999px',
+                  padding: '18px 38px',
+                  font: "500 16px var(--font-sans)",
+                  lineHeight: 1,
+                  cursor: 'pointer',
+                  transition: 'border-color 250ms, color 250ms'
+                }}
+              >
+                {t?.closingCta?.bookRoom || (language === 'ar' ? 'احجز قاعة' : 'Book a room')}
+              </button>
             </div>
           </div>
         </section>

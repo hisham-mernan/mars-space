@@ -6,7 +6,7 @@ import BookingModal from './BookingModal';
 import MegaMenu from './MegaMenu';
 
 export default function Header() {
-  const { language, toggleLanguage } = useLanguage();
+  const { language, toggleLanguage, t } = useLanguage();
   const [scrolled, setScrolled] = useState(false);
   const [bookingOpen, setBookingOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
@@ -97,16 +97,16 @@ export default function Header() {
               style={{ position: 'relative', display: 'inline-block' }}
             >
               <a href="/spaces" className="nav-link">
-                {language === 'ar' ? 'المساحات ▾' : 'Workspaces ▾'}
+                {t?.nav?.space || (language === 'ar' ? 'المساحة ▾' : 'The Space ▾')} ▾
               </a>
               <MegaMenu isOpen={megaOpen} onClose={() => setMegaOpen(false)} />
             </div>
 
-            <a href="/about" className="nav-link">{language === 'ar' ? 'عن مارس' : 'About'}</a>
-            <a href="/pricing" className="nav-link">{language === 'ar' ? 'الأسعار' : 'Pricing'}</a>
-            <a href="/events" className="nav-link">{language === 'ar' ? 'الفعاليات' : 'Events'}</a>
-            <a href="/faq" className="nav-link">{language === 'ar' ? 'الأسئلة الشائعة' : 'FAQ'}</a>
-            <a href="/contact" className="nav-link">{language === 'ar' ? 'تواصل معنا' : 'Contact'}</a>
+            <a href="/spaces?category=meeting_room" className="nav-link">{t?.nav?.rooms || (language === 'ar' ? 'قاعات الاجتماعات' : 'Meeting Rooms')}</a>
+            <a href="/pricing" className="nav-link">{t?.nav?.membership || (language === 'ar' ? 'العضوية' : 'Membership')}</a>
+            <a href="/events" className="nav-link">{t?.nav?.community || (language === 'ar' ? 'المجتمع' : 'Community')}</a>
+            <a href="/about" className="nav-link">{t?.nav?.about || (language === 'ar' ? 'عن مارس سبيس' : 'About')}</a>
+            <a href="/contact" className="nav-link">{t?.nav?.contact || (language === 'ar' ? 'تواصل معنا' : 'Contact')}</a>
           </nav>
 
           {/* Language Switcher Pill */}
@@ -166,7 +166,7 @@ export default function Header() {
               transition: 'background 250ms, gap 250ms'
             }}
           >
-            {user ? (language === 'ar' ? 'لوحة التحكم' : 'Dashboard') : (language === 'ar' ? 'احجز مساحة' : 'Book a space')}
+            {user ? (language === 'ar' ? 'لوحة التحكم' : 'Dashboard') : (t?.nav?.cta || (language === 'ar' ? 'احجز قاعة' : 'Book a room'))}
             <span style={{ fontSize: '15px', lineHeight: 1 }}>→</span>
           </button>
         </div>
