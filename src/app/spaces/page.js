@@ -1,360 +1,196 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
-import { useLanguage } from '@/context/LanguageContext';
+import React, { useState } from 'react';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import AnnouncementBar from '@/components/AnnouncementBar';
+import { useLanguage } from '@/context/LanguageContext';
 
-export default function SpacesListing() {
-  const { t, language, mounted } = useLanguage();
-  
-  // States for search and filter controls
-  const [spaces, setSpaces] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [search, setSearch] = useState('');
+export default function SpacesPage() {
+  const { language, t, mounted } = useLanguage();
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [selectedBranch, setSelectedBranch] = useState('all');
-  const [selectedCapacity, setSelectedCapacity] = useState('all');
-
-  // Fetch workspaces from our API route
-  useEffect(() => {
-    async function loadWorkspaces() {
-      try {
-        let url = '/api/v1/public/workspaces';
-        const params = [];
-        if (selectedCategory !== 'all') params.push(`category=${selectedCategory}`);
-        if (selectedBranch !== 'all') params.push(`branchId=${selectedBranch}`);
-        if (params.length > 0) {
-          url += '?' + params.join('&');
-        }
-        
-        const res = await fetch(url);
-        const json = await res.json();
-        if (json.success) {
-          setSpaces(json.data);
-        }
-      } catch (err) {
-        console.error("Failed to load spaces:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
-    loadWorkspaces();
-  }, [selectedCategory, selectedBranch]);
 
   if (!mounted) return null;
 
-  // Filter remaining client-side
-  let filteredSpaces = spaces;
+  const ss = t?.spacesSection || {};
+  const cards = ss.cards || {};
 
-  // Search filter
-  if (search.trim()) {
-    const q = search.toLowerCase();
-    filteredSpaces = filteredSpaces.filter(
-      s => s.name.toLowerCase().includes(q) || (s.nameAr && s.nameAr.includes(q))
-    );
-  }
+  const spacesList = [
+    {
+      id: 'private_office',
+      title: cards.offices?.title || (language === 'ar' ? 'مكاتب خاصة' : 'Private Offices'),
+      desc: cards.offices?.desc || (language === 'ar' ? 'مساحة مخصصة للفرق التي تبحث عن الخصوصية والراحة وبيئة عمل مهنية.' : 'A dedicated space for teams that value privacy, comfort and a professional setting.'),
+      cta: cards.offices?.cta || (language === 'ar' ? 'استكشف المكاتب' : 'View Offices'),
+      category: 'private_office',
+      image: '/assets/photo-glass-offices.jpg'
+    },
+    {
+      id: 'dedicated',
+      title: cards.dedicated?.title || (language === 'ar' ? 'مكاتب مخصصة' : 'Dedicated Desks'),
+      desc: cards.dedicated?.desc || (language === 'ar' ? 'مكتبك الخاص ضمن بيئة عمل مشتركة، مجهز بكل ما تحتاجه ليوم عمل منتج.' : 'Your own desk in a shared environment, with everything you need for a productive workday.'),
+      cta: cards.dedicated?.cta || (language === 'ar' ? 'استكشف المكاتب' : 'View Desks'),
+      category: 'dedicated',
+      image: '/assets/photo-coworking.jpg'
+    },
+    {
+      id: 'meeting_room',
+      title: cards.meetingRooms?.title || (language === 'ar' ? 'قاعات الاجتماعات' : 'Meeting Rooms'),
+      desc: cards.meetingRooms?.desc || (language === 'ar' ? 'قاعات مجهزة بعناية للاجتماعات وورش العمل والمقابلات واللقاءات مع العملاء.' : 'Thoughtfully equipped rooms for meetings, workshops, interviews and client conversations.'),
+      cta: cards.meetingRooms?.cta || (language === 'ar' ? 'احجز قاعة' : 'Book a Room'),
+      category: 'meeting_room',
+      image: '/assets/photo-meeting-room.jpg'
+    },
+    {
+      id: 'event_space',
+      title: cards.eventSpaces?.title || (language === 'ar' ? 'مساحات الفعاليات' : 'Event Spaces'),
+      desc: cards.eventSpaces?.desc || (language === 'ar' ? 'مساحات مرنة للورش، واللقاءات، والفعاليات المجتمعية والخاصة.' : 'Flexible spaces for workshops, talks, community gatherings and private events.'),
+      cta: cards.eventSpaces?.cta || (language === 'ar' ? 'استكشف المساحات' : 'Explore Event Spaces'),
+      category: 'event_space',
+      image: '/assets/photo-hall-full.jpg'
+    }
+  ];
 
-  // Capacity filter logic
-  if (selectedCapacity !== 'all') {
-    filteredSpaces = filteredSpaces.filter(s => {
-      const cap = s.capacity;
-      if (selectedCapacity === '1') return cap === 1;
-      if (selectedCapacity === '2-4') return cap >= 2 && cap <= 4;
-      if (selectedCapacity === '5-8') return cap >= 5 && cap <= 8;
-      if (selectedCapacity === '9-12') return cap >= 9 && cap <= 12;
-      if (selectedCapacity === '12+') return cap > 12;
-      return true;
-    });
-  }
-
-  const handleClearFilters = () => {
-    setSearch('');
-    setSelectedCategory('all');
-    setSelectedBranch('all');
-    setSelectedCapacity('all');
-  };
+  const filteredSpaces = selectedCategory === 'all' 
+    ? spacesList 
+    : spacesList.filter(s => s.category === selectedCategory);
 
   return (
     <>
+      <AnnouncementBar />
       <Header />
 
-      <main style={{ minHeight: '100vh', background: 'var(--mars-void)', paddingTop: '100px', boxSizing: 'border-box' }}>
-        {/* Hero Banner Section (§3) */}
-        <section style={{ padding: '60px 0 40px', borderBottom: '1px solid var(--line-dark)' }}>
-          <div className="container">
-            <span style={{ fontSize: '13px', fontWeight: 700, letterSpacing: '0.1em', color: 'var(--copper-400)', textTransform: 'uppercase' }}>
-              {t?.nav?.space || (language === 'ar' ? 'المساحة' : 'THE SPACE')}
+      <main style={{ minHeight: '100vh', background: '#07070A', color: '#F5F3EF', paddingTop: '140px', paddingBottom: '120px' }}>
+        <div style={{ maxWidth: '1440px', margin: '0 auto', padding: '0 clamp(24px, 4vw, 72px)' }}>
+          
+          {/* Header Section (§5) */}
+          <div style={{ maxWidth: '720px', marginBottom: '48px' }}>
+            <span style={{ fontSize: '13px', fontWeight: 600, letterSpacing: '0.12em', color: '#C86B3C', textTransform: 'uppercase' }}>
+              {ss.eyebrow}
             </span>
-            <h1 style={{ fontSize: 'clamp(32px, 5vw, 56px)', fontWeight: 200, letterSpacing: '-0.02em', color: '#FFFFFF', margin: '12px 0 0' }}>
-              {t?.theSpacePage?.h1 || (language === 'ar' ? 'طابقٌ واحد، مُنسَّق بعناية وقصد.' : 'One floor, curated with intent.')}
+
+            <h1 style={{ fontSize: 'clamp(36px, 4.5vw, 68px)', fontWeight: 300, margin: '16px 0 20px', letterSpacing: '-0.02em' }}>
+              {ss.headline}
             </h1>
-            <p style={{ margin: '14px 0 0', color: 'var(--text-secondary)', maxWidth: '65ch', fontSize: '17px', lineHeight: 1.6 }}>
-              {t?.theSpacePage?.sub || (language === 'ar' 
-                ? 'العمل المركّز، والعمل المجدول، وكل ما بينهما — لكلٍّ مكانه اللائق هنا، ولا يبعد أيٌّ منها سوى خطوات عن الآخر.'
-                : 'Focused work, scheduled work, and everything in between — each has a proper place here, and none is more than a short walk from the rest.')}
+
+            <p style={{ fontSize: '18px', color: 'rgba(245, 243, 239, 0.75)', lineHeight: 1.65 }}>
+              {ss.body}
             </p>
-
-            {/* Why One Floor (§3) */}
-            <div style={{ marginTop: '32px', padding: '24px 28px', background: 'var(--surface-1)', borderRadius: '8px', border: '1px solid var(--glass-border)' }}>
-              <h3 style={{ fontSize: '18px', fontWeight: 500, color: 'var(--copper-400)', margin: '0 0 8px' }}>
-                {t?.theSpacePage?.whyOneFloorTitle || (language === 'ar' ? 'أبقيناه طابقاً واحداً عن قصد.' : 'We kept it to one floor on purpose.')}
-              </h3>
-              <p style={{ margin: 0, fontSize: '15px', color: 'var(--text-muted-dark)', lineHeight: 1.6 }}>
-                {t?.theSpacePage?.whyOneFloorBody || (language === 'ar'
-                  ? 'طابقٌ واحد يعني أن كل شيء قريب، وكل شيء مُتسق، وكل شيء خاضع للمعيار نفسه. إدارة مساحةٍ منتقاة بإتقان أسهل حين تكون في مكان واحد — والتنقُّل خلال يومك أسلس، بلا عوائق.'
-                  : 'One floor means everything is close, everything is consistent, and everything is held to the same standard. It\'s easier to run a curated space well when it\'s all in one place — and easier for you to move through your day without friction.')}
-              </p>
-            </div>
           </div>
-        </section>
 
-        {/* Filters and Search Toolbar */}
-        <section style={{ padding: '32px 0', background: 'var(--mars-slate)', borderBottom: '1px solid var(--line-dark)' }}>
-          <div className="container">
-            <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '16px',
-              alignItems: 'center',
-              justifyContent: 'space-between'
-            }}>
-              {/* Filter controls */}
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
-                {/* Branch Picker */}
-                <select
-                  value={selectedBranch}
-                  onChange={(e) => setSelectedBranch(e.target.value)}
-                  style={{
-                    background: 'var(--mars-void)',
-                    border: '1px solid var(--line-dark)',
-                    color: '#FFFFFF',
-                    borderRadius: '999px',
-                    padding: '10px 18px',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="all">{language === 'ar' ? 'جميع الفروع' : 'All Branches'}</option>
-                  <option value="jeddah">{language === 'ar' ? 'فرع جدة' : 'Jeddah Branch'}</option>
-                  <option value="riyadh">{language === 'ar' ? 'فرع الرياض (قريباً)' : 'Riyadh Branch (Soon)'}</option>
-                </select>
+          {/* Filter Pills */}
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '48px' }}>
+            <button
+              onClick={() => setSelectedCategory('all')}
+              style={{
+                padding: '8px 20px',
+                borderRadius: '999px',
+                border: '1px solid rgba(245, 243, 239, 0.2)',
+                background: selectedCategory === 'all' ? '#8A4120' : 'transparent',
+                color: '#F5F3EF',
+                fontSize: '14px',
+                fontWeight: 500,
+                cursor: 'pointer'
+              }}
+            >
+              {language === 'ar' ? 'الكل' : 'All Spaces'}
+            </button>
 
-                {/* Category Picker */}
-                <select
-                  value={selectedCategory}
-                  onChange={(e) => setSelectedCategory(e.target.value)}
-                  style={{
-                    background: 'var(--mars-void)',
-                    border: '1px solid var(--line-dark)',
-                    color: '#FFFFFF',
-                    borderRadius: '999px',
-                    padding: '10px 18px',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="all">{language === 'ar' ? 'جميع الفئات' : 'All Categories'}</option>
-                  <option value="private_office">{language === 'ar' ? 'مكاتب خاصة' : 'Private Offices'}</option>
-                  <option value="meeting_room">{language === 'ar' ? 'قاعات اجتماعات' : 'Meeting Rooms'}</option>
-                  <option value="community_hall">{language === 'ar' ? 'قاعة المجتمع' : 'Community Hall'}</option>
-                </select>
+            <button
+              onClick={() => setSelectedCategory('private_office')}
+              style={{
+                padding: '8px 20px',
+                borderRadius: '999px',
+                border: '1px solid rgba(245, 243, 239, 0.2)',
+                background: selectedCategory === 'private_office' ? '#8A4120' : 'transparent',
+                color: '#F5F3EF',
+                fontSize: '14px',
+                fontWeight: 500,
+                cursor: 'pointer'
+              }}
+            >
+              {cards.offices?.title}
+            </button>
 
-                {/* Capacity Picker */}
-                <select
-                  value={selectedCapacity}
-                  onChange={(e) => setSelectedCapacity(e.target.value)}
-                  style={{
-                    background: 'var(--mars-void)',
-                    border: '1px solid var(--line-dark)',
-                    color: '#FFFFFF',
-                    borderRadius: '999px',
-                    padding: '10px 18px',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    outline: 'none',
-                    cursor: 'pointer'
-                  }}
-                >
-                  <option value="all">{language === 'ar' ? 'السعة (الجميع)' : 'Capacity (All)'}</option>
-                  <option value="1">1 {language === 'ar' ? 'شخص' : 'Person'}</option>
-                  <option value="2-4">2-4 {language === 'ar' ? 'أشخاص' : 'People'}</option>
-                  <option value="5-8">5-8 {language === 'ar' ? 'أشخاص' : 'People'}</option>
-                  <option value="9-12">9-12 {language === 'ar' ? 'أشخاص' : 'People'}</option>
-                  <option value="12+">12+ {language === 'ar' ? 'شخصاً' : 'People'}</option>
-                </select>
-              </div>
+            <button
+              onClick={() => setSelectedCategory('dedicated')}
+              style={{
+                padding: '8px 20px',
+                borderRadius: '999px',
+                border: '1px solid rgba(245, 243, 239, 0.2)',
+                background: selectedCategory === 'dedicated' ? '#8A4120' : 'transparent',
+                color: '#F5F3EF',
+                fontSize: '14px',
+                fontWeight: 500,
+                cursor: 'pointer'
+              }}
+            >
+              {cards.dedicated?.title}
+            </button>
 
-              {/* Search text input */}
-              <div style={{ position: 'relative', width: 'min(100%, 320px)' }}>
-                <input
-                  type="text"
-                  placeholder={language === 'ar' ? 'ابحث عن مساحة...' : 'Search spaces...'}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  style={{
-                    width: '100%',
-                    background: 'var(--mars-void)',
-                    border: '1px solid var(--line-dark)',
-                    borderRadius: '999px',
-                    padding: '10px 20px',
-                    boxSizing: 'border-box',
-                    color: '#FFFFFF',
-                    fontSize: '14px',
-                    outline: 'none'
-                  }}
-                />
-              </div>
-            </div>
+            <button
+              onClick={() => setSelectedCategory('meeting_room')}
+              style={{
+                padding: '8px 20px',
+                borderRadius: '999px',
+                border: '1px solid rgba(245, 243, 239, 0.2)',
+                background: selectedCategory === 'meeting_room' ? '#8A4120' : 'transparent',
+                color: '#F5F3EF',
+                fontSize: '14px',
+                fontWeight: 500,
+                cursor: 'pointer'
+              }}
+            >
+              {cards.meetingRooms?.title}
+            </button>
+
+            <button
+              onClick={() => setSelectedCategory('event_space')}
+              style={{
+                padding: '8px 20px',
+                borderRadius: '999px',
+                border: '1px solid rgba(245, 243, 239, 0.2)',
+                background: selectedCategory === 'event_space' ? '#8A4120' : 'transparent',
+                color: '#F5F3EF',
+                fontSize: '14px',
+                fontWeight: 500,
+                cursor: 'pointer'
+              }}
+            >
+              {cards.eventSpaces?.title}
+            </button>
           </div>
-        </section>
 
-        {/* Space Grid Listing */}
-        <section style={{ padding: '64px 0 120px' }}>
-          <div className="container">
-            {loading ? (
-              <div style={{ display: 'flex', justifyContent: 'center', padding: '80px 0' }}>
-                <span style={{ fontSize: '18px', color: 'var(--copper-400)' }}>
-                  {language === 'ar' ? 'جاري التحميل...' : 'LOADING SPACES...'}
-                </span>
+          {/* Cards Grid */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))', gap: '32px' }}>
+            {filteredSpaces.map((item) => (
+              <div
+                key={item.id}
+                style={{
+                  background: '#111116',
+                  border: '1px solid rgba(245, 243, 239, 0.08)',
+                  borderRadius: '12px',
+                  overflow: 'hidden',
+                  display: 'flex',
+                  flexDirection: 'column'
+                }}
+              >
+                <div style={{ aspectRatio: '16/10', overflow: 'hidden' }}>
+                  <img src={item.image} alt={item.title} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                </div>
+                <div style={{ padding: '32px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between', flex: 1 }}>
+                  <div>
+                    <h3 style={{ fontSize: '24px', fontWeight: 300, color: '#F5F3EF', margin: '0 0 12px' }}>{item.title}</h3>
+                    <p style={{ fontSize: '15px', color: 'rgba(245, 243, 239, 0.65)', lineHeight: 1.6, margin: '0 0 24px' }}>{item.desc}</p>
+                  </div>
+                  <a href={`/spaces/${item.id}`} style={{ color: '#C86B3C', fontSize: '15px', fontWeight: 500 }}>
+                    {item.cta} →
+                  </a>
+                </div>
               </div>
-            ) : filteredSpaces.length === 0 ? (
-              /* Empty state matching specs */
-              <div style={{ textAlign: 'center', padding: '80px 0', background: 'var(--mars-slate)', borderRadius: '8px', border: '1px dashed var(--line-dark)' }}>
-                <svg width="48" height="48" fill="none" viewBox="0 0 24 24" stroke="var(--text-muted-dark)" style={{ margin: '0 auto 16px' }}>
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="1.5" d="M19.5 12h-15m0 0l3-3m-3 3l3 3" />
-                </svg>
-                <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>
-                  {language === 'ar' ? 'لم نجد مساحات مطابقة' : 'No spaces match your filters'}
-                </h3>
-                <p style={{ margin: '8px 0 24px', color: 'var(--text-muted-dark)', fontSize: '15px' }}>
-                  {language === 'ar' 
-                    ? 'يرجى تجربة تعديل التصفية للحصول على نتائج أفضل.' 
-                    : 'Try clearing or modifying your filter preferences.'}
-                </p>
-                <button
-                  onClick={handleClearFilters}
-                  className="btn-pill-primary"
-                  style={{ padding: '12px 28px', fontSize: '14px', cursor: 'pointer', border: 'none' }}
-                >
-                  {language === 'ar' ? 'إعادة تعيين خيارات البحث' : 'Clear Filters'}
-                </button>
-              </div>
-            ) : (
-              <div style={{
-                display: 'grid',
-                gridTemplateColumns: 'repeat(auto-fit, minmax(320px, 1fr))',
-                gap: '32px'
-              }}>
-                {filteredSpaces.map((room, idx) => {
-                  const availabilityBadgeColor = room.status === 'Available' ? 'var(--copper-400)' : 'var(--text-muted-dark)';
-                  const availabilityBadgeBorder = room.status === 'Available' ? '1px solid rgba(200, 107, 60, 0.45)' : '1px solid rgba(245, 245, 245, 0.18)';
-                  
-                  return (
-                    <a
-                      key={idx}
-                      href={`/spaces/${room.slug}`}
-                      style={{
-                        display: 'block',
-                        background: 'var(--mars-slate)',
-                        borderRadius: '8px',
-                        overflow: 'hidden',
-                        color: 'var(--mars-paper)',
-                        transition: 'transform var(--dur-instant) var(--ease-out), background var(--dur-instant) var(--ease-out)',
-                      }}
-                      className="room-card"
-                    >
-                      <div style={{ aspectRatio: '3/2', overflow: 'hidden', position: 'relative' }}>
-                        <img
-                          src={room.image || '/assets/photo-glass-offices.jpg'}
-                          alt={room.name}
-                          style={{
-                            width: '100%',
-                            height: '100%',
-                            objectFit: 'cover',
-                            display: 'block',
-                            transition: 'transform var(--dur-base) var(--ease-out)',
-                          }}
-                          className="room-card-img"
-                        />
-                      </div>
-                      
-                      <div style={{ padding: '24px' }}>
-                        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-                          <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>
-                            {language === 'ar' ? room.nameAr : room.name}
-                          </h3>
-                          <span style={{
-                            fontSize: '11px',
-                            fontWeight: 600,
-                            color: availabilityBadgeColor,
-                            border: availabilityBadgeBorder,
-                            borderRadius: '999px',
-                            padding: '4px 10px',
-                            lineHeight: 1,
-                            whiteSpace: 'nowrap'
-                          }}>
-                            {language === 'ar' 
-                              ? (room.status === 'Available' ? 'متاح الآن' : 'غير متاح')
-                              : room.status}
-                          </span>
-                        </div>
-                        
-                        <div style={{ marginTop: '8px', fontSize: '14px', color: 'var(--text-muted-dark)', fontWeight: 500 }}>
-                          {room.capacity} {language === 'ar' ? 'أشخاص' : 'People'} · {room.floor} · {room.size} sqm
-                        </div>
-
-                        {/* Amenities preview list */}
-                        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '16px' }}>
-                          {(language === 'ar' ? room.amenitiesAr : room.amenities || []).slice(0, 3).map((amenity, amIdx) => (
-                            <span key={amIdx} style={{
-                              fontSize: '12px',
-                              background: 'var(--mars-void)',
-                              padding: '4px 10px',
-                              borderRadius: '4px',
-                              color: 'rgba(245, 245, 245, 0.8)'
-                            }}>
-                              {amenity}
-                            </span>
-                          ))}
-                        </div>
-
-                        {/* Card Price / CTA Row */}
-                        <div style={{
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'baseline',
-                          marginTop: '24px',
-                          paddingTop: '16px',
-                          borderTop: '1px solid rgba(245, 245, 245, 0.08)'
-                        }}>
-                          <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                            <span style={{ fontSize: '22px', fontWeight: 700, color: '#FFFFFF' }}>
-                              <bdi>{room.rate} SAR</bdi>
-                            </span>
-                            <span style={{ fontSize: '13px', color: 'var(--text-muted-dark)' }}>
-                              {room.category === 'private_office' 
-                                ? (language === 'ar' ? '/شهرياً' : '/month')
-                                : (language === 'ar' ? '/ساعة' : '/hour')}
-                            </span>
-                          </div>
-                          
-                          <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--copper-400)' }}>
-                            {language === 'ar' ? 'عرض التفاصيل ←' : 'View Details →'}
-                          </span>
-                        </div>
-                      </div>
-                    </a>
-                  );
-                })}
-              </div>
-            )}
+            ))}
           </div>
-        </section>
+
+        </div>
       </main>
 
       <Footer />
