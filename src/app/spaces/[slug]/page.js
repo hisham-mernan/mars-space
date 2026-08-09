@@ -346,7 +346,7 @@ export default function SpaceDetail() {
                 boxSizing: 'border-box'
               }}>
                 <h3 style={{ margin: 0, fontSize: '22px', fontWeight: 600, color: '#FFFFFF', borderBottom: '1px solid rgba(245, 245, 245, 0.08)', paddingBottom: '16px' }}>
-                  {t?.roomDetail?.cta || (language === 'ar' ? 'احجز القاعة' : 'Book this room')}
+                  {language === 'ar' ? 'حجز مساحة العمل' : 'Reserve Workspace'}
                 </h3>
 
                 {bookingError && (

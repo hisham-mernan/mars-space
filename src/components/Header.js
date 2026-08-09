@@ -11,6 +11,7 @@ export default function Header() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -18,9 +19,17 @@ export default function Header() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
+    
+    // Auth Check
+    const storedUser = localStorage.getItem('mars-user');
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+    
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  // Prevent background scroll when mobile menu is open
   useEffect(() => {
     if (mobileMenuOpen) {
       document.body.style.overflow = 'hidden';
@@ -107,20 +116,19 @@ export default function Header() {
               style={{ position: 'relative', display: 'inline-block' }}
             >
               <a href="/spaces" className="nav-link">
-                {t?.nav?.spaces || (language === 'ar' ? 'المساحات' : 'Spaces')}
+                {t?.nav?.space || (language === 'ar' ? 'المساحة ▾' : 'The Space ▾')}
               </a>
               <MegaMenu isOpen={megaOpen} onClose={() => setMegaOpen(false)} />
             </div>
 
-            <a href="/pricing" className="nav-link">{t?.nav?.memberships || (language === 'ar' ? 'العضويات' : 'Memberships')}</a>
             <a href="/spaces?category=meeting_room" className="nav-link">{t?.nav?.rooms || (language === 'ar' ? 'قاعات الاجتماعات' : 'Meeting Rooms')}</a>
+            <a href="/pricing" className="nav-link">{t?.nav?.membership || (language === 'ar' ? 'العضوية' : 'Membership')}</a>
             <a href="/events" className="nav-link">{t?.nav?.community || (language === 'ar' ? 'المجتمع' : 'Community')}</a>
-            <a href="/events" className="nav-link">{t?.nav?.events || (language === 'ar' ? 'الفعاليات' : 'Events')}</a>
-            <a href="/about" className="nav-link">{t?.nav?.about || (language === 'ar' ? 'عن مارس' : 'About')}</a>
+            <a href="/about" className="nav-link">{t?.nav?.about || (language === 'ar' ? 'عن مارس سبيس' : 'About')}</a>
             <a href="/contact" className="nav-link">{t?.nav?.contact || (language === 'ar' ? 'تواصل معنا' : 'Contact')}</a>
           </nav>
 
-          {/* Controls Right Wrapper (Language Switcher, Primary CTA, Mobile Hamburger) */}
+          {/* Controls Right Wrapper (Language Toggle, CTA Button, Mobile Hamburger) */}
           <div
             className="header-controls"
             style={{
@@ -169,9 +177,9 @@ export default function Header() {
               </span>
             </div>
 
-            {/* Primary CTA Button: Book a Tour */}
-            <a
-              href="/contact?type=tour"
+            {/* Book Button */}
+            <button
+              onClick={() => setBookingOpen(true)}
               className="cta-book-btn"
               style={{
                 display: 'inline-flex',
@@ -190,9 +198,9 @@ export default function Header() {
                 transition: 'background 250ms, gap 250ms'
               }}
             >
-              <span>{t?.nav?.cta || (language === 'ar' ? 'احجز جولة' : 'Book a Tour')}</span>
+              <span>{user ? (language === 'ar' ? 'لوحة التحكم' : 'Dashboard') : (t?.nav?.cta || (language === 'ar' ? 'احجز قاعة' : 'Book a room'))}</span>
               <span style={{ fontSize: '13px', lineHeight: 1 }}>→</span>
-            </a>
+            </button>
 
             {/* Mobile Hamburger Toggle Button */}
             <button
@@ -279,21 +287,7 @@ export default function Header() {
                   borderBottom: '1px solid rgba(245,243,239,0.1)'
                 }}
               >
-                {t?.nav?.spaces || (language === 'ar' ? 'المساحات' : 'Spaces')}
-              </a>
-
-              <a
-                href="/pricing"
-                onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  fontSize: '22px',
-                  fontWeight: 300,
-                  color: '#F5F3EF',
-                  paddingBottom: '12px',
-                  borderBottom: '1px solid rgba(245,243,239,0.1)'
-                }}
-              >
-                {t?.nav?.memberships || (language === 'ar' ? 'العضويات' : 'Memberships')}
+                {t?.nav?.space || (language === 'ar' ? 'المساحة' : 'The Space')}
               </a>
 
               <a
@@ -311,6 +305,20 @@ export default function Header() {
               </a>
 
               <a
+                href="/pricing"
+                onClick={() => setMobileMenuOpen(false)}
+                style={{
+                  fontSize: '22px',
+                  fontWeight: 300,
+                  color: '#F5F3EF',
+                  paddingBottom: '12px',
+                  borderBottom: '1px solid rgba(245,243,239,0.1)'
+                }}
+              >
+                {t?.nav?.membership || (language === 'ar' ? 'العضوية' : 'Membership')}
+              </a>
+
+              <a
                 href="/events"
                 onClick={() => setMobileMenuOpen(false)}
                 style={{
@@ -325,20 +333,6 @@ export default function Header() {
               </a>
 
               <a
-                href="/events"
-                onClick={() => setMobileMenuOpen(false)}
-                style={{
-                  fontSize: '22px',
-                  fontWeight: 300,
-                  color: '#F5F3EF',
-                  paddingBottom: '12px',
-                  borderBottom: '1px solid rgba(245,243,239,0.1)'
-                }}
-              >
-                {t?.nav?.events || (language === 'ar' ? 'الفعاليات' : 'Events')}
-              </a>
-
-              <a
                 href="/about"
                 onClick={() => setMobileMenuOpen(false)}
                 style={{
@@ -349,7 +343,7 @@ export default function Header() {
                   borderBottom: '1px solid rgba(245,243,239,0.1)'
                 }}
               >
-                {t?.nav?.about || (language === 'ar' ? 'عن مارس' : 'About')}
+                {t?.nav?.about || (language === 'ar' ? 'عن مارس سبيس' : 'About')}
               </a>
 
               <a
@@ -367,10 +361,12 @@ export default function Header() {
               </a>
             </div>
 
-            <div style={{ paddingTop: '24px', display: 'flex', flexDirection: 'column', gap: '12px' }}>
-              <a
-                href="/contact?type=tour"
-                onClick={() => setMobileMenuOpen(false)}
+            <div style={{ paddingTop: '24px' }}>
+              <button
+                onClick={() => {
+                  setMobileMenuOpen(false);
+                  setBookingOpen(true);
+                }}
                 style={{
                   width: '100%',
                   display: 'flex',
@@ -384,12 +380,11 @@ export default function Header() {
                   padding: '16px',
                   fontSize: '16px',
                   fontWeight: 500,
-                  cursor: 'pointer',
-                  textDecoration: 'none'
+                  cursor: 'pointer'
                 }}
               >
-                {t?.nav?.cta || (language === 'ar' ? 'احجز جولة' : 'Book a Tour')} →
-              </a>
+                {t?.nav?.cta || (language === 'ar' ? 'احجز قاعة' : 'Book a room')} →
+              </button>
             </div>
           </div>
         )}
@@ -409,7 +404,7 @@ export default function Header() {
           color: #F5F3EF !important;
         }
 
-        @media (max-width: 960px) {
+        @media (max-width: 900px) {
           .desktop-nav {
             display: none !important;
           }
@@ -423,7 +418,7 @@ export default function Header() {
 
         @media (max-width: 600px) {
           .logo-img {
-            height: 28px !important;
+            height: 28px !style !important;
           }
           .logo-text {
             font-size: 10px !important;

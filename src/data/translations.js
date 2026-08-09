@@ -1,430 +1,646 @@
 export const translations = {
   en: {
+    meta: {
+      title: "Mars Space — Coworking, Private Offices & Meeting Rooms",
+      description: "Considered space for serious work in Jeddah. Private offices, meeting rooms and community floor run with the discipline of a venture builder."
+    },
     nav: {
-      spaces: 'Spaces',
-      memberships: 'Memberships',
-      rooms: 'Meeting Rooms',
-      community: 'Community',
-      events: 'Events',
-      about: 'About',
-      contact: 'Contact',
-      cta: 'Book a Tour',
-      secondaryCta: 'Book a Room'
+      space: "The Space",
+      floor: "The Floor",
+      rooms: "Meeting Rooms",
+      membership: "Membership",
+      community: "Community",
+      about: "About",
+      contact: "Contact",
+      cta: "Book a room",
+      langToggle: "عربي",
+      login: "Log in",
+      memberPortal: "Member portal"
+    },
+    megaMenu: {
+      heading: "One curated floor",
+      offices: "Private Offices",
+      officesDesc: "Lockable offices for teams, registered to your name",
+      desks: "Coworking Desks",
+      desksDesc: "Hot desks by the day, dedicated desks by the month",
+      rooms: "Meeting Rooms",
+      roomsDesc: "Properly equipped rooms, bookable by the hour",
+      pods: "Focus Pods",
+      podsDesc: "Single-occupancy rooms for calls and deep work",
+      community: "Community Space",
+      communityDesc: "Arranged for talks, workshops and launches",
+      cafe: "Café & Lounge",
+      cafeDesc: "Specialty coffee and quiet seating included",
+      footerLine: "Everything is a few steps apart."
     },
     hero: {
-      eyebrow: 'MARS SPACE · JEDDAH',
-      headline: 'A place to do your best work.',
-      sub: 'Private offices, flexible workspaces, meeting rooms and spaces for your next event, all under one roof.',
-      primaryCta: 'Explore Spaces',
-      secondaryCta: 'Book a Tour',
-      microCtaText: 'Already know what you need? Book a room'
+      eyebrow: "MARS SPACE — JEDDAH",
+      headline: "Considered space for serious work.",
+      alternateHeadlines: [
+        "A workspace worth arriving to.",
+        "One floor, curated for the way you work."
+      ],
+      subHeadline: "A single, curated floor in Jeddah — private offices, meeting rooms and quiet space, each one chosen and run with care. Book a room today, or make the floor your own.",
+      bookCta: "Book a room",
+      seeFloorCta: "See the floor"
     },
-    heroSupport: {
-      headline: 'Work well. Meet well. Grow well.',
-      body: 'A professional space designed around the way modern businesses actually work.'
-    },
-    spacesSection: {
-      eyebrow: 'THE SPACE',
-      headline: 'Find the space that fits your work.',
-      body: 'From a private office for your team to a room for your next meeting, choose the space that works for you.',
-      cards: {
-        offices: {
-          title: 'Private Offices',
-          desc: 'A dedicated space for teams that value privacy, comfort and a professional setting.',
-          cta: 'View Offices'
+    curatedFloor: {
+      eyebrow: "CURATED",
+      headline: "A floor arranged around how you work.",
+      body: "Nothing here is generic. Every desk, every room and every quiet corner was chosen for a specific way of working — and your membership is set up the same way. Tell us how your day runs, and we arrange the floor around it: the desk that suits you, the rooms you'll actually use, the access hours that fit your schedule, and the details handled before you have to ask.",
+      pillars: [
+        {
+          num: 1,
+          title: "Chosen, not filled",
+          line: "We offer fewer spaces done properly, never a floor packed to the walls."
         },
-        dedicated: {
-          title: 'Dedicated Desks',
-          desc: 'Your own desk in a shared environment, with everything you need for a productive workday.',
-          cta: 'View Desks'
+        {
+          num: 2,
+          title: "Set up to you",
+          line: "Your plan, your access and your rooms are tuned to how you actually work."
+        },
+        {
+          num: 3,
+          title: "Run with care",
+          line: "A team keeps the whole floor to one standard, every single day."
+        }
+      ]
+    },
+    spacesOverview: {
+      eyebrow: "THE FLOOR",
+      headline: "Six kinds of space, one considered floor.",
+      body: "From a locked private office to a quiet room for one, every space on the floor has a purpose — and they're all a short walk apart.",
+      zones: {
+        privateOffices: {
+          name: "Private Offices",
+          arName: "مكاتب خاصة",
+          desc: "Lockable offices for teams, finished to a standard and registered to your name. Your own space, ready from day one."
+        },
+        coworkingDesks: {
+          name: "Coworking Desks",
+          arName: "مكاتب مشتركة",
+          desc: "A considered shared floor — hot desks by the day, dedicated desks by the month. Quiet, comfortable, never overcrowded."
         },
         meetingRooms: {
-          title: 'Meeting Rooms',
-          desc: 'Thoughtfully equipped rooms for meetings, workshops, interviews and client conversations.',
-          cta: 'Book a Room'
+          name: "Meeting Rooms",
+          arName: "قاعات اجتماعات",
+          desc: "Rooms that are properly equipped and genuinely ready. Book by the hour — member or guest, same rooms, same rates."
         },
-        eventSpaces: {
-          title: 'Event Spaces',
-          desc: 'Flexible spaces for workshops, talks, community gatherings and private events.',
-          cta: 'Explore Event Spaces'
+        focusPods: {
+          name: "Focus Pods",
+          arName: "غرف تركيز",
+          desc: "Single-occupancy rooms for calls and deep work, for when the day needs quiet."
+        },
+        communitySpace: {
+          name: "Community Space",
+          arName: "مساحة مجتمعية",
+          desc: "A room made for gatherings — talks, workshops and launches, arranged and hosted properly."
+        },
+        cafeLounge: {
+          name: "Café & Lounge",
+          arName: "المقهى والاستراحة",
+          desc: "Good coffee and quiet seating, included with every plan. The part of the floor nobody has to schedule."
         }
       }
     },
-    visualStorytelling: {
-      eyebrow: 'ONE SPACE. MANY WAYS TO WORK.',
-      headline: 'Designed around your day.',
-      body: 'Move from focused work to a client meeting, a coffee between calls or an evening event without leaving the space.',
-      items: [
-        { key: 'offices', title: 'Private Offices', img: '/assets/photo-glass-offices.jpg' },
-        { key: 'meeting_rooms', title: 'Meeting Rooms', img: '/assets/photo-meeting-room.jpg' },
-        { key: 'community', title: 'Community', img: '/assets/photo-community-space.jpg' },
-        { key: 'lounge', title: 'Lounge', img: '/assets/photo-lounge-velvet.jpg' },
-        { key: 'coffee', title: 'Coffee', img: '/assets/photo-barista-cafe.jpg' },
-        { key: 'event_space', title: 'Event Space', img: '/assets/photo-hall-full.jpg' }
-      ]
+    meetingRoomsBand: {
+      eyebrow: "BOOK BY THE HOUR",
+      headline: "Book a room. Membership optional.",
+      body: "Anyone can book a Mars Space meeting room — members and guests, the same rooms at the same rates, with availability that updates in real time.",
+      cta: "See available rooms"
     },
-    photography: {
-      headline: 'Take a look around.',
-      body: 'A closer look at the spaces, details and places that make Mars Space feel like Mars.'
-    },
-    amenitiesSection: {
-      headline: 'Everything you need, already here.',
-      body: 'From the basics that keep your day running to the details that make it more comfortable.',
-      items: [
-        'High-speed Wi-Fi',
-        'Meeting facilities',
-        'Printing and scanning',
-        'Coffee and refreshments',
-        'Reception services',
-        '24/7 member access',
-        'Parking',
-        'Storage',
-        'Business address',
-        'Daily cleaning'
-      ]
-    },
-    membershipSection: {
-      eyebrow: 'MEMBERSHIP',
-      headline: 'Choose how you want to work.',
-      body: 'Come in for a day, make Mars Space your regular workplace, or give your team a space of its own.',
+    membershipBand: {
+      eyebrow: "MEMBERSHIP",
+      headline: "A membership set to how you work.",
+      body: "Four plans, one curated floor, no long lock-ins. Every plan includes meeting-room credits, the café, and around-the-clock access.",
+      cta: "Compare plans",
       plans: [
         {
-          id: 'daypass',
-          name: 'Day Pass',
-          badge: 'For a day',
-          line: 'A flexible way to experience Mars Space when you need a professional place to work.',
-          cta: 'Get a Day Pass'
+          name: "Day Pass",
+          arName: "بطاقة يوم",
+          line: "A full day on the floor — café and quiet space included."
         },
         {
-          id: 'coworking',
-          name: 'Coworking',
-          badge: 'For flexible work',
-          line: 'A shared workspace for professionals who want flexibility without working alone.',
-          cta: 'Explore Membership'
+          name: "Hot Desk",
+          arName: "مكتب مرن",
+          line: "Any open desk, whenever you come in, plus monthly meeting-room credits."
         },
         {
-          id: 'dedicated',
-          name: 'Dedicated Desk',
-          badge: 'Make it yours',
-          line: 'Your own desk in a shared environment, ready whenever you are.',
-          cta: 'Explore Desks'
+          name: "Dedicated Desk",
+          arName: "مكتب مخصص",
+          line: "Your own desk, kept as you left it, with more credits and a locker."
         },
         {
-          id: 'private_office',
-          name: 'Private Office',
-          badge: 'For your team',
-          line: 'A private, fully equipped workspace designed around your team.',
-          cta: 'View Offices'
+          name: "Private Office",
+          arName: "مكتب خاص",
+          line: "A lockable office for your team — finished and registered to your name."
+        }
+      ],
+      includedInEveryPlan: {
+        title: "Included in every plan",
+        body: "Meeting-room credits, the café, 24/7 access, a registered business address, mail handling, and a discount on the community space. No setup fees, no surprises."
+      },
+      reassuranceLine: "Prices include 15% VAT. Change or cancel your plan with [30] days' notice.",
+      ctas: {
+        tour: "Book a tour",
+        talk: "Talk to us"
+      }
+    },
+    communityBand: {
+      headline: "Host it on our floor.",
+      subHeadline: "A room made for gatherings.",
+      body: "The community space is arranged for talks, workshops and launches — up to [N] guests, with the setup, AV and hosting handled by us.",
+      subBody: "Up to [N] guests, several seating arrangements, full AV, and a team that has hosted [N] events on this floor.",
+      whatWeHandle: {
+        title: "You bring the guests. We handle the rest.",
+        body: "Configuration, AV, seating, catering and front-of-house are all arranged for you. Tell us the shape of the event, and the room is ready before your first guest arrives."
+      },
+      cta: "Check dates"
+    },
+    amenitiesStrip: {
+      headline: "The details, already handled.",
+      items: [
+        "High-speed fibre",
+        "Printing & scanning",
+        "Prayer room on the floor",
+        "[N] parking bays",
+        "24/7 member access",
+        "Registered business address",
+        "Mail & package handling",
+        "Daily housekeeping",
+        "Fully equipped kitchen",
+        "Reception & guest handling"
+      ]
+    },
+    location: {
+      headline: "Find us.",
+      address: "[Building, street, district], Jeddah, Saudi Arabia",
+      nationalAddress: "[_____]",
+      openGoogleMaps: "Open in Google Maps",
+      openAppleMaps: "Open in Apple Maps",
+      hours: [
+        { label: "Sunday – Thursday", time: "[08:00 – 20:00]" },
+        { label: "Friday", time: "[Closed / ___]" },
+        { label: "Saturday", time: "[10:00 – 18:00]" },
+        { label: "Members", time: "24/7" }
+      ]
+    },
+    ecosystem: {
+      eyebrow: "PART OF MARS",
+      headline: "Backed by Mars Ventures.",
+      body: "Mars Ventures builds companies from idea to exit. Mars Space is where that work happens — and it's open to everyone building something worth building.",
+      marquee: ["MARS Ventures", "MARS Lab", "MARS VC", "MARS Consultancy", "MARS Space"]
+    },
+    closingCta: {
+      headline: "Come see the floor.",
+      body: "Book a private tour, or reserve a room and experience it for yourself.",
+      bookTour: "Book a tour",
+      bookRoom: "Book a room"
+    },
+    theSpacePage: {
+      h1: "One floor, curated with intent.",
+      sub: "Focused work, scheduled work, and everything in between — each has a proper place here, and none is more than a short walk from the rest.",
+      whyOneFloorTitle: "We kept it to one floor on purpose.",
+      whyOneFloorBody: "One floor means everything is close, everything is consistent, and everything is held to the same standard. It's easier to run a curated space well when it's all in one place — and easier for you to move through your day without friction."
+    },
+    zoneDetailPages: {
+      privateOffices: {
+        h1: "Your team, behind a door that locks.",
+        body: "Fully finished offices for teams of 2 to [N], registered to your business, with your own network and 24/7 access. Move in and start — the setup is already done."
+      },
+      coworkingDesks: {
+        h1: "A desk that's ready when you are.",
+        body: "Hot desks by the day, dedicated desks by the month — on a floor that stays quiet and uncrowded by design. Same access, same café, same standard."
+      },
+      meetingRooms: {
+        h1: "Rooms that are ready when you are.",
+        body: "[N] rooms seating 4 to [N], each properly equipped and reset before you arrive. Book by the hour, member or guest."
+      },
+      focusPods: {
+        h1: "Private, for one.",
+        body: "Single-occupancy rooms for calls, focus and the parts of the day that need quiet. Book one for an hour, or take one now."
+      },
+      communitySpace: {
+        h1: "Where your community gathers.",
+        body: "Up to [N] guests, several seating arrangements, and full AV — set up and hosted by a team that does this often."
+      },
+      cafeLounge: {
+        h1: "The part of the floor nobody schedules.",
+        body: "Specialty coffee and comfortable, quiet seating — included with every plan and every booking. Somewhere to think between the things you planned."
+      }
+    },
+    meetingRoomsPage: {
+      h1: "Meeting rooms, properly equipped.",
+      sub: "Real-time availability, clear hourly rates, instant confirmation. No membership required.",
+      whatEveryRoomIncludesTitle: "What every room includes",
+      whatEveryRoomIncludesBody: "A screen and video conferencing, a proper table, fast wifi, water, and a room that's been reset before you walk in. Nothing to set up, nothing to chase.",
+      noAvailability: "No rooms free from [10:00] to [12:00] on [Sunday]. The nearest options are [08:00–10:00] in [Room X], or [14:00–16:00] in [Room Y]."
+    },
+    sharedLabels: {
+      whereItSits: "Where it sits",
+      whatsIncluded: "What's included",
+      gallery: "Gallery",
+      theDetails: "The details",
+      rates: "Rates",
+      book: "Book",
+      enquire: "Enquire",
+      bookATour: "Book a tour",
+      otherSpaces: "Other spaces",
+      capacity: "Capacity",
+      from: "From",
+      perHour: "per hour",
+      vatIncluded: "VAT included"
+    },
+    aboutPage: {
+      h1: "A floor run like a company, not a lobby.",
+      intro: "Mars Space is a curated workspace in Jeddah, built and backed by Mars Ventures. We keep one floor to a single standard — chosen spaces, considered details, and a team that treats your working day as seriously as you do.",
+      vision: "To set the standard for what a workspace can be — considered, professional, and genuinely built around the people who use it.",
+      mission: "We run one curated floor with the discipline of a venture builder — so the space, the details and the service are handled, and you can put your attention where it belongs: on the work.",
+      values: [
+        {
+          name: "Discipline",
+          arName: "الانضباط",
+          line: "Discipline — one standard, held every day"
+        },
+        {
+          name: "Ownership",
+          arName: "المسؤولية",
+          line: "Ownership — we treat the floor as our own"
+        },
+        {
+          name: "Care",
+          arName: "العناية",
+          line: "Care — the details are the point, not an afterthought"
+        },
+        {
+          name: "Vision",
+          arName: "الرؤية",
+          line: "Vision — a workspace built for what's next"
         }
       ]
     },
-    meetingRoomsSection: {
-      eyebrow: 'MEETING ROOMS',
-      headline: 'A room for the conversation that matters.',
-      body: 'Meet clients, bring your team together or host your next workshop in a room that is ready when you are.',
-      primaryCta: 'Find a Room',
-      secondaryCta: 'View All Rooms'
-    },
-    roomDetail: {
-      title: 'Meeting Room',
-      capacity: 'Up to 8 people',
-      whatsIncluded: 'What\'s included',
-      includedItems: [
-        'Display screen',
-        'Whiteboard',
-        'High-speed Wi-Fi',
-        'Power outlets',
-        'Coffee and refreshments',
-        'Professional seating'
-      ],
-      availability: 'Availability',
-      availableTimes: 'Available times',
-      chooseDatePrompt: 'Choose a date and time to see availability.',
-      cta: 'Book this room'
-    },
-    communitySection: {
-      eyebrow: 'COMMUNITY',
-      headline: 'Work around people who are building things.',
-      body: 'Mars Space brings together founders, professionals, teams and people with ideas worth sharing.',
-      cta: 'Meet the Community'
-    },
-    eventsSection: {
-      eyebrow: 'EVENTS',
-      headline: 'Bring people together.',
-      body: 'Host a workshop, talk, private gathering or community event in a space designed for people, not just presentations.',
-      primaryCta: 'Explore Events',
-      secondaryCta: 'Host an Event'
-    },
-    aboutSection: {
-      eyebrow: 'ABOUT MARS SPACE',
-      headline: 'A workspace built around people.',
-      body: 'Mars Space was created with a simple idea: work is better when the space around you works with you.\n\nWe bring together private offices, flexible workspaces, meeting rooms and community spaces in one place, giving individuals and businesses the freedom to work in the way that suits them.',
-      cta: 'Our Story'
-    },
-    tourSection: {
-      headline: 'Come see it for yourself.',
-      body: 'Photos can tell you what Mars Space looks like. A visit tells you what it feels like.',
-      cta: 'Book a Tour'
-    },
-    contactSection: {
-      headline: 'Let\'s talk.',
-      body: 'Have a question about a workspace, membership or booking? Our team is here to help.',
-      cta: 'Get in touch',
-      fields: {
-        name: 'Full Name',
-        company: 'Company',
-        email: 'Email',
-        phone: 'Phone',
-        helpTopic: 'What can we help you with?',
-        message: 'Message'
+    contactPage: {
+      h1: "Come and see it.",
+      sub: "The floor makes more sense in person. Book a tour, or reach us directly.",
+      form: {
+        name: "Name",
+        email: "Email",
+        phone: "Phone",
+        company: "Company (optional)",
+        aboutQuestion: "What's this about?",
+        options: {
+          tour: "Book a tour",
+          membership: "Membership",
+          rooms: "Meeting rooms",
+          events: "Events",
+          other: "Something else"
+        },
+        message: "Message",
+        send: "Send"
       },
-      sendBtn: 'Send Message'
+      confirmation: "Thanks — we've got your message and will reply within one business day.",
+      directDetails: "phone [+966 __ ___ ____] · WhatsApp [____] · email [hello@mars.sa]"
     },
     footer: {
-      brand: 'Mars Space',
-      tagline: 'A better place to work.',
-      location: 'Jeddah, Saudi Arabia',
-      col1Title: 'Spaces',
-      col1Items: [
-        { label: 'Private Offices', href: '/spaces?category=private_office' },
-        { label: 'Coworking', href: '/spaces?category=coworking' },
-        { label: 'Dedicated Desks', href: '/spaces?category=dedicated' },
-        { label: 'Meeting Rooms', href: '/spaces?category=meeting_room' },
-        { label: 'Event Spaces', href: '/events' }
-      ],
-      col2Title: 'Mars Space',
-      col2Items: [
-        { label: 'About', href: '/about' },
-        { label: 'Community', href: '/events' },
-        { label: 'Events', href: '/events' },
-        { label: 'Careers', href: '/contact' },
-        { label: 'Contact', href: '/contact' },
-        { label: 'Help', href: '/contact' }
-      ],
-      col3Title: 'Actions & Legal',
-      col3Items: [
-        { label: 'Book a Tour', href: '/contact' },
-        { label: 'Book a Room', href: '/spaces?category=meeting_room' },
-        { label: 'Memberships', href: '/pricing' },
-        { label: 'FAQs', href: '/faq' },
-        { label: 'Terms', href: '/contact' },
-        { label: 'Privacy', href: '/contact' }
-      ],
-      copyright: '© 2026 Mars Space. All rights reserved.'
+      tagline: "Considered space for serious work.",
+      legalLine: "© 2026 Mars Space, a Mars Ventures company. CR [] · VAT []."
+    },
+    microcopy: {
+      bookRoom: "Book a room",
+      reserve: "Reserve",
+      checkAvailability: "Check availability",
+      comparePlans: "Compare plans",
+      becomeMember: "Become a member",
+      bookTour: "Book a tour",
+      enquire: "Enquire",
+      talkToUs: "Talk to us",
+      seeFloor: "See the floor",
+      continue: "Continue",
+      slotHeld: "Your slot is held for [09:42]",
+      bookedMessage: "Booked. [Room 3], [Sunday] [10:00–12:00].",
+      noMembershipNeeded: "No membership needed to book a room."
     }
   },
   ar: {
+    meta: {
+      title: "مارس سبيس — مساحات عمل، مكاتب خاصة وقاعات اجتماعات",
+      description: "مساحة مدروسة لعمل جاد في جدة. مكاتب خاصة، وقاعات اجتماعات، ومساحة مجتمعية تُدار بانضباط شركة لبناء المشاريع."
+    },
     nav: {
-      spaces: 'المساحات',
-      memberships: 'العضويات',
-      rooms: 'قاعات الاجتماعات',
-      community: 'المجتمع',
-      events: 'الفعاليات',
-      about: 'عن مارس',
-      contact: 'تواصل معنا',
-      cta: 'احجز جولة',
-      secondaryCta: 'احجز قاعة'
+      space: "المساحة",
+      floor: "الطابق",
+      rooms: "قاعات الاجتماعات",
+      membership: "العضوية",
+      community: "المجتمع",
+      about: "عن مارس سبيس",
+      contact: "تواصل معنا",
+      cta: "احجز قاعة",
+      langToggle: "EN",
+      login: "تسجيل الدخول",
+      memberPortal: "بوابة الأعضاء"
+    },
+    megaMenu: {
+      heading: "طابقٌ واحد منتقى",
+      offices: "مكاتب خاصة",
+      officesDesc: "مكاتب قابلة للإغلاق للفرق، مُسجّلة باسمك",
+      desks: "مكاتب مشتركة",
+      desksDesc: "مكاتب مرنة باليوم، ومكاتب مُخصّصة بالشهر",
+      rooms: "قاعات اجتماعات",
+      roomsDesc: "قاعات مُجهّزة كما ينبغي، قابلة للحجز بالساعة",
+      pods: "غرف تركيز",
+      podsDesc: "غرف لشخص واحد للمكالمات والعمل العميق",
+      community: "مساحة مجتمعية",
+      communityDesc: "مُهيّأة للمحاضرات والورش والإطلاقات",
+      cafe: "المقهى والاستراحة",
+      cafeDesc: "قهوة مختصة وجلسات هادئة ضمن كل باقة",
+      footerLine: "كل شيء على بُعد خطوات."
     },
     hero: {
-      eyebrow: 'مارس سبيس · جدة',
-      headline: 'مساحة تليق بطريقة عملك.',
-      sub: 'مكاتب خاصة، ومساحات عمل مرنة، وقاعات اجتماعات، ومساحات للفعاليات. كل ما تحتاجه للعمل، في مكان واحد.',
-      primaryCta: 'استكشف المساحات',
-      secondaryCta: 'احجز جولة',
-      microCtaText: 'تعرف ما تحتاجه؟ احجز قاعة'
+      eyebrow: "مارس سبيس — جدة",
+      headline: "مساحةٌ مدروسة لعملٍ جاد.",
+      alternateHeadlines: [
+        "مساحةُ عملٍ تستحق الحضور.",
+        "طابقٌ واحد، مُنسَّق لطريقتك في العمل."
+      ],
+      subHeadline: "طابقٌ واحدٌ منتقى في جدة — مكاتب خاصة، وقاعات اجتماعات، ومساحات هادئة، اختير كُلٌّ منها وأُدير بعناية. احجز قاعةً اليوم، أو اتّخذ الطابق مقراً لك.",
+      bookCta: "احجز قاعة",
+      seeFloorCta: "استعرض الطابق"
     },
-    heroSupport: {
-      headline: 'اعمل بشكل أفضل. اجتمع بشكل أفضل. انمُ بشكل أفضل.',
-      body: 'مساحة مهنية مصممة لتناسب طريقة عمل الأعمال الحديثة.'
-    },
-    spacesSection: {
-      eyebrow: 'المساحات',
-      headline: 'اختر المساحة التي تناسب عملك.',
-      body: 'من مكتب خاص لفريقك إلى قاعة لاجتماعك القادم، اختر المساحة التي تناسب احتياجك.',
-      cards: {
-        offices: {
-          title: 'مكاتب خاصة',
-          desc: 'مساحة مخصصة للفرق التي تبحث عن الخصوصية والراحة وبيئة عمل مهنية.',
-          cta: 'استكشف المكاتب'
+    curatedFloor: {
+      eyebrow: "بعناية فائقة",
+      headline: "طابقٌ مُصمَّم حول طريقتك في العمل.",
+      body: "لا شيء هنا عامٌّ أو اعتباطي. كل مكتب، وكل قاعة، وكل ركنٍ هادئ اختير لأسلوب عملٍ محدَّد — وعضويتك تُهيَّأ بالطريقة نفسها. أخبرنا كيف يسير يومك، ونرّتب الطابق حولك: المكتب الذي يناسبك، والقاعات التي ستستخدمها فعلاً، وساعات الدخول التي تلائم جدولك، والتفاصيل التي نتكفّل بها قبل أن تطلبها.",
+      pillars: [
+        {
+          num: 1,
+          title: "اختيار لا حشو",
+          line: "نُقدّم مساحاتٍ أقل ومُتقنة، لا طابقاً محشواً حتى الجدران."
         },
-        dedicated: {
-          title: 'مكاتب مخصصة',
-          desc: 'مكتبك الخاص ضمن بيئة عمل مشتركة، مجهز بكل ما تحتاجه ليوم عمل منتج.',
-          cta: 'استكشف المكاتب'
+        {
+          num: 2,
+          title: "مُهيَّأ لك",
+          line: "باقتك، ودخولك، وقاعاتك مضبوطة على أسلوب عملك الحقيقي."
+        },
+        {
+          num: 3,
+          title: "يُدار بعناية",
+          line: "فريقٌ يحافظ على الطابق بأكمله بمستوىً واحد، كل يوم."
+        }
+      ]
+    },
+    spacesOverview: {
+      eyebrow: "الطابق",
+      headline: "ستة أنواع من المساحات، طابقٌ واحدٌ مدروس.",
+      body: "من مكتبٍ خاصٍّ مغلق إلى غرفةٍ هادئة لشخص واحد، لكل مساحةٍ على الطابق غايتها — وجميعها على بُعد خطوات.",
+      zones: {
+        privateOffices: {
+          name: "مكاتب خاصة",
+          arName: "مكاتب خاصة",
+          desc: "مكاتب قابلة للإغلاق للفرق، مُجهّزة بمستوىً راقٍ ومُسجّلة باسمك. مساحتك الخاصة، جاهزة من اليوم الأول."
+        },
+        coworkingDesks: {
+          name: "مكاتب مشتركة",
+          arName: "مكاتب مشتركة",
+          desc: "طابقٌ مشتركٌ مدروس — مكاتب مرنة باليوم، ومكاتب مُخصّصة بالشهر. هادئ ومريح وغير مزدحم أبداً."
         },
         meetingRooms: {
-          title: 'قاعات الاجتماعات',
-          desc: 'قاعات مجهزة بعناية للاجتماعات وورش العمل والمقابلات واللقاءات مع العملاء.',
-          cta: 'احجز قاعة'
+          name: "قاعات اجتماعات",
+          arName: "قاعات اجتماعات",
+          desc: "قاعاتٌ مُجهّزة كما ينبغي وجاهزة فعلاً. احجز بالساعة — عضواً كنت أو ضيفاً، القاعات نفسها والأسعار نفسها."
         },
-        eventSpaces: {
-          title: 'مساحات الفعاليات',
-          desc: 'مساحات مرنة للورش، واللقاءات، والفعاليات المجتمعية والخاصة.',
-          cta: 'استكشف المساحات'
+        focusPods: {
+          name: "غرف تركيز",
+          arName: "غرف تركيز",
+          desc: "غرفٌ لشخص واحد للمكالمات والعمل العميق، حين يتطلّب اليوم هدوءاً."
+        },
+        communitySpace: {
+          name: "مساحة مجتمعية",
+          arName: "مساحة مجتمعية",
+          desc: "مساحةٌ صُمّمت للّقاءات — محاضرات، وورش، وإطلاقات، تُنظَّم وتُستضاف كما ينبغي."
+        },
+        cafeLounge: {
+          name: "المقهى والاستراحة",
+          arName: "المقهى والاستراحة",
+          desc: "قهوةٌ جيدة وجلساتٌ هادئة، ضمن كل باقة. الجزء من الطابق الذي لا يحتاج إلى موعد."
         }
       }
     },
-    visualStorytelling: {
-      eyebrow: 'مساحة واحدة. طرق متعددة للعمل.',
-      headline: 'مصممة لتناسب يومك.',
-      body: 'انتقل من العمل المركّز إلى اجتماع مع عميل، أو استراحة بين الاجتماعات، أو فعالية مسائية، من دون أن تغادر المكان.',
-      items: [
-        { key: 'offices', title: 'مكاتب خاصة', img: '/assets/photo-glass-offices.jpg' },
-        { key: 'meeting_rooms', title: 'قاعات الاجتماعات', img: '/assets/photo-meeting-room.jpg' },
-        { key: 'community', title: 'المجتمع', img: '/assets/photo-community-space.jpg' },
-        { key: 'lounge', title: 'صالة الاستراحة', img: '/assets/photo-lounge-velvet.jpg' },
-        { key: 'coffee', title: 'القهوة المختصة', img: '/assets/photo-barista-cafe.jpg' },
-        { key: 'event_space', title: 'مساحة الفعاليات', img: '/assets/photo-hall-full.jpg' }
-      ]
+    meetingRoomsBand: {
+      eyebrow: "احجز بالساعة",
+      headline: "احجز قاعة. العضوية اختيارية.",
+      body: "يمكن لأي شخص حجز قاعة اجتماعات في مارس سبيس — الأعضاء والضيوف، القاعات نفسها بالأسعار نفسها، مع توفّرٍ يُحدَّث لحظياً.",
+      cta: "استعرض القاعات المتاحة"
     },
-    photography: {
-      headline: 'خذ جولة في المكان.',
-      body: 'نظرة أقرب على المساحات والتفاصيل والأجواء التي تجعل مارس سبيس مختلفًا.'
-    },
-    amenitiesSection: {
-      headline: 'كل ما تحتاجه، في مكان واحد.',
-      body: 'من الأساسيات التي تساعدك على إنجاز يومك إلى التفاصيل التي تجعل تجربة العمل أكثر راحة.',
-      items: [
-        'إنترنت عالي السرعة',
-        'تجهيزات للاجتماعات',
-        'خدمات الطباعة والمسح الضوئي',
-        'القهوة والمرطبات',
-        'خدمات الاستقبال',
-        'دخول الأعضاء على مدار الساعة',
-        'مواقف سيارات',
-        'مساحات تخزين',
-        'عنوان أعمال',
-        'تنظيف يومي'
-      ]
-    },
-    membershipSection: {
-      eyebrow: 'العضويات',
-      headline: 'اختر الطريقة التي تناسبك للعمل.',
-      body: 'يمكنك العمل معنا ليوم واحد، أو اتخاذ مارس سبيس مقرًا لعملك، أو تخصيص مساحة لفريقك.',
+    membershipBand: {
+      eyebrow: "العضوية",
+      headline: "عضويةٌ مضبوطة على طريقتك في العمل.",
+      body: "أربع باقات، طابقٌ واحدٌ منتقى، دون ارتباطات طويلة. تشمل كل باقة رصيداً من ساعات القاعات، والمقهى، ودخولاً على مدار الساعة.",
+      cta: "قارن الباقات",
       plans: [
         {
-          id: 'daypass',
-          name: 'دخول يومي',
-          badge: 'ليوم واحد',
-          line: 'طريقة مرنة لتجربة مارس سبيس والاستفادة من مساحة عمل مهنية عند الحاجة.',
-          cta: 'احجز دخولك'
+          name: "بطاقة يوم",
+          arName: "بطاقة يوم",
+          line: "يومٌ كاملٌ على الطابق — يشمل المقهى والمساحات الهادئة."
         },
         {
-          id: 'coworking',
-          name: 'مساحة عمل مشتركة',
-          badge: 'للعمل بمرونة',
-          line: 'مساحة عمل مشتركة للمحترفين الذين يبحثون عن المرونة وبيئة عمل متكاملة.',
-          cta: 'استكشف العضويات'
+          name: "مكتب مرن",
+          arName: "مكتب مرن",
+          line: "أي مكتبٍ متاح، وقتما حضرت، مع رصيدٍ شهري من ساعات القاعات."
         },
         {
-          id: 'dedicated',
-          name: 'مكتب مخصص',
-          badge: 'مساحتك الخاصة',
-          line: 'مكتبك الخاص ضمن بيئة عمل مشتركة، جاهز لك في كل يوم.',
-          cta: 'استكشف المكاتب'
+          name: "مكتب مخصص",
+          arName: "مكتب مخصص",
+          line: "مكتبك الخاص، يبقى كما تركته، مع رصيدٍ أكبر وخزانة."
         },
         {
-          id: 'private_office',
-          name: 'مكتب خاص',
-          badge: 'لفريقك',
-          line: 'مساحة عمل خاصة ومجهزة بالكامل، مصممة لتناسب احتياجات فريقك.',
-          cta: 'استكشف المكاتب'
+          name: "مكتب خاص",
+          arName: "مكتب خاص",
+          line: "مكتبٌ قابلٌ للإغلاق لفريقك — مُجهّزٌ ومُسجَّلٌ باسمك."
+        }
+      ],
+      includedInEveryPlan: {
+        title: "مشمولٌ في كل باقة",
+        body: "رصيدٌ من ساعات القاعات، والمقهى، ودخولٌ على مدار الساعة، وعنوانٌ تجاري مُسجّل، واستلام البريد، وخصمٌ على المساحة المجتمعية. دون رسوم تجهيز، ودون مفاجآت."
+      },
+      reassuranceLine: "تشمل الأسعار ضريبة القيمة المضافة 15%. يمكنك تغيير باقتك أو إلغاؤها بإشعارٍ قبل [30] يوماً.",
+      ctas: {
+        tour: "احجز جولة",
+        talk: "تحدّث إلينا"
+      }
+    },
+    communityBand: {
+      headline: "استضفها على طابقنا.",
+      subHeadline: "مساحةٌ صُمّمت للّقاءات.",
+      body: "المساحة المجتمعية مُهيّأة للمحاضرات والورش والإطلاقات — حتى [N] ضيف، مع تكفّلنا بالتجهيز والصوتيات والاستضافة.",
+      subBody: "حتى [N] ضيف، وعدة تهيئات للجلوس، وتجهيزات صوتية ومرئية كاملة، وفريقٌ استضاف حتى [N] فعالية على هذا الطابق.",
+      whatWeHandle: {
+        title: "أنت تُحضر الضيوف، ونحن نتكفّل بالباقي.",
+        body: "التهيئة، والصوتيات، والجلوس، والضيافة، والاستقبال — كلها مُرتّبةٌ لك. أخبرنا بطبيعة الفعالية، وتكون المساحة جاهزةً قبل وصول أول ضيف."
+      },
+      cta: "تحقّق من المواعيد"
+    },
+    amenitiesStrip: {
+      headline: "التفاصيل، مُدارة سلفاً.",
+      items: [
+        "إنترنت ليفي فائق السرعة",
+        "طباعة ومسح ضوئي",
+        "مصلّى في الطابق",
+        "موقف سيارات [N]",
+        "دخول للأعضاء على مدار الساعة",
+        "عنوان تجاري مُسجّل",
+        "استلام البريد والطرود",
+        "تنظيف يومي",
+        "مطبخ مُجهّز بالكامل",
+        "استقبال واستضافة الزوار"
+      ]
+    },
+    location: {
+      headline: "موقعنا.",
+      address: "[المبنى، الشارع، الحي]، جدة، المملكة العربية السعودية",
+      nationalAddress: "[_____]",
+      openGoogleMaps: "افتح في خرائط جوجل",
+      openAppleMaps: "افتح في خرائط آبل",
+      hours: [
+        { label: "الأحد – الخميس", time: "[08:00 – 20:00]" },
+        { label: "الجمعة", time: "[مغلق / ___]" },
+        { label: "السبت", time: "[10:00 – 18:00]" },
+        { label: "الأعضاء", time: "24/7" }
+      ]
+    },
+    ecosystem: {
+      eyebrow: "جزء من مارس",
+      headline: "بدعمٍ من مارس فينتشرز.",
+      body: "مارس فينتشرز تبني الشركات من الفكرة حتى التخارج. مارس سبيس هي المكان الذي يجري فيه ذلك العمل — وهي مفتوحةٌ لكل من يبني شيئاً يستحق البناء.",
+      marquee: ["MARS Ventures", "MARS Lab", "MARS VC", "MARS Consultancy", "MARS Space"]
+    },
+    closingCta: {
+      headline: "تعال وشاهد الطابق.",
+      body: "احجز جولةً خاصة، أو احجز قاعةً وجرّبها بنفسك.",
+      bookTour: "احجز جولة",
+      bookRoom: "احجز قاعة"
+    },
+    theSpacePage: {
+      h1: "طابقٌ واحد، مُنسَّق بعناية وقصد.",
+      sub: "العمل المركّز، والعمل المجدول، وكل ما بينهما — لكلٍّ مكانه اللائق هنا، ولا يبعد أيٌّ منها سوى خطوات عن الآخر.",
+      whyOneFloorTitle: "أبقيناه طابقاً واحداً عن قصد.",
+      whyOneFloorBody: "طابقٌ واحد يعني أن كل شيء قريب، وكل شيء مُتسق، وكل شيء خاضع للمعيار نفسه. إدارة مساحةٍ منتقاة بإتقان أسهل حين تكون في مكان واحد — والتنقُّل خلال يومك أسلس، بلا عوائق."
+    },
+    zoneDetailPages: {
+      privateOffices: {
+        h1: "فريقك، خلف بابٍ يُغلق.",
+        body: "مكاتب مكتملة التجهيز لفرق من 2 إلى [N]، مُسجّلة باسم منشأتك، بشبكةٍ خاصة ودخولٍ على مدار الساعة. ادخل وابدأ — التجهيز جاهزٌ سلفاً."
+      },
+      coworkingDesks: {
+        h1: "مكتبٌ جاهزٌ حين تحضر.",
+        body: "مكاتب مرنة باليوم، ومكاتب مُخصّصة بالشهر — على طابقٍ يبقى هادئاً وغير مزدحم بحكم التصميم. الدخول نفسه، والمقهى نفسه، والمعيار نفسه."
+      },
+      meetingRooms: {
+        h1: "قاعاتٌ جاهزةٌ حين تكون جاهزاً.",
+        body: "[N] قاعة تتسع من 4 إلى [N]، كُلٌّ منها مُجهّزٌ كما ينبغي ومُعاد ترتيبه قبل وصولك. احجز بالساعة، عضواً كنت أو ضيفاً."
+      },
+      focusPods: {
+        h1: "خصوصية، لشخص واحد.",
+        body: "غرفٌ لشخص واحد للمكالمات والتركيز وأجزاء اليوم التي تتطلب هدوءاً. احجز واحدةً لساعة، أو خذ واحدةً الآن."
+      },
+      communitySpace: {
+        h1: "حيث يجتمع مجتمعك.",
+        body: "حتى [N] ضيف، وعدة تهيئات للجلوس، وتجهيزات صوتية ومرئية كاملة — يُعدّها ويستضيفها فريقٌ اعتاد ذلك."
+      },
+      cafeLounge: {
+        h1: "الجزء من الطابق الذي لا يُجدول.",
+        body: "قهوةٌ مختصة وجلساتٌ مريحة هادئة — ضمن كل باقة وكل حجز. مكانٌ للتفكير بين ما خطّطت له."
+      }
+    },
+    meetingRoomsPage: {
+      h1: "قاعات اجتماعات، مُجهّزة كما ينبغي.",
+      sub: "توفُّرٌ لحظي، وأسعارٌ واضحةٌ بالساعة، وتأكيدٌ فوري. دون الحاجة إلى عضوية.",
+      whatEveryRoomIncludesTitle: "ما تشمله كل قاعة",
+      whatEveryRoomIncludesBody: "شاشةٌ واتصالٌ مرئي، وطاولةٌ ملائمة، وإنترنتٌ سريع، وماء، وقاعةٌ أُعيد ترتيبها قبل دخولك. لا شيء تُهيّئه، ولا شيء تلاحقه.",
+      noAvailability: "لا تتوفّر قاعاتٌ من [10:00] إلى [12:00] يوم [الأحد]. أقرب الخيارات: [08:00–10:00] في [قاعة X]، أو [14:00–16:00] في [قاعة Y]."
+    },
+    sharedLabels: {
+      whereItSits: "موقعها في الطابق",
+      whatsIncluded: "ما تشمله",
+      gallery: "معرض الصور",
+      theDetails: "التفاصيل",
+      rates: "الأسعار",
+      book: "احجز",
+      enquire: "استفسر",
+      bookATour: "احجز جولة",
+      otherSpaces: "مساحات أخرى",
+      capacity: "السعة",
+      from: "ابتداءً من",
+      perHour: "للساعة",
+      vatIncluded: "شامل الضريبة"
+    },
+    aboutPage: {
+      h1: "طابقٌ يُدار كشركة، لا كردهة.",
+      intro: "مارس سبيس مساحة عملٍ منتقاة في جدة، بناها ويدعمها مارس فينتشرز. نحافظ على طابقٍ واحدٍ بمعيارٍ واحد — مساحاتٌ مختارة، وتفاصيل مدروسة، وفريقٌ يتعامل مع يوم عملك بالجدية نفسها التي تتعامل بها.",
+      vision: "أن نضع المعيار لما يمكن أن تكون عليه مساحة العمل — مدروسة، واحترافية، ومبنية فعلاً حول من يستخدمها.",
+      mission: "نُدير طابقاً واحداً منتقى بانضباط شركةٍ لبناء المشاريع — لتكون المساحة والتفاصيل والخدمة مُدارة، وتضع تركيزك حيث ينبغي: على العمل.",
+      values: [
+        {
+          name: "Discipline",
+          arName: "الانضباط",
+          line: "الانضباط — معيارٌ واحد، يُحافظ عليه كل يوم"
+        },
+        {
+          name: "Ownership",
+          arName: "المسؤولية",
+          line: "المسؤولية — نتعامل مع الطابق كأنه ملكنا"
+        },
+        {
+          name: "Care",
+          arName: "العناية",
+          line: "العناية — التفاصيل هي الأساس، لا أمرٌ ثانوي"
+        },
+        {
+          name: "Vision",
+          arName: "الرؤية",
+          line: "الرؤية — مساحةٌ مبنيةٌ لما هو قادم"
         }
       ]
     },
-    meetingRoomsSection: {
-      eyebrow: 'قاعات الاجتماعات',
-      headline: 'قاعة لاجتماعك المهم.',
-      body: 'استقبل عملاءك، واجمع فريقك، أو قدم ورشة عملك القادمة في قاعة مجهزة وجاهزة عند الحاجة.',
-      primaryCta: 'ابحث عن قاعة',
-      secondaryCta: 'عرض جميع القاعات'
-    },
-    roomDetail: {
-      title: 'قاعة اجتماعات',
-      capacity: 'تتسع حتى 8 أشخاص',
-      whatsIncluded: 'تشمل القاعة',
-      includedItems: [
-        'شاشة عرض',
-        'سبورة',
-        'إنترنت عالي السرعة',
-        'منافذ كهرباء',
-        'قهوة ومرطبات',
-        'تجهيزات جلوس مريحة'
-      ],
-      availability: 'التوفر',
-      availableTimes: 'الأوقات المتاحة',
-      chooseDatePrompt: 'اختر التاريخ والوقت لعرض المواعيد المتاحة.',
-      cta: 'احجز القاعة'
-    },
-    communitySection: {
-      eyebrow: 'المجتمع',
-      headline: 'اعمل بين أشخاص يصنعون أشياء جديدة.',
-      body: 'يجمع مارس سبيس رواد الأعمال، والمحترفين، والفرق، وأصحاب الأفكار في بيئة واحدة تساعد على التواصل وتبادل المعرفة.',
-      cta: 'اكتشف المجتمع'
-    },
-    eventsSection: {
-      eyebrow: 'الفعاليات',
-      headline: 'اجمع الناس في المكان المناسب.',
-      body: 'استضف ورشة عمل، أو لقاءً، أو فعالية خاصة أو مجتمعية في مساحة مصممة للتواصل والتفاعل.',
-      primaryCta: 'استكشف الفعاليات',
-      secondaryCta: 'استضف فعالية'
-    },
-    aboutSection: {
-      eyebrow: 'عن مارس سبيس',
-      headline: 'مساحة عمل تبدأ من الإنسان.',
-      body: 'بدأ مارس سبيس بفكرة بسيطة: تكون تجربة العمل أفضل عندما تكون المساحة من حولك مصممة لتخدم طريقة عملك.\n\nنجمع المكاتب الخاصة، ومساحات العمل المرنة، وقاعات الاجتماعات، والمساحات المجتمعية في مكان واحد، لنمنح الأفراد والأعمال حرية العمل بالطريقة التي تناسبهم.',
-      cta: 'قصتنا'
-    },
-    tourSection: {
-      headline: 'تعال واكتشف المكان بنفسك.',
-      body: 'الصور تخبرك كيف يبدو مارس سبيس. أما الزيارة فتجعلك تعيش التجربة.',
-      cta: 'احجز جولة'
-    },
-    contactSection: {
-      headline: 'تواصل معنا.',
-      body: 'لديك سؤال عن مساحة عمل أو عضوية أو حجز؟ فريقنا جاهز لمساعدتك.',
-      cta: 'تواصل معنا',
-      fields: {
-        name: 'الاسم الكامل',
-        company: 'الشركة',
-        email: 'البريد الإلكتروني',
-        phone: 'رقم الجوال',
-        helpTopic: 'كيف يمكننا مساعدتك؟',
-        message: 'الرسالة'
+    contactPage: {
+      h1: "تفضّل بزيارتنا.",
+      sub: "الطابق يتّضح أكثر عند زيارته. احجز جولة، أو تواصل معنا مباشرةً.",
+      form: {
+        name: "الاسم",
+        email: "البريد الإلكتروني",
+        phone: "رقم الجوال",
+        company: "المنشأة (اختياري)",
+        aboutQuestion: "ما موضوع تواصلك؟",
+        options: {
+          tour: "حجز جولة",
+          membership: "العضوية",
+          rooms: "قاعات الاجتماعات",
+          events: "الفعاليات",
+          other: "موضوع آخر"
+        },
+        message: "رسالتك",
+        send: "إرسال"
       },
-      sendBtn: 'إرسال الرسالة'
+      confirmation: "شكراً لك — وصلتنا رسالتك، وسنردّ خلال يوم عملٍ واحد.",
+      directDetails: "رقم الجوال [+966 __ ___ ____] · واتساب [____] · البريد [hello@mars.sa]"
     },
     footer: {
-      brand: 'مارس سبيس',
-      tagline: 'مساحة تليق بطريقة عملك.',
-      location: 'جدة، المملكة العربية السعودية',
-      col1Title: 'المساحات',
-      col1Items: [
-        { label: 'المكاتب الخاصة', href: '/spaces?category=private_office' },
-        { label: 'العمل المشترك', href: '/spaces?category=coworking' },
-        { label: 'المكاتب المخصصة', href: '/spaces?category=dedicated' },
-        { label: 'قاعات الاجتماعات', href: '/spaces?category=meeting_room' },
-        { label: 'مساحات الفعاليات', href: '/events' }
-      ],
-      col2Title: 'مارس سبيس',
-      col2Items: [
-        { label: 'عن مارس', href: '/about' },
-        { label: 'المجتمع', href: '/events' },
-        { label: 'الفعاليات', href: '/events' },
-        { label: 'الوظائف', href: '/contact' },
-        { label: 'تواصل معنا', href: '/contact' },
-        { label: 'المساعدة', href: '/contact' }
-      ],
-      col3Title: 'إجراءات',
-      col3Items: [
-        { label: 'احجز جولة', href: '/contact' },
-        { label: 'احجز قاعة', href: '/spaces?category=meeting_room' },
-        { label: 'العضويات', href: '/pricing' },
-        { label: 'الأسئلة الشائعة', href: '/faq' },
-        { label: 'الشروط والأحكام', href: '/contact' },
-        { label: 'الخصوصية', href: '/contact' }
-      ],
-      copyright: '© 2026 مارس سبيس. جميع الحقوق محفوظة.'
+      tagline: "مساحةٌ مدروسة لعملٍ جاد.",
+      legalLine: "© 2026 مارس سبيس، إحدى شركات مارس فينتشرز. س.ت [] · الرقم الضريبي []."
+    },
+    microcopy: {
+      bookRoom: "احجز قاعة",
+      reserve: "احجز",
+      checkAvailability: "تحقّق من التوفّر",
+      comparePlans: "قارن الباقات",
+      becomeMember: "انضمّ كعضو",
+      bookTour: "احجز جولة",
+      enquire: "استفسر",
+      talkToUs: "تحدّث إلينا",
+      seeFloor: "استعرض الطابق",
+      continue: "متابعة",
+      slotHeld: "قاعتك محجوزةٌ مؤقتاً لمدة [09:42]",
+      bookedMessage: "تم الحجز. [قاعة 3]، [الأحد] [10:00–12:00].",
+      noMembershipNeeded: "لا تحتاج إلى عضوية لحجز قاعة."
     }
   }
 };
