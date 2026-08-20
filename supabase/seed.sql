@@ -87,6 +87,12 @@ on conflict (branch_id, slug) do update set
   capacity = excluded.capacity, size_sqm = excluded.size_sqm,
   rate = excluded.rate, rate_unit = excluded.rate_unit,
   is_bookable = excluded.is_bookable, floor = excluded.floor,
+  -- status is reset too. Whether an office is OCCUPIED is expressed by
+  -- office_assignments, not by this column: resources.status describes the
+  -- room itself (available / maintenance / retired). Leaving it out of the
+  -- upsert let an old 'occupied' value survive on Office 17 and quietly drop
+  -- the floor to 24 offices and 82 desks.
+  status = excluded.status,
   teaser = excluded.teaser, teaser_ar = excluded.teaser_ar;
 
 -- ---------------------------------------------------------------------------
@@ -142,7 +148,7 @@ where b.slug = 'jeddah'
 on conflict (branch_id, slug) do update set
   name = excluded.name, name_ar = excluded.name_ar, category = excluded.category,
   capacity = excluded.capacity, size_sqm = excluded.size_sqm,
-  rate = excluded.rate, rate_unit = excluded.rate_unit,
+  rate = excluded.rate, rate_unit = excluded.rate_unit, status = excluded.status,
   is_bookable = excluded.is_bookable, teaser = excluded.teaser,
   teaser_ar = excluded.teaser_ar, includes = excluded.includes,
   includes_ar = excluded.includes_ar, amenities = excluded.amenities,
@@ -270,3 +276,27 @@ on conflict (slug) do update set
   question_ar = excluded.question_ar, answer = excluded.answer,
   answer_ar = excluded.answer_ar, is_featured = excluded.is_featured,
   sort_order = excluded.sort_order;
+
+-- ---------------------------------------------------------------------------
+-- Self-check: the brochure states 25 private offices and 83 desks. If a future
+-- edit drops or mistypes a row, fail here rather than shipping a floor plan
+-- that quietly disagrees with the company profile.
+-- ---------------------------------------------------------------------------
+do $seedcheck$
+declare
+  v_offices integer;
+  v_desks   integer;
+begin
+  select count(*), coalesce(sum(capacity), 0)
+    into v_offices, v_desks
+    from public.resources
+   where category = 'private_office' and status <> 'retired';
+
+  if v_offices <> 25 or v_desks <> 83 then
+    raise exception
+      'Seed check failed: expected 25 private offices and 83 desks, found % and %',
+      v_offices, v_desks;
+  end if;
+  raise notice 'seed check: 25 private offices, 83 desks';
+end
+$seedcheck$;
