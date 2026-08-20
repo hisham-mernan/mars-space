@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function EventsLog() {
   const { language, t, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   
   // Seeded events list matching DB structure
   const [events, setEvents] = useState([
@@ -15,13 +16,6 @@ export default function EventsLog() {
 
   const [activeFilter, setActiveFilter] = useState('all');
   const [ticketModalEvent, setTicketModalEvent] = useState(null);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   if (!mounted || !user) return null;
 

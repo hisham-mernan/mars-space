@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function ErpContractsCLM() {
   const { language, theme, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   const [contracts, setContracts] = useState([]);
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -35,11 +36,6 @@ export default function ErpContractsCLM() {
   const [amendReason, setAmendReason] = useState('Expanded office layout and added 2 extra parking passes');
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-
     async function loadData() {
       try {
         const [cRes, tRes] = await Promise.all([

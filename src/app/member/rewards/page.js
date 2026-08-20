@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function RewardsProgram() {
   const { language, t, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   
   // Simulated loyalty balance
   const [points, setPoints] = useState(1250);
@@ -23,13 +24,6 @@ export default function RewardsProgram() {
     { name: 'Stripe Payments', discount: 'Fee-free processing on first 15,000 SAR', category: 'Finance', code: 'STRIPE-KSA-SPACE' },
     { name: 'HubSpot', discount: '90% discount on first year subscriptions', category: 'Software Tools', code: 'HUBSPOT-STARTUP-90' }
   ];
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   if (!mounted || !user) return null;
 

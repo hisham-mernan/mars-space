@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function SupportDesk() {
   const { language, t, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   
   // Tickets log state
   const [tickets, setTickets] = useState([
@@ -26,13 +27,6 @@ export default function SupportDesk() {
     { sender: 'reception', text: 'Hello Ahmed! Nour here. How can I help you today?', time: '09:12 AM' }
   ]);
   const [typedMessage, setTypedMessage] = useState('');
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   if (!mounted || !user) return null;
 

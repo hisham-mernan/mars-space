@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function MemberDirectory() {
   const { language, t, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   
   // Seeded Member profiles matching specs
   const [members, setMembers] = useState([
@@ -17,13 +18,6 @@ export default function MemberDirectory() {
 
   const [search, setSearch] = useState('');
   const [selectedIndustry, setSelectedIndustry] = useState('all');
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   if (!mounted || !user) return null;
 

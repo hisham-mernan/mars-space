@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function BiAiCopilot() {
   const { language, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
 
   // Chat conversation logs state
   const [messages, setMessages] = useState([
@@ -13,13 +14,6 @@ export default function BiAiCopilot() {
   ]);
   const [inputVal, setInputVal] = useState('');
   const [loading, setLoading] = useState(false);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   if (!mounted || !user) return null;
 

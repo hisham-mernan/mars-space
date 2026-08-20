@@ -3,29 +3,23 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function MemberLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const { language, toggleLanguage, theme, toggleTheme, t, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user, loading, signOut } = useSession();
 
-  // Check auth on load
+  // Belt-and-braces redirect. src/proxy.js already bounces signed-out visitors
+  // before this renders; this catches a session that expires mid-visit.
   useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (!storedUser) {
-      router.push('/auth/login');
-    } else {
-      setUser(JSON.parse(storedUser));
+    if (!loading && !user) {
+      router.push('/auth/login?redirect=' + encodeURIComponent(pathname));
     }
-    setLoading(false);
-  }, [router]);
+  }, [loading, user, router, pathname]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('mars-user');
-    router.push('/auth/login');
-  };
+  const handleLogout = () => signOut();
 
   if (!mounted || loading) {
     return (

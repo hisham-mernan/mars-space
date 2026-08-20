@@ -2,6 +2,7 @@
 
 import React, { useState } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { createClient } from '@/lib/supabase/client';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
@@ -20,33 +21,50 @@ export default function Login() {
     setLoading(true);
     setErrorMsg('');
 
-    try {
-      const res = await fetch('/api/v1/auth/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password })
-      });
-      const data = await res.json();
+    const supabase = createClient();
 
-      if (data.success && data.data?.user) {
-        const user = data.data.user;
-        localStorage.setItem('mars-user', JSON.stringify(user));
-        
-        const params = new URLSearchParams(window.location.search);
-        const redirectTarget = params.get('redirect');
-        
-        if (redirectTarget) {
-          window.location.href = redirectTarget;
-        } else if (user.role === 'ERP_ADMIN' || user.role === 'STAFF') {
-          window.location.href = '/erp';
-        } else {
-          window.location.href = '/member';
-        }
-      } else {
-        setErrorMsg(data.error?.message || (language === 'ar' ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة' : 'Invalid email or password'));
+    try {
+      const { data, error } = await supabase.auth.signInWithPassword({
+        email: email.trim(),
+        password
+      });
+
+      if (error || !data?.user) {
+        // Deliberately generic: distinguishing "no such account" from "wrong
+        // password" tells an attacker which emails are members here.
+        setErrorMsg(
+          language === 'ar'
+            ? 'البريد الإلكتروني أو كلمة المرور غير صحيحة'
+            : 'Invalid email or password'
+        );
+        return;
       }
-    } catch (err) {
-      setErrorMsg('Network error, please try again.');
+
+      // Staff land in the ERP, members in the portal.
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('platform_role')
+        .eq('id', data.user.id)
+        .single();
+
+      const params = new URLSearchParams(window.location.search);
+      const redirectTarget = params.get('redirect');
+      const isStaff = ['staff', 'erp_admin'].includes(profile?.platform_role);
+
+      // Only same-origin paths, so ?redirect= cannot bounce a signed-in member
+      // to another site.
+      const safeRedirect =
+        redirectTarget && redirectTarget.startsWith('/') && !redirectTarget.startsWith('//')
+          ? redirectTarget
+          : null;
+
+      window.location.href = safeRedirect || (isStaff ? '/erp' : '/member');
+    } catch {
+      setErrorMsg(
+        language === 'ar'
+          ? 'تعذر الاتصال، حاول مرة أخرى'
+          : 'Network error, please try again.'
+      );
     } finally {
       setLoading(false);
     }
@@ -184,51 +202,25 @@ export default function Login() {
               </button>
             </form>
 
-            {/* Social logins */}
-            <div style={{ textAlign: 'center', margin: '24px 0 16px', fontSize: '13px', color: 'var(--text-muted-dark)' }}>
-              {language === 'ar' ? 'أو سجل الدخول بواسطة' : 'OR CONTINUE WITH'}
-            </div>
-
-            <div style={{ display: 'grid', gap: '10px' }}>
-              <button style={{
-                background: 'none',
-                border: '1px solid var(--line-dark)',
-                borderRadius: '999px',
-                padding: '12px',
-                color: '#FFFFFF',
-                fontSize: '13px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px'
-              }}>
-                Google
-              </button>
-              <button style={{
-                background: 'none',
-                border: '1px solid var(--line-dark)',
-                borderRadius: '999px',
-                padding: '12px',
-                color: '#FFFFFF',
-                fontSize: '13px',
-                fontWeight: 600,
-                cursor: 'pointer',
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                gap: '10px'
-              }}>
-                Apple
-              </button>
-            </div>
-
-            {/* Register link */}
-            <div style={{ textAlign: 'center', marginTop: '32px', fontSize: '14px', color: 'var(--text-muted-dark)' }}>
-              {language === 'ar' ? 'ليس لديك حساب؟ ' : "Don't have an account? "}
-              <a href="/auth/register" style={{ color: 'var(--copper-400)', fontWeight: 600 }}>
-                {language === 'ar' ? 'إنشاء حساب جديد' : 'Register now'}
+            {/*
+              Social sign-in and self-registration are deliberately absent.
+              Membership is invite-only: Mars Space provisions the account when
+              the contract is signed, and the member sets their own password
+              from the invite email. Anyone without an account is a prospect,
+              not a blocked user, so send them to the enquiry form.
+            */}
+            <div style={{
+              textAlign: 'center',
+              marginTop: '32px',
+              paddingTop: '24px',
+              borderTop: '1px solid var(--line-dark)',
+              fontSize: '14px',
+              color: 'var(--text-muted-dark)',
+              lineHeight: 1.7
+            }}>
+              {language === 'ar' ? 'العضوية بدعوة من مارس سبيس. ' : 'Membership is by invitation from Mars Space. '}
+              <a href="/contact?type=membership" style={{ color: 'var(--copper-400)', fontWeight: 600 }}>
+                {language === 'ar' ? 'تواصل معنا للانضمام' : 'Get in touch to join'}
               </a>
             </div>
 

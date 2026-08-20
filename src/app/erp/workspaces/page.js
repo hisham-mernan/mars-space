@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function WorkspaceManagement() {
   const { language, theme, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   const [spaces, setSpaces] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -24,13 +25,6 @@ export default function WorkspaceManagement() {
   const [floor, setFloor] = useState('Floor 1');
   const [capacity, setCapacity] = useState(4);
   const [status, setStatus] = useState('Available');
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   useEffect(() => {
     async function loadSpaces() {

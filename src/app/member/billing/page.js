@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function BillingSettings() {
   const { language, t, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   const [cards, setCards] = useState([
     { id: 'card-1', brand: 'VISA', last4: '4827', expiry: '06/2029', isDefault: true }
   ]);
@@ -25,13 +26,6 @@ export default function BillingSettings() {
   const [address, setAddress] = useState('Olaya Tower, Floor 14');
   const [city, setCity] = useState('Riyadh');
   const [postalCode, setPostalCode] = useState('12211');
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   if (!mounted || !user) return null;
 

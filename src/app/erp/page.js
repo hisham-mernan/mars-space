@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function ErpOperations() {
   const { language, theme, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   const [cockpitData, setCockpitData] = useState(null);
   const [loading, setLoading] = useState(true);
 
@@ -17,11 +18,6 @@ export default function ErpOperations() {
   ]);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-
     async function loadCockpit() {
       try {
         const res = await fetch('/api/v1/erp/cockpit');

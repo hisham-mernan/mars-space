@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function ReportsDashboard() {
   const { language, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
 
   // Scheduled reports config states
   const [reportType, setReportType] = useState('Profit & Loss');
@@ -14,13 +15,6 @@ export default function ReportsDashboard() {
   const [schedules, setSchedules] = useState([
     { id: 'sch-1', type: 'Profit & Loss', freq: 'Monthly', email: 'cfo@mars.space' }
   ]);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   if (!mounted || !user) return null;
 

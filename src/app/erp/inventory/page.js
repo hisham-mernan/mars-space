@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function ErpInventory() {
   const { language, theme, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
 
   // Seeded inventory list
   const [inventory, setInventory] = useState([
@@ -34,10 +35,6 @@ export default function ErpInventory() {
   const [activeCategory, setActiveCategory] = useState('all');
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
     // Load local inventory if saved
     const savedInv = localStorage.getItem('mars-erp-inventory');
     if (savedInv) {

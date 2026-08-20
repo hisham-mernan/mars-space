@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function ErpInvoices() {
   const { language, theme, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   const [invoices, setInvoices] = useState([
     {
       id: "inv-1",
@@ -45,10 +46,6 @@ export default function ErpInvoices() {
   ]);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
     // Load local invoices if saved
     const savedInvs = localStorage.getItem('mars-erp-invoices');
     if (savedInvs) {

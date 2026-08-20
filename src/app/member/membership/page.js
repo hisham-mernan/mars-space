@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function MembershipManagement() {
   const { language, t, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   const [dbData, setDbData] = useState(null);
   const [autoRenew, setAutoRenew] = useState(true);
   const [comparisonModal, setComparisonModal] = useState(false);
@@ -15,13 +16,6 @@ export default function MembershipManagement() {
     { id: 'phone', name: 'Dedicated VOIP Number', price: 90, period: 'Month', active: false },
     { id: 'mail', name: 'Premium Mail Forwarding', price: 120, period: 'Month', active: false }
   ]);
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   if (!mounted || !user) return null;
 

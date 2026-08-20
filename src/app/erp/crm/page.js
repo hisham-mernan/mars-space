@@ -2,10 +2,11 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function CrmKanban() {
   const { language, theme, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   const [pipeline, setPipeline] = useState({
     'Leads': [],
     'Contacted': [],
@@ -20,11 +21,6 @@ export default function CrmKanban() {
   const [quotationConverted, setQuotationConverted] = useState(false);
 
   useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-
     async function loadPipeline() {
       try {
         const res = await fetch('/api/v1/erp/crm');

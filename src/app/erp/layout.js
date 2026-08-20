@@ -3,13 +3,13 @@
 import React, { useState, useEffect } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function ErpLayout({ children }) {
   const router = useRouter();
   const pathname = usePathname();
   const { language, toggleLanguage, theme, toggleTheme, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const { user, loading, isStaff, signOut } = useSession();
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const [currentBranch, setCurrentBranch] = useState('jeddah');
 
@@ -18,15 +18,19 @@ export default function ErpLayout({ children }) {
   const [searchResults, setSearchResults] = useState([]);
   const [showSearchDropdown, setShowSearchDropdown] = useState(false);
 
+  // The ERP is staff-only. proxy.js redirects signed-out visitors, but it
+  // deliberately does not read platform_role (that would add a database
+  // round-trip to every request), so the role check lives here. It is a UI
+  // gate only: the data itself is protected by RLS and by
+  // requireStaffClient() on the /api/v1/erp routes.
   useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (!storedUser) {
-      router.push('/auth/login');
-    } else {
-      setUser(JSON.parse(storedUser));
+    if (loading) return;
+    if (!user) {
+      router.push('/auth/login?redirect=/erp');
+    } else if (!isStaff) {
+      router.push('/member');
     }
-    setLoading(false);
-  }, [router]);
+  }, [loading, user, isStaff, router]);
 
   // Spotlight search lookup
   useEffect(() => {
@@ -51,10 +55,7 @@ export default function ErpLayout({ children }) {
     return () => clearTimeout(timer);
   }, [searchQuery]);
 
-  const handleLogout = () => {
-    localStorage.removeItem('mars-user');
-    router.push('/auth/login');
-  };
+  const handleLogout = () => signOut();
 
   if (!mounted || loading) {
     return (

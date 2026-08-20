@@ -1,5 +1,6 @@
 import localFont from "next/font/local";
 import { LanguageProvider } from "../context/LanguageContext";
+import { SessionProvider } from '@/context/SessionContext';
 import "./globals.css";
 
 const thmanyahSans = localFont({
@@ -57,7 +58,9 @@ export default function RootLayout({ children }) {
       </head>
       <body className={`${thmanyahSans.className} h-full`}>
         <LanguageProvider>
-          {children}
+          <SessionProvider>
+            {children}
+          </SessionProvider>
         </LanguageProvider>
       </body>
     </html>

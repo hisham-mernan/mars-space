@@ -2,10 +2,12 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
+import { createClient } from '@/lib/supabase/client';
 
 export default function AccountProfile() {
   const { language, t, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user, activeCompany } = useSession();
 
   // Security states
   const [enable2FA, setEnable2FA] = useState(false);
@@ -23,14 +25,8 @@ export default function AccountProfile() {
   // Account deletion Danger Zone
   const [deleteStep, setDeleteStep] = useState(0); // 0: None, 1: Confirm Warning, 2: Enter Password, 3: Success Queue
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [deleteError, setDeleteError] = useState('');
   const [deleteReason, setDeleteReason] = useState('Found another coworking space');
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   if (!mounted || !user) return null;
 
@@ -60,16 +56,54 @@ export default function AccountProfile() {
     setDevices(prev => prev.filter(d => d.id !== id));
   };
 
-  const handleDeleteAccount = (e) => {
+  /**
+   * Account closure is a request, not a self-service action.
+   *
+   * The previous version accepted the literal string 'password' and then just
+   * cleared localStorage — it deleted nothing and verified nobody. Real
+   * deletion cannot be self-service here anyway: accounts are tied to a signed
+   * contract, invoices and an audit trail that Mars Space is required to keep,
+   * and removing the last company admin would strand their colleagues. So this
+   * re-authenticates the member properly and files a ticket for staff to action.
+   */
+  const handleDeleteAccount = async (e) => {
     e.preventDefault();
-    if (confirmPassword === 'password') {
-      setDeleteStep(3);
-      // Wait 3 seconds and log out
-      setTimeout(() => {
-        localStorage.removeItem('mars-user');
-        window.location.href = '/';
-      }, 3000);
+    setDeleteError('');
+
+    const supabase = createClient();
+
+    // Re-authenticate: proves the person at the keyboard is the account holder.
+    const { error: authError } = await supabase.auth.signInWithPassword({
+      email: user.email,
+      password: confirmPassword,
+    });
+
+    if (authError) {
+      setDeleteError(
+        language === 'ar' ? 'كلمة المرور غير صحيحة' : 'Incorrect password'
+      );
+      return;
     }
+
+    const { error: ticketError } = await supabase.from('support_tickets').insert({
+      profile_id: user.id,
+      company_id: activeCompany?.id ?? null,
+      category: 'membership',
+      priority: 'high',
+      subject: 'Account closure request',
+      description: `Member ${user.email} requested account closure from the member portal.`,
+    });
+
+    if (ticketError) {
+      setDeleteError(
+        language === 'ar'
+          ? 'تعذر إرسال الطلب، حاول مرة أخرى'
+          : 'Could not submit the request. Please try again.'
+      );
+      return;
+    }
+
+    setDeleteStep(3);
   };
 
   return (
@@ -284,19 +318,30 @@ export default function AccountProfile() {
               <form onSubmit={handleDeleteAccount} style={{ display: 'grid', gap: '12px' }}>
                 <label style={{ display: 'grid', gap: '6px', fontSize: '13px' }}>
                   Enter Password to Confirm
-                  <input type="password" required placeholder="Type 'password' to test" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} style={{ background: 'var(--mars-void)', border: '1px solid var(--line-dark)', borderRadius: '4px', padding: '10px', color: '#FFFFFF', outline: 'none' }} />
+                  <input type="password" required placeholder={language === 'ar' ? 'أدخل كلمة المرور للتأكيد' : 'Enter your password to confirm'} value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} style={{ background: 'var(--mars-void)', border: '1px solid var(--line-dark)', borderRadius: '4px', padding: '10px', color: '#FFFFFF', outline: 'none' }} />
                 </label>
+                {deleteError && (
+                  <div role="alert" style={{ color: '#FF4A4A', fontSize: '13px', fontWeight: 500 }}>
+                    {deleteError}
+                  </div>
+                )}
                 <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
-                  <button type="button" onClick={() => setDeleteStep(0)} style={{ background: 'none', border: 'none', color: 'var(--text-muted-dark)', cursor: 'pointer' }}>Cancel</button>
-                  <button type="submit" style={{ background: '#FF4A4A', border: 'none', padding: '8px 16px', borderRadius: '999px', color: '#FFFFFF', fontWeight: 600, cursor: 'pointer' }}>Delete Permanently</button>
+                  <button type="button" onClick={() => { setDeleteStep(0); setDeleteError(''); }} style={{ background: 'none', border: 'none', color: 'var(--text-muted-dark)', cursor: 'pointer' }}>
+                    {language === 'ar' ? 'إلغاء' : 'Cancel'}
+                  </button>
+                  <button type="submit" style={{ background: '#FF4A4A', border: 'none', padding: '8px 16px', borderRadius: '999px', color: '#FFFFFF', fontWeight: 600, cursor: 'pointer' }}>
+                    {language === 'ar' ? 'إرسال طلب الإغلاق' : 'Submit closure request'}
+                  </button>
                 </div>
               </form>
             )}
 
-            {/* Step 3 Success Scheduled */}
+            {/* Step 3: request filed. Staff action it — see handleDeleteAccount. */}
             {deleteStep === 3 && (
-              <div style={{ color: 'var(--copper-400)', fontSize: '14px', fontWeight: 600 }}>
-                ✓ Account scheduled for deletion. Logging out...
+              <div style={{ color: 'var(--copper-400)', fontSize: '14px', fontWeight: 600, lineHeight: 1.7 }}>
+                {language === 'ar'
+                  ? '✓ تم استلام طلب إغلاق الحساب. سيتواصل معك فريق مارس سبيس لإتمام الإجراءات المتعلقة بالعقد والفواتير.'
+                  : '✓ Closure request received. The Mars Space team will be in touch to settle the contract and any outstanding invoices.'}
               </div>
             )}
           </div>

@@ -2,6 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '../context/LanguageContext';
+import { useSession } from '../context/SessionContext';
 import BookingModal from './BookingModal';
 import MegaMenu from './MegaMenu';
 
@@ -11,7 +12,7 @@ export default function Header() {
   const [bookingOpen, setBookingOpen] = useState(false);
   const [megaOpen, setMegaOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -19,13 +20,7 @@ export default function Header() {
     };
     window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll();
-    
-    // Auth Check
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-    
+
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
