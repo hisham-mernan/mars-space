@@ -496,8 +496,19 @@ select pg_temp.check_no_execute('public.next_invoice_number()',
   'anon cannot burn the invoice number sequence');
 select pg_temp.check_no_execute('public.next_booking_reference()',
   'anon cannot burn the booking reference sequence');
-select pg_temp.check_no_execute('public.current_company_ids()',
-  'anon cannot enumerate company memberships');
+-- current_company_ids() is deliberately callable by anon (migration 019). The
+-- public homepage reads community_schedule, whose privacy filter calls it, and
+-- a revoked EXECUTE made the whole view raise 42501 for signed-out visitors —
+-- which took the homepage down rather than making anything safer.
+--
+-- It takes NO arguments and resolves only auth.uid(), so it can never report
+-- anybody else's memberships; for anon that is the empty set. Assert the
+-- behaviour rather than the grant, which is the stronger claim. Contrast
+-- has_company_perm() just below: that one takes a company id, so it IS a
+-- probing oracle and stays revoked.
+select pg_temp.check_eq(
+  (select count(*)::int from public.current_company_ids()), 0,
+  'anon may call current_company_ids() but gets no memberships');
 select pg_temp.check_no_execute(
   'public.has_company_perm(''aaaaaaaa-0000-0000-0000-000000000001''::uuid, ''view_invoices'')',
   'anon cannot probe company permissions');

@@ -120,7 +120,7 @@ psql -d "$TESTDB" -At -c "
       || ' faqs='||(select count(*) from faqs);"
 
 fail=0
-for suite in rls_policies pricing_credits community_requests credits_contract; do
+for suite in rls_policies pricing_credits community_requests credits_contract view_audiences; do
   echo "==> ${suite}"
   if psql -d "$TESTDB" -v ON_ERROR_STOP=1 -f "$REPO/supabase/tests/${suite}.test.sql" 2>&1 \
        | grep -E "pass:|FAIL|ERROR" | sed 's/^psql:[^ ]* //;s/^NOTICE:  /    /'; then :; fi
