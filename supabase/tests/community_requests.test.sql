@@ -94,7 +94,7 @@ select pg_temp.check_eq(
      (select id from public.resources where slug = 'community-space'),
      tstzrange(now() + interval '30 days', now() + interval '30 days 4 hours'),
      'aaaa1111-0000-4000-8000-000000000001',
-     'private', 'Alpha Co board offsite', 40, 'Theatre seating')),
+     'private', 'Alpha Co board offsite', 18, 'Theatre seating')),
   'requested', 'a request is created, not a booking');
 
 select pg_temp.check_eq(
@@ -143,6 +143,20 @@ select pg_temp.check_eq(
     where company_id = 'aaaa1111-0000-4000-8000-000000000001' limit 1),
   4600.00::numeric, 'the invoice matches the accepted quote');
 
+-- Capacity is enforced: the Community Space holds 20.
+do $blk$
+begin
+  perform public.request_community_space(
+    (select id from public.resources where slug = 'community-space'),
+    tstzrange(now() + interval '60 days', now() + interval '60 days 3 hours'),
+    'aaaa1111-0000-4000-8000-000000000001',
+    'public', 'Too many guests', 25, null);
+  raise exception 'FAIL: a request above capacity should have been refused';
+exception when check_violation then
+  raise notice 'pass: a request for more guests than the space holds is refused';
+end
+$blk$;
+
 -- ===========================================================================
 -- 3. PRIVACY — the headline promise
 --
@@ -175,7 +189,7 @@ select pg_temp.check_eq(
      (select id from public.resources where slug = 'community-space'),
      tstzrange(now() + interval '45 days', now() + interval '45 days 3 hours'),
      'aaaa1111-0000-4000-8000-000000000001',
-     'public', 'Alpha Co open studio', 30, null)),
+     'public', 'Alpha Co open studio', 12, null)),
   'public', 'a public request is created');
 
 select pg_temp.as_member('b2222222-2222-4222-8222-222222222222');
@@ -211,7 +225,7 @@ begin
     (select id from public.resources where slug = 'community-space'),
     tstzrange(now() + interval '30 days 1 hour', now() + interval '30 days 3 hours'),
     'bbbb2222-0000-4000-8000-000000000002',
-    'public', 'Beta Co launch', 20, null);
+    'public', 'Beta Co launch', 15, null);
   raise exception 'FAIL: an overlapping request should have been refused';
 exception when exclusion_violation then
   raise notice 'pass: a date under discussion cannot be requested by another company';
@@ -235,7 +249,7 @@ select pg_temp.check_eq(
      (select id from public.resources where slug = 'community-space'),
      tstzrange(now() + interval '45 days', now() + interval '45 days 2 hours'),
      'bbbb2222-0000-4000-8000-000000000002',
-     'public', 'Beta Co launch', 20, null)),
+     'public', 'Beta Co launch', 15, null)),
   'requested', 'Beta can now take the released date');
 
 rollback;

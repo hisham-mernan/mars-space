@@ -12,8 +12,8 @@
 -- the catalogue rather than duplicating it.
 --
 -- STILL PLACEHOLDER, pending Mars Space:
---   * Community Space capacity (the brochure gives a 50 m stage and a 50 sqm
---     event kitchen, but no seated capacity) and its hourly/day rate.
+--   * Community Space rate. Capacity is 20 (given by Mars Space); the rate
+--     stays 0 because every event is quoted individually.
 --   * Private office rents. The price list says "upon request", so rate is 0
 --     and the app shows "On request" rather than inventing a number.
 --   * Meeting-room credit allowances per plan. The published price list sells
@@ -124,10 +124,11 @@ select b.id, v.* from public.branches b, (values
    array['Wi-Fi', 'Coffee lounge'],
    array['إنترنت', 'المقهى']),
 
-  -- Capacity and rate are placeholders: the brochure gives the stage and
-  -- kitchen but no seated capacity or price.
+  -- Capacity set to 20 by Mars Space. The rate stays 0 because the Community
+  -- Space is quoted per event rather than sold at a list price - see the
+  -- request flow in migration 018.
   ('community-space', 'Community Space (Majlis)', 'المساحة المجتمعية (المجلس)',
-   'community_hall', 'Second floor', 60, null, 0.00, 'day', 'available', true,
+   'community_hall', 'Second floor', 20, null, 0.00, 'day', 'available', true,
    'Sessions, seminars and workshops. 50 m entertainment stage and a 50 sqm plug-in event kitchen.',
    'جلسات وندوات وورش عمل. مسرح ترفيهي ٥٠ متراً ومطبخ فعاليات ٥٠ متراً مربعاً.',
    array['50 m entertainment stage', '50 sqm plug-in event kitchen', 'Hospitality from our restaurants'],
