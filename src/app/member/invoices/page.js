@@ -2,20 +2,14 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
 
 export default function InvoicesLog() {
   const { language, theme, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user } = useSession();
   const [invoices, setInvoices] = useState([]);
   const [selectedInvoice, setSelectedInvoice] = useState(null);
   const [activeFilter, setActiveFilter] = useState('all');
-
-  useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
 
   useEffect(() => {
     async function loadInvoices() {

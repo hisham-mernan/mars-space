@@ -2,43 +2,36 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
+import { createClient } from '@/lib/supabase/client';
+import { listBookings } from '@/lib/supabase/queries';
 import BookingModal from '@/components/BookingModal';
 
 export default function MemberDashboard() {
   const { language, theme, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user, activeCompany } = useSession();
   const [bookings, setBookings] = useState([]);
-  const [invoices, setInvoices] = useState([]);
   const [bookingOpen, setBookingOpen] = useState(false);
 
+  // Was fetching /api/v1/public/bookings AND /api/v1/erp/invoices — the ERP
+  // endpoint — then filtering by email in the browser, which meant every
+  // member downloaded every other member's bookings. RLS now scopes the rows
+  // server-side, so the client receives only what it is entitled to. The
+  // invoices fetch is dropped: it was never rendered on this page.
   useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      const parsed = JSON.parse(storedUser);
-      setUser(parsed);
+    if (!activeCompany?.id) return;
+    let cancelled = false;
 
-      async function loadMemberData() {
-        try {
-          const [bRes, iRes] = await Promise.all([
-            fetch('/api/v1/public/bookings'),
-            fetch('/api/v1/erp/invoices')
-          ]);
-          const bJson = await bRes.json();
-          const iJson = await iRes.json();
+    listBookings(createClient(), { companyId: activeCompany.id, scope: 'upcoming', limit: 10 })
+      .then((rows) => { if (!cancelled) setBookings(rows); })
+      .catch((err) => console.error('Error loading bookings:', err));
 
-          if (bJson.success) setBookings(bJson.data);
-          if (iJson.success) setInvoices(iJson.data);
-        } catch (err) {
-          console.error('Error loading member data:', err);
-        }
-      }
-      loadMemberData();
-    }
-  }, []);
+    return () => { cancelled = true; };
+  }, [activeCompany?.id]);
 
   if (!mounted || !user) return null;
 
-  const userBookings = bookings.filter(b => b.customerEmail === user.email || !b.customerEmail);
+  const userBookings = bookings;
 
   return (
     <div style={{ display: 'grid', gap: '28px' }} className="animate-fade-in">
@@ -130,9 +123,9 @@ export default function MemberDashboard() {
                     border: '1px solid var(--glass-border)'
                   }}>
                     <div style={{ textAlign: 'start' }}>
-                      <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-primary)' }}>{b.resourceName || 'Meeting Suite A'}</div>
+                      <div style={{ fontWeight: 600, fontSize: '14px', color: 'var(--text-primary)' }}>{b.resource_name || 'Meeting Suite A'}</div>
                       <div style={{ fontSize: '12px', color: 'var(--text-secondary)', marginTop: '4px' }}>
-                        {b.date} · {b.startTime} - {b.endTime}
+                        {b.booking_date} · {b.start_time} - {b.end_time}
                       </div>
                     </div>
                     <span className="status-pill status-pill-emerald">

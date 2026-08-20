@@ -2,80 +2,39 @@
 
 import React, { useState, useEffect } from 'react';
 import { useLanguage } from '@/context/LanguageContext';
+import { useSession } from '@/context/SessionContext';
+import { createClient } from '@/lib/supabase/client';
+import { listBookings, cancelBooking } from '@/lib/supabase/queries';
 
 export default function MyBookings() {
   const { language, t, mounted } = useLanguage();
-  const [user, setUser] = useState(null);
+  const { user, activeCompany, loading: loadingSession } = useSession();
   const [bookings, setBookings] = useState([]);
-  const [loading, setLoading] = useState(true);
+  const [loaded, setLoaded] = useState(false);
   const [expandedId, setExpandedId] = useState(null);
   const [activeTab, setActiveTab] = useState('upcoming');
   const [cancelModalId, setCancelModalId] = useState(null);
   const [cancelReason, setCancelReason] = useState('Conflict in schedule');
+  const [cancelError, setCancelError] = useState('');
 
+  // Was fetching /api/v1/public/homepage and, if it returned anything at all,
+  // rendering two hardcoded bookings. Reads the member's real bookings now;
+  // RLS restricts the rows to their own company.
   useEffect(() => {
-    const storedUser = localStorage.getItem('mars-user');
-    if (storedUser) {
-      setUser(JSON.parse(storedUser));
-    }
-  }, []);
+    if (!activeCompany?.id) return;
+    let cancelled = false;
 
-  useEffect(() => {
-    if (!user) return;
+    listBookings(createClient(), { companyId: activeCompany.id })
+      .then((rows) => { if (!cancelled) setBookings(rows); })
+      .catch((err) => console.error('Failed to load bookings:', err))
+      .finally(() => { if (!cancelled) setLoaded(true); });
 
-    async function loadBookings() {
-      try {
-        const res = await fetch('/api/v1/public/homepage');
-        const json = await res.json();
-        if (json.success) {
-          // Find all bookings matching this customerId
-          // Seeded booking has customerId "usr-01"
-          const matches = json.data.branches ? getMockBookings(user.id) : [];
-          setBookings(matches);
-        }
-      } catch (err) {
-        console.error("Failed to load bookings:", err);
-      } finally {
-        setLoading(false);
-      }
-    }
+    return () => { cancelled = true; };
+  }, [activeCompany?.id]);
 
-    loadBookings();
-  }, [user]);
-
-  // Mock bookings matching the database structures
-  const getMockBookings = (userId) => {
-    return [
-      {
-        id: "bk-1001",
-        reference: "MS-BK-1001",
-        resourceId: "room-alpha",
-        resourceName: "Meeting Room Alpha",
-        date: "2026-07-20",
-        startTime: "14:00",
-        endTime: "16:00",
-        duration: 2,
-        status: "Confirmed",
-        paymentStatus: "Paid",
-        totalAmount: 160,
-        image: "/assets/photo-community-cinema.jpg"
-      },
-      {
-        id: "bk-1002",
-        reference: "MS-BK-1002",
-        resourceId: "office-a101",
-        resourceName: "Private Office A-101",
-        date: "2026-07-22",
-        startTime: "09:00",
-        endTime: "17:00",
-        duration: 8,
-        status: "Confirmed",
-        paymentStatus: "Paid",
-        totalAmount: 480,
-        image: "/assets/photo-glass-offices.jpg"
-      }
-    ];
-  };
+  // Derived rather than a second piece of state, so there is no setState in
+  // the effect body just to clear a spinner.
+  const loading = loadingSession || (Boolean(activeCompany?.id) && !loaded);
 
   if (!mounted || !user) return null;
 
@@ -83,28 +42,36 @@ export default function MyBookings() {
     setCancelModalId(id);
   };
 
-  const confirmCancellation = () => {
-    setBookings((prev) =>
-      prev.map((b) => {
-        if (b.id === cancelModalId) {
-          return { ...b, status: 'Cancelled', paymentStatus: 'Refunded' };
-        }
-        return b;
-      })
-    );
-    setCancelModalId(null);
+  const confirmCancellation = async () => {
+    setCancelError('');
+    try {
+      // cancel_booking() frees the slot, returns any credit hours consumed and
+      // voids the related invoice — all in one transaction.
+      await cancelBooking(createClient(), cancelModalId, cancelReason);
+      setBookings((prev) =>
+        prev.map((b) => (b.id === cancelModalId ? { ...b, status: 'cancelled' } : b))
+      );
+      setCancelModalId(null);
+    } catch (err) {
+      setCancelError(
+        language === 'ar'
+          ? 'تعذر إلغاء الحجز. حاول مرة أخرى.'
+          : 'Could not cancel this booking. Please try again.'
+      );
+      console.error('Cancellation failed:', err);
+    }
   };
 
   // Filter bookings based on activeTab
   const filteredBookings = bookings.filter((b) => {
     if (activeTab === 'upcoming') {
-      return (b.status === 'Confirmed' || b.status === 'Pending Payment') && new Date(b.date) >= new Date();
+      return ['confirmed', 'checked_in'].includes(b.status) && new Date(b.booking_date) >= new Date();
     }
     if (activeTab === 'history') {
-      return b.status === 'Completed' || new Date(b.date) < new Date();
+      return b.status === 'completed' || new Date(b.booking_date) < new Date();
     }
     if (activeTab === 'cancelled') {
-      return b.status === 'Cancelled';
+      return b.status === 'cancelled';
     }
     return true;
   });
@@ -186,7 +153,7 @@ export default function MyBookings() {
         <div style={{ display: 'grid', gap: '20px' }}>
           {filteredBookings.map((b) => {
             const isExpanded = expandedId === b.id;
-            const statusColor = b.status === 'Confirmed' ? 'var(--copper-400)' : 'var(--text-muted-dark)';
+            const statusColor = b.status === 'confirmed' ? 'var(--copper-400)' : 'var(--text-muted-dark)';
             const borderVal = isExpanded ? '1px solid var(--copper-400)' : '1px solid var(--line-dark)';
 
             return (
@@ -215,10 +182,10 @@ export default function MyBookings() {
                 >
                   <div style={{ display: 'flex', alignItems: 'center', gap: '16px' }}>
                     <div style={{ width: '80px', height: '60px', borderRadius: '4px', overflow: 'hidden' }}>
-                      <img src={b.image} alt={b.resourceName} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
+                      <img src={b.resource_image} alt={b.resource_name} style={{ width: '100%', height: '100%', objectFit: 'cover' }} />
                     </div>
                     <div>
-                      <h4 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#FFFFFF' }}>{b.resourceName}</h4>
+                      <h4 style={{ margin: 0, fontSize: '18px', fontWeight: 600, color: '#FFFFFF' }}>{b.resource_name}</h4>
                       <div style={{ fontSize: '13px', color: 'var(--text-muted-dark)', marginTop: '4px' }}>
                         Reference: {b.reference}
                       </div>
@@ -227,8 +194,8 @@ export default function MyBookings() {
 
                   <div style={{ display: 'flex', alignItems: 'center', gap: '32px' }}>
                     <div style={{ fontSize: '14px', color: 'var(--text-muted-dark)' }}>
-                      <div>{b.date}</div>
-                      <div style={{ marginTop: '2px', fontWeight: 500, color: '#FFFFFF' }}>{b.startTime} - {b.endTime}</div>
+                      <div>{b.booking_date}</div>
+                      <div style={{ marginTop: '2px', fontWeight: 500, color: '#FFFFFF' }}>{b.start_time} - {b.end_time}</div>
                     </div>
                     <span style={{
                       fontSize: '11px',
@@ -262,21 +229,27 @@ export default function MyBookings() {
                       <div style={{ display: 'grid', gap: '8px', fontSize: '14px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                           <span style={{ color: 'var(--text-muted-dark)' }}>{language === 'ar' ? 'حالة السداد' : 'Payment Status'}</span>
-                          <span style={{ fontWeight: 600 }}>{b.paymentStatus}</span>
+                          <span style={{ fontWeight: 600 }}>
+                            {Number(b.credit_hours_used) > 0
+                              ? (language === 'ar'
+                                  ? `${b.credit_hours_used} ساعة من الرصيد`
+                                  : `${b.credit_hours_used} hrs from credits`)
+                              : (language === 'ar' ? 'يُفوتر' : 'Invoiced')}
+                          </span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                           <span style={{ color: 'var(--text-muted-dark)' }}>{language === 'ar' ? 'المبلغ الإجمالي' : 'Total Amount'}</span>
-                          <span style={{ fontWeight: 600 }}>{b.totalAmount} SAR</span>
+                          <span style={{ fontWeight: 600 }}>{b.total} SAR</span>
                         </div>
                         <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                           <span style={{ color: 'var(--text-muted-dark)' }}>{language === 'ar' ? 'ساعات الحجز' : 'Total Hours'}</span>
-                          <span style={{ fontWeight: 600 }}>{b.duration} hours</span>
+                          <span style={{ fontWeight: 600 }}>{b.hours} hours</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Middle check-in QR Code badge mockup */}
-                    {b.status === 'Confirmed' && (
+                    {b.status === 'confirmed' && (
                       <div style={{
                         background: 'var(--mars-void)',
                         borderRadius: '6px',
@@ -296,7 +269,7 @@ export default function MyBookings() {
 
                     {/* Right column: Action list */}
                     <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', justifyContent: 'center' }}>
-                      {b.status === 'Confirmed' && (
+                      {b.status === 'confirmed' && (
                         <button
                           onClick={() => handleCancelClick(b.id)}
                           style={{
@@ -389,9 +362,15 @@ export default function MyBookings() {
               </select>
             </label>
 
+            {cancelError && (
+              <div role="alert" style={{ color: '#FF4A4A', fontSize: '13px', fontWeight: 500, marginTop: '16px' }}>
+                {cancelError}
+              </div>
+            )}
+
             <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '12px', marginTop: '24px' }}>
               <button
-                onClick={() => setCancelModalId(null)}
+                onClick={() => { setCancelModalId(null); setCancelError(''); }}
                 style={{
                   background: 'none',
                   border: 'none',
