@@ -1,183 +1,185 @@
 -- Mars Space — reference data
 --
--- Migrated from the legacy src/data/db.json. This file holds only real
--- catalogue data (branches, rooms, add-ons, plans, FAQs) and is safe to run
--- against production. Demo companies, members and bookings live in
--- seed_demo.sql instead.
+-- The real second floor of Kings Road Tower, transcribed from the Mars Space
+-- company profile (13-page brochure). It replaces the invented inventory that
+-- came from the old src/data/db.json ("Ventures Room", a 10-desk "Office 17").
 --
--- Idempotent: every insert is ON CONFLICT DO UPDATE on a natural key, so
--- re-running it refreshes the catalogue rather than duplicating it.
+-- The transcription was checked against the brochure's own stated totals:
+-- 25 private offices, 324.1 sqm, 83 desks. Both reconcile exactly, which is
+-- what gives confidence the areas and desk counts below are right.
 --
--- PLAN NAMING: db.json, translations.js and the member portal disagreed
--- ("Open Desk" / "Hot Desk" / "Business Plan (Premium)"). db.json is taken as
--- canonical here because it is the only source carrying prices. The fifth
--- tier hardcoded in member/membership/page.js at SAR 2,400 is dropped - it
--- exists nowhere else.
+-- Idempotent: every insert upserts on a natural key, so re-running refreshes
+-- the catalogue rather than duplicating it.
+--
+-- STILL PLACEHOLDER, pending Mars Space:
+--   * Community Space capacity (the brochure gives a 50 m stage and a 50 sqm
+--     event kitchen, but no seated capacity) and its hourly/day rate.
+--   * Private office rents. The price list says "upon request", so rate is 0
+--     and the app shows "On request" rather than inventing a number.
+--   * Meeting-room credit allowances per plan. The published price list sells
+--     rooms as a separate paid product and mentions no included hours, so
+--     every plan grants 0 until told otherwise.
 
 -- ---------------------------------------------------------------------------
--- Branches
+-- Branch
 -- ---------------------------------------------------------------------------
 insert into public.branches (slug, code, name, name_ar, address, address_ar,
                              latitude, longitude, status)
 values
-  ('jeddah', 'JED-01', 'Jeddah Branch', 'فرع جدة',
-   'Jeddah Tower, King Abdulaziz Rd, Jeddah', 'برج جدة، طريق الملك عبدالعزيز، جدة',
-   21.543300, 39.172800, 'active'),
-  ('riyadh', 'RUH-01', 'Riyadh Branch', 'فرع الرياض',
-   'Olaya Towers, Olaya District, Riyadh', 'أبراج العليا، حي العليا، الرياض',
-   24.713600, 46.675300, 'coming_soon')
+  ('jeddah', 'JED-01', 'Mars Space — Kings Road Tower', 'مارس سبيس — برج كينجز رود',
+   'Second floor, Kings Road Tower, Jeddah, KSA',
+   'الطابق الثاني، برج كينجز رود، جدة، المملكة العربية السعودية',
+   21.543300, 39.172800, 'active')
 on conflict (slug) do update set
   code = excluded.code, name = excluded.name, name_ar = excluded.name_ar,
   address = excluded.address, address_ar = excluded.address_ar,
-  latitude = excluded.latitude, longitude = excluded.longitude,
   status = excluded.status;
 
+-- Riyadh is not open. Kept so historical references resolve.
+insert into public.branches (slug, code, name, name_ar, status)
+values ('riyadh', 'RUH-01', 'Riyadh Branch', 'فرع الرياض', 'coming_soon')
+on conflict (slug) do update set status = excluded.status;
+
 -- ---------------------------------------------------------------------------
--- Resources
+-- Private offices — 25 suites, 324.1 sqm, 83 desks
+--
+-- Offices 01-08 and 23-25 are team offices (4-8 desks); 09-22 are executive
+-- suites (1-3 desks). Rent is "upon request", so rate stays 0 and is_bookable
+-- is false: an office is assigned by contract, never self-booked.
 -- ---------------------------------------------------------------------------
-insert into public.resources (
-  branch_id, slug, name, name_ar, category, floor, location, location_ar,
-  capacity, size_sqm, rate, rate_unit, status, is_bookable,
-  teaser, teaser_ar, features, features_ar, amenities, amenities_ar, hero_image
-)
-select b.id, v.* from public.branches b, (values
-  ('ventures', 'Ventures Room', 'قاعة فينتشرز', 'meeting_room', 'Floor 1',
-   null::text, null::text, 14, 35.0, 220.00, 'hour', 'available', true,
-   'Boardroom table, 75" screen with video conferencing, whiteboard wall.',
-   'طاولة اجتماعات رئيسية، شاشة 75 بوصة مع اتصال مرئي، جدار سبورة بيضاء.',
-   array['Boardroom table seating 14', '75" screen with video conferencing',
-         'Conference microphone and audio', 'Whiteboard wall with markers',
-         'Stationery, adapters and clickers'],
-   array['طاولة اجتماعات تتسع لـ 14 شخصاً', 'شاشة 75 بوصة مع نظام اتصالات مرئية',
-         'مكبرات صوت وميكروفون للمؤتمرات', 'جدار سبورة بيضاء مع أقلام',
-         'أدوات مكتبية ومحولات وصلات'],
-   array['75" Screen', 'Video Conference', 'Whiteboard Wall', 'Audio System', 'Adapters'],
-   array['شاشة 75 بوصة', 'اتصال مرئي', 'جدار سبورة بيضاء', 'نظام صوتي', 'محولات'],
-   '/assets/photo-glass-offices.jpg'),
-
-  ('lab', 'Lab Room', 'قاعة اللاب', 'meeting_room', 'Floor 1',
-   null, null, 8, 24.0, 160.00, 'hour', 'available', true,
-   'Workshop tables, projector and 65" screen, full-wall whiteboard.',
-   'طاولات ورش عمل، جهاز عرض وشاشة 65 بوصة، سبورة بيضاء كاملة.',
-   array['Movable workshop tables for 8', '65" screen and projector',
-         'Full-wall whiteboard', 'Workshop kit: sticky notes, markers, timer',
-         'Standing rail for pin-ups'],
-   array['طاولات مرنة لورش العمل تتسع لـ 8 أشخاص', 'شاشة 65 بوصة وجهاز عرض ضوئي',
-         'سبورة بيضاء على كامل الجدار', 'حقيبة ورش العمل: أوراق ملاحظات، أقلام، مؤقت',
-         'حامل تعليق للملاحظات والرسومات'],
-   array['65" Screen', 'Projector', 'Full Whiteboard', 'Workshop Kit', 'Flexible Tables'],
-   array['شاشة 65 بوصة', 'جهاز عرض', 'سبورة جدارية', 'حقيبة ورش عمل', 'طاولات مرنة'],
-   '/assets/photo-coworking.jpg'),
-
-  ('vc', 'VC Room', 'قاعة VC', 'meeting_room', 'Floor 1',
-   null, null, 6, 18.0, 120.00, 'hour', 'available', true,
-   'Round table for six, 55" screen, natural light, the quiet room.',
-   'طاولة دائرية لستة أشخاص، شاشة 55 بوصة، إضاءة طبيعية، غرفة هادئة.',
-   array['Round table seating 6', '55" screen with wireless casting',
-         'Natural light, blackout blind', 'Acoustic panelling',
-         'Office essentials tray'],
-   array['طاولة دائرية تتسع لـ 6 أشخاص', 'شاشة 55 بوصة مع بث لاسلكي',
-         'إضاءة طبيعية مع ستائر عتمة', 'عزل صوتي متقدم', 'صينية المستلزمات المكتبية'],
-   array['55" Screen', 'Wireless Casting', 'Natural Light', 'Acoustic Panels', 'Round Table'],
-   array['شاشة 55 بوصة', 'بث لاسلكي', 'إضاءة طبيعية', 'عزل صوتي', 'طاولة دائرية'],
-   '/assets/photo-vip-lounge.jpg'),
-
-  ('community-hall', 'Community Hall', 'القاعة المجتمعية', 'community_hall', 'Floor 1',
-   null, null, 80, 120.0, 400.00, 'day', 'available', true,
-   'Screen wall, configurable seating and PA for talks, workshops and launches.',
-   'جدار شاشة عرض، مقاعد قابلة للتهيئة ونظام صوتي للمحاضرات والإطلاقات.',
-   array['Screen wall and projector', 'Theatre, classroom or circle seating',
-         'PA system and two microphones', 'Stage lighting presets',
-         'Pantry access for catering'],
-   array['جدار شاشة عرض وجهاز عرض ضوئي', 'ترتيب مقاعد مسرحي أو تدريبي أو دائري',
-         'نظام صوتي مكبر وميكروفونين', 'إعدادات إضاءة المسرح',
-         'إمكانية الوصول للمطبخ للضيافة'],
-   array['Screen Wall', 'Projector', 'PA Sound System', 'Microphones', 'Stage Lighting'],
-   array['جدار شاشات', 'بروجكتر', 'نظام صوتي', 'ميكروفونات', 'إضاءة مسرح'],
-   '/assets/photo-community-cinema.jpg'),
-
-  -- Private offices: assigned by contract, never self-booked.
-  ('office-04', 'Office 04', 'مكتب ٠٤', 'private_office', 'Floor 1',
-   'North perimeter, window line', 'الواجهة الشمالية، المطلة على الشارع',
-   4, 22.0, 6500.00, 'month', 'available', false,
-   null, null,
-   array['4 height-adjustable desks with chairs', 'Lockable glass front, frosted band',
-         'Storage wall and personal lockers', 'Own network segment and printing'],
-   array['٤ مكاتب قابلة لتعديل الارتفاع مع كراسي', 'واجهة زجاجية قابلة للقفل مع شريط خصوصية',
-         'جدار تخزين وخزائن شخصية', 'شبكة مستقلة وطباعة خاصة'],
-   array['4 Adjustable Desks', 'Private Glass Office', 'Storage Lockers', '24/7 Access'],
-   array['٤ مكاتب قابلة للتعديل', 'مكتب زجاجي خاص', 'خزائن تخزين', 'دخول ٢٤/٧'],
-   '/assets/photo-glass-offices.jpg'),
-
-  ('office-11', 'Office 11', 'مكتب ١١', 'private_office', 'Floor 1',
-   'East corner, daylight on two sides', 'الركن الشرقي، إضاءة من جانبين',
-   6, 32.0, 9000.00, 'month', 'available', false,
-   null, null,
-   array['6 desks with monitor arms', 'Corner glazing, double aspect',
-         'In-office meeting nook for 3', 'Own network segment and storage'],
-   array['٦ مكاتب مزودة بحوامل شاشات', 'زوايا زجاجية مزدوجة الإضاءة',
-         'ركن اجتماعات مصغر داخل المكتب لـ ٣ أشخاص', 'شبكة مستقلة وتخزين خاص'],
-   array['6 Workstations', 'Double Aspect Daylight', 'Mini Meeting Nook', '24/7 Access'],
-   array['٦ محطات عمل', 'إضاءة من جانبين', 'ركن اجتماعات مصغر', 'دخول ٢٤/٧'],
-   '/assets/photo-vip-lounge.jpg'),
-
-  ('office-17', 'Office 17', 'مكتب ١٧', 'private_office', 'Floor 1',
-   'South perimeter suite', 'جناح الواجهة الجنوبية',
-   10, 48.0, 14000.00, 'month', 'occupied', false,
-   null, null,
-   array['10 desks in two banks', 'Separable manager cabin',
-         'Dedicated storage room', 'Own network, AC zone control'],
-   array['١٠ مكاتب مقسمة على مجموعتين', 'مكتب مدير مستقل قابل للفصل',
-         'غرفة تخزين مخصصة', 'شبكة خاصة وتحكم مستقل بالتكييف'],
-   array['10 Workstations', 'Manager Cabin', 'Private Storage Room', 'Dedicated AC'],
-   array['١٠ محطات عمل', 'مكتب مدير خاص', 'غرفة تخزين خاصة', 'تكييف مستقل'],
-   '/assets/photo-coworking.jpg')
-) as v(slug, name, name_ar, category, floor, location, location_ar,
-       capacity, size_sqm, rate, rate_unit, status, is_bookable,
-       teaser, teaser_ar, features, features_ar, amenities, amenities_ar, hero_image)
+insert into public.resources (branch_id, slug, name, name_ar, category, floor,
+                              capacity, size_sqm, rate, rate_unit, status,
+                              is_bookable, teaser, teaser_ar)
+select b.id, v.slug, v.name, v.name_ar, 'private_office', 'Second floor',
+       v.desks, v.sqm, 0, 'month', 'available', false, v.config, v.config_ar
+from public.branches b, (values
+  -- Team offices
+  ('office-01', 'Office 01', 'مكتب ٠١', 8, 21.5, '8 desks',              '٨ مكاتب'),
+  ('office-02', 'Office 02', 'مكتب ٠٢', 6, 17.8, '6 desks',              '٦ مكاتب'),
+  ('office-03', 'Office 03', 'مكتب ٠٣', 6, 15.0, '6 desks',              '٦ مكاتب'),
+  ('office-04', 'Office 04', 'مكتب ٠٤', 6, 17.2, '6 desks',              '٦ مكاتب'),
+  ('office-05', 'Office 05', 'مكتب ٠٥', 6, 14.0, '6 desks',              '٦ مكاتب'),
+  ('office-06', 'Office 06', 'مكتب ٠٦', 6, 15.2, '6 desks',              '٦ مكاتب'),
+  ('office-07', 'Office 07', 'مكتب ٠٧', 6, 14.4, '6 desks',              '٦ مكاتب'),
+  ('office-08', 'Office 08', 'مكتب ٠٨', 6, 17.0, '6 desks',              '٦ مكاتب'),
+  ('office-23', 'Office 23', 'مكتب ٢٣', 5, 15.0, '5 desks',              '٥ مكاتب'),
+  ('office-24', 'Office 24', 'مكتب ٢٤', 4, 11.0, '4 desks',              '٤ مكاتب'),
+  ('office-25', 'Office 25', 'مكتب ٢٥', 4, 11.0, '4 desks',              '٤ مكاتب'),
+  -- Executive suites
+  ('office-09', 'Office 09', 'مكتب ٠٩', 1,  8.3, '1 executive desk',     'مكتب تنفيذي'),
+  ('office-10', 'Office 10', 'مكتب ١٠', 1,  8.3, '1 executive desk',     'مكتب تنفيذي'),
+  ('office-11', 'Office 11', 'مكتب ١١', 1,  8.3, '1 executive desk',     'مكتب تنفيذي'),
+  ('office-12', 'Office 12', 'مكتب ١٢', 1, 10.4, '1 executive desk',     'مكتب تنفيذي'),
+  ('office-13', 'Office 13', 'مكتب ١٣', 3, 12.6, '1 executive + 2 desks', 'مكتب تنفيذي + مكتبان'),
+  ('office-14', 'Office 14', 'مكتب ١٤', 3, 13.2, '1 executive + 2 desks', 'مكتب تنفيذي + مكتبان'),
+  ('office-15', 'Office 15', 'مكتب ١٥', 3, 13.5, '1 executive + 2 desks', 'مكتب تنفيذي + مكتبان'),
+  ('office-16', 'Office 16', 'مكتب ١٦', 1, 18.5, '1 executive + 4 pax lounge', 'مكتب تنفيذي + جلسة لأربعة'),
+  ('office-17', 'Office 17', 'مكتب ١٧', 1, 11.4, '1 executive desk',     'مكتب تنفيذي'),
+  ('office-18', 'Office 18', 'مكتب ١٨', 1, 12.9, '1 executive desk',     'مكتب تنفيذي'),
+  ('office-19', 'Office 19', 'مكتب ١٩', 1, 13.0, '1 executive desk',     'مكتب تنفيذي'),
+  ('office-20', 'Office 20', 'مكتب ٢٠', 1,  8.2, '1 executive desk',     'مكتب تنفيذي'),
+  ('office-21', 'Office 21', 'مكتب ٢١', 1,  8.2, '1 executive desk',     'مكتب تنفيذي'),
+  ('office-22', 'Office 22', 'مكتب ٢٢', 1,  8.2, '1 executive desk',     'مكتب تنفيذي')
+) as v(slug, name, name_ar, desks, sqm, config, config_ar)
 where b.slug = 'jeddah'
 on conflict (branch_id, slug) do update set
   name = excluded.name, name_ar = excluded.name_ar, category = excluded.category,
   capacity = excluded.capacity, size_sqm = excluded.size_sqm,
-  rate = excluded.rate, rate_unit = excluded.rate_unit, status = excluded.status,
-  is_bookable = excluded.is_bookable, teaser = excluded.teaser,
-  teaser_ar = excluded.teaser_ar, features = excluded.features,
-  features_ar = excluded.features_ar, amenities = excluded.amenities,
-  amenities_ar = excluded.amenities_ar, hero_image = excluded.hero_image;
-
--- Galleries. Only five interior photos exist and db.json reused them across
--- all seven resources; that is carried over rather than invented around.
-insert into public.resource_photos (resource_id, url, sort_order)
-select r.id, p.url, p.sort_order
-from public.resources r
-join (values
-  ('ventures', '/assets/photo-glass-offices.jpg', 0),
-  ('ventures', '/assets/photo-vip-lounge.jpg', 1),
-  ('ventures', '/assets/photo-coworking.jpg', 2),
-  ('lab', '/assets/photo-coworking.jpg', 0),
-  ('lab', '/assets/photo-glass-offices.jpg', 1),
-  ('lab', '/assets/photo-lounge-velvet.jpg', 2),
-  ('vc', '/assets/photo-vip-lounge.jpg', 0),
-  ('vc', '/assets/photo-lounge-velvet.jpg', 1),
-  ('vc', '/assets/photo-glass-offices.jpg', 2),
-  ('community-hall', '/assets/photo-community-cinema.jpg', 0),
-  ('community-hall', '/assets/photo-lounge-velvet.jpg', 1),
-  ('community-hall', '/assets/photo-coworking.jpg', 2),
-  ('office-04', '/assets/photo-glass-offices.jpg', 0),
-  ('office-04', '/assets/photo-coworking.jpg', 1),
-  ('office-11', '/assets/photo-vip-lounge.jpg', 0),
-  ('office-11', '/assets/photo-glass-offices.jpg', 1),
-  ('office-17', '/assets/photo-coworking.jpg', 0),
-  ('office-17', '/assets/photo-vip-lounge.jpg', 1)
-) as p(slug, url, sort_order) on p.slug = r.slug
-where not exists (
-  select 1 from public.resource_photos rp
-  where rp.resource_id = r.id and rp.url = p.url
-);
+  rate = excluded.rate, rate_unit = excluded.rate_unit,
+  is_bookable = excluded.is_bookable, floor = excluded.floor,
+  teaser = excluded.teaser, teaser_ar = excluded.teaser_ar;
 
 -- ---------------------------------------------------------------------------
--- Availability rules: one default row per bookable resource.
--- Spec 8.4 wants these configurable; staff refine them per weekday in Studio.
+-- Meeting rooms, co-working and the community space
+-- ---------------------------------------------------------------------------
+insert into public.resources (branch_id, slug, name, name_ar, category, floor,
+                              capacity, size_sqm, rate, rate_unit, status,
+                              is_bookable, teaser, teaser_ar,
+                              includes, includes_ar, amenities, amenities_ar)
+select b.id, v.* from public.branches b, (values
+  ('meeting-room-small', 'Small Meeting Room', 'قاعة اجتماعات صغيرة',
+   'meeting_room', 'Second floor', 6, null::numeric, 250.00, 'hour', 'available', true,
+   'From 250 SAR per hour, with 4- and 8-hour rates.',
+   'من ٢٥٠ ريال للساعة، مع أسعار ٤ و٨ ساعات.',
+   array['Screen', 'Wi-Fi', 'Water and coffee', 'Room setup'],
+   array['شاشة عرض', 'إنترنت', 'مياه وقهوة', 'تجهيز القاعة'],
+   array['Screen', 'Wi-Fi', 'Water and coffee', 'Room setup'],
+   array['شاشة عرض', 'إنترنت', 'مياه وقهوة', 'تجهيز القاعة']),
+
+  ('meeting-room-large', 'Large Meeting Room', 'قاعة اجتماعات كبيرة',
+   'meeting_room', 'Second floor', 12, null, 350.00, 'hour', 'available', true,
+   'From 350 SAR per hour, with 4- and 8-hour rates.',
+   'من ٣٥٠ ريال للساعة، مع أسعار ٤ و٨ ساعات.',
+   array['Screen', 'Wi-Fi', 'Water and coffee', 'Room setup'],
+   array['شاشة عرض', 'إنترنت', 'مياه وقهوة', 'تجهيز القاعة'],
+   array['Screen', 'Wi-Fi', 'Water and coffee', 'Room setup'],
+   array['شاشة عرض', 'إنترنت', 'مياه وقهوة', 'تجهيز القاعة']),
+
+  ('co-working', 'Co-working', 'مساحة العمل المشتركة',
+   'hot_desk', 'Second floor', 16, 62.3, 100.00, 'day', 'available', true,
+   'Shared workspace and coffee lounge. 62.3 sqm for 16.',
+   'مساحة عمل مشتركة ومقهى. ٦٢٫٣ متر مربع لـ ١٦ شخصاً.',
+   array['Wi-Fi', 'Coffee lounge', 'Shared workspace'],
+   array['إنترنت', 'المقهى', 'مساحة عمل مشتركة'],
+   array['Wi-Fi', 'Coffee lounge'],
+   array['إنترنت', 'المقهى']),
+
+  -- Capacity and rate are placeholders: the brochure gives the stage and
+  -- kitchen but no seated capacity or price.
+  ('community-space', 'Community Space (Majlis)', 'المساحة المجتمعية (المجلس)',
+   'community_hall', 'Second floor', 60, null, 0.00, 'day', 'available', true,
+   'Sessions, seminars and workshops. 50 m entertainment stage and a 50 sqm plug-in event kitchen.',
+   'جلسات وندوات وورش عمل. مسرح ترفيهي ٥٠ متراً ومطبخ فعاليات ٥٠ متراً مربعاً.',
+   array['50 m entertainment stage', '50 sqm plug-in event kitchen', 'Hospitality from our restaurants'],
+   array['مسرح ترفيهي ٥٠ متراً', 'مطبخ فعاليات ٥٠ متراً مربعاً', 'ضيافة من مطاعمنا'],
+   array['Stage', 'Event kitchen', 'Hospitality'],
+   array['مسرح', 'مطبخ فعاليات', 'ضيافة'])
+) as v(slug, name, name_ar, category, floor, capacity, size_sqm, rate, rate_unit,
+       status, is_bookable, teaser, teaser_ar, includes, includes_ar,
+       amenities, amenities_ar)
+where b.slug = 'jeddah'
+on conflict (branch_id, slug) do update set
+  name = excluded.name, name_ar = excluded.name_ar, category = excluded.category,
+  capacity = excluded.capacity, size_sqm = excluded.size_sqm,
+  rate = excluded.rate, rate_unit = excluded.rate_unit,
+  is_bookable = excluded.is_bookable, teaser = excluded.teaser,
+  teaser_ar = excluded.teaser_ar, includes = excluded.includes,
+  includes_ar = excluded.includes_ar, amenities = excluded.amenities,
+  amenities_ar = excluded.amenities_ar;
+
+-- Anything left over from the invented db.json inventory is retired rather
+-- than deleted: bookings reference these rows and the history must survive.
+update public.resources
+   set status = 'retired', is_bookable = false
+ where slug in ('ventures', 'lab', 'vc', 'community-hall');
+
+-- ---------------------------------------------------------------------------
+-- Rate tiers — the published price list
+-- ---------------------------------------------------------------------------
+insert into public.rate_tiers (resource_id, hours, price, label, label_ar)
+select r.id, v.hours, v.price, v.label, v.label_ar
+from public.resources r, (values
+  (1, 250.00,  'Hourly',        'بالساعة'),
+  (4, 750.00,  '4-hour rate',   'أربع ساعات'),
+  (8, 1400.00, '8-hour rate',   'ثماني ساعات')
+) as v(hours, price, label, label_ar)
+where r.slug = 'meeting-room-small'
+on conflict (resource_id, hours) do update set
+  price = excluded.price, label = excluded.label, label_ar = excluded.label_ar;
+
+insert into public.rate_tiers (resource_id, hours, price, label, label_ar)
+select r.id, v.hours, v.price, v.label, v.label_ar
+from public.resources r, (values
+  (1, 350.00,  'Hourly',        'بالساعة'),
+  (4, 1300.00, '4-hour rate',   'أربع ساعات'),
+  (8, 2400.00, '8-hour rate',   'ثماني ساعات')
+) as v(hours, price, label, label_ar)
+where r.slug = 'meeting-room-large'
+on conflict (resource_id, hours) do update set
+  price = excluded.price, label = excluded.label, label_ar = excluded.label_ar;
+
+-- ---------------------------------------------------------------------------
+-- Availability rules for the bookable resources
 -- ---------------------------------------------------------------------------
 insert into public.availability_rules (resource_id, weekday, opens_at, closes_at,
                                        slot_minutes, min_duration_minutes,
@@ -187,55 +189,36 @@ select r.id, null, '07:00', '23:00', 30,
        480,
        case when r.category = 'community_hall' then 60 else 15 end
 from public.resources r
-where r.is_bookable
-  and not exists (
-    select 1 from public.availability_rules a
-    where a.resource_id = r.id and a.weekday is null
-  );
+where r.is_bookable and r.status = 'available'
+  and not exists (select 1 from public.availability_rules a
+                   where a.resource_id = r.id and a.weekday is null);
 
 -- ---------------------------------------------------------------------------
--- Add-ons
--- ---------------------------------------------------------------------------
-insert into public.addons (slug, name, name_ar, price, is_quote_only)
-values
-  ('tea',      'Tea Service',                       'خدمة الشاي والضيافة',        40.00, false),
-  ('coffee',   'Specialty Coffee Service',          'خدمة القهوة المختصة',        60.00, false),
-  ('drinks',   'Water & Soft Drinks',               'مياه ومشروبات باردة',        35.00, false),
-  ('kit',      'Extra Whiteboard & Workshop Kit',   'حقيبة ورش عمل وسبورة إضافية', 30.00, false),
-  ('catering', 'Catering Service',                  'خدمة تقديم الطعام والوجبات',  0.00,  true)
-on conflict (slug) do update set
-  name = excluded.name, name_ar = excluded.name_ar,
-  price = excluded.price, is_quote_only = excluded.is_quote_only;
-
--- ---------------------------------------------------------------------------
--- Membership plans
+-- Membership plans — the published price list
 -- ---------------------------------------------------------------------------
 insert into public.membership_plans (slug, name, name_ar, rate, billing_cycle,
-                                     included_credit_hours, features, features_ar, sort_order)
+                                     included_credit_hours, features, features_ar,
+                                     sort_order)
 values
-  ('daypass', 'Day Pass', 'تصريح يومي', 150.00, 'daily', 1,
-   array['Single day access to hot desks', 'High-speed Wi-Fi & Cafe access',
-         '1 hr meeting room credit'],
-   array['دخول يومي للمكاتب المشتركة', 'إنترنت فائق السرعة ودخول المقهى',
-         'ساعة واحدة رصيد قاعات اجتماعات'], 1),
+  ('day-pass', 'Day Pass', 'تصريح يومي', 100.00, 'daily', 0,
+   array['One day in the shared workspace', 'Coffee lounge access', 'Wi-Fi'],
+   array['يوم واحد في مساحة العمل المشتركة', 'دخول المقهى', 'إنترنت'], 1),
 
-  ('opendesk', 'Open Desk', 'مكتب مشترك', 1200.00, 'monthly', 5,
-   array['24/7 Access to hot desking area', '5 hrs meeting room credits / mo',
-         'Member directory & events access'],
-   array['دخول ٢٤/٧ لمساحة المكاتب المشتركة', '٥ ساعات رصيد قاعات اجتماعات شهرياً',
-         'دخول دليل الأعضاء والفعاليات'], 2),
+  ('ten-day-pass', '10-Day Pass', 'تصريح ١٠ أيام', 750.00, 'daily', 0,
+   array['Ten days in the shared workspace', 'Use them whenever you like', 'Coffee lounge access'],
+   array['عشرة أيام في مساحة العمل المشتركة', 'استخدمها متى شئت', 'دخول المقهى'], 2),
 
-  ('dedicated', 'Dedicated Desk', 'مكتب مخصص', 2200.00, 'monthly', 10,
-   array['Reserved desk with lockable storage', '10 hrs meeting room credits / mo',
-         'Business address & mail handling'],
-   array['مكتب مخصص دائم مع وحدة تخزين قابلة للقفل', '١٠ ساعات رصيد قاعات اجتماعات شهرياً',
-         'عنوان تجاري واستلام البريد'], 3),
+  ('monthly-flex', 'Monthly Flex', 'الاشتراك الشهري المرن', 1300.00, 'monthly', 0,
+   array['Monthly access to the shared workspace', 'Coffee lounge access', 'Professional environment'],
+   array['دخول شهري لمساحة العمل المشتركة', 'دخول المقهى', 'بيئة عمل احترافية'], 3),
 
-  ('office', 'Private Office', 'مكتب خاص', 6500.00, 'monthly', 20,
-   array['Lockable glass office suite', '20 hrs meeting room credits / mo',
-         'Branded door sign & 24/7 access'],
-   array['جناح مكتب زجاجي خاص قابل للقفل', '٢٠ ساعة رصيد قاعات اجتماعات شهرياً',
-         'لوحة اسم الشركة على الباب ودخول ٢٤/٧'], 4)
+  ('dedicated-desk', 'Dedicated Desk', 'مكتب مخصص', 1800.00, 'monthly', 0,
+   array['Your own desk', '24/7 access', 'Common areas and amenities'],
+   array['مكتبك الخاص', 'دخول على مدار الساعة', 'المرافق والمساحات المشتركة'], 4),
+
+  ('private-office', 'Private Office', 'مكتب خاص', 0.00, 'monthly', 0,
+   array['A private office on the second floor', '8.2 to 21.5 sqm', 'Premium amenities', 'Priced on request'],
+   array['مكتب خاص في الطابق الثاني', 'من ٨٫٢ إلى ٢١٫٥ متر مربع', 'مرافق متميزة', 'السعر عند الطلب'], 5)
 on conflict (slug) do update set
   name = excluded.name, name_ar = excluded.name_ar, rate = excluded.rate,
   billing_cycle = excluded.billing_cycle,
@@ -243,23 +226,43 @@ on conflict (slug) do update set
   features = excluded.features, features_ar = excluded.features_ar,
   sort_order = excluded.sort_order;
 
+-- The invented tiers from db.json.
+update public.membership_plans set is_active = false
+ where slug in ('daypass', 'opendesk', 'dedicated', 'office');
+
+-- ---------------------------------------------------------------------------
+-- Add-ons
+-- ---------------------------------------------------------------------------
+insert into public.addons (slug, name, name_ar, price, is_quote_only)
+values
+  ('catering', 'Catering', 'خدمة الضيافة', 0.00, true),
+  ('extra-setup', 'Additional room setup', 'تجهيز إضافي للقاعة', 0.00, true)
+on conflict (slug) do update set
+  name = excluded.name, name_ar = excluded.name_ar,
+  price = excluded.price, is_quote_only = excluded.is_quote_only;
+
+-- Screen, Wi-Fi, water and coffee are included in the room rate, so the old
+-- paid tea/coffee/whiteboard add-ons no longer apply.
+update public.addons set is_active = false
+ where slug in ('tea', 'coffee', 'drinks', 'kit');
+
 -- ---------------------------------------------------------------------------
 -- FAQs
 -- ---------------------------------------------------------------------------
 insert into public.faqs (slug, category, question, question_ar, answer, answer_ar,
                          is_featured, sort_order)
 values
-  ('membership-includes', 'general',
-   'What is included in a Mars Space membership?',
-   'ما الذي تشتمل عليه عضوية مارس سبيس؟',
-   'All memberships include 24/7 access to the floor, high-speed symmetric fiber Wi-Fi, unlimited specialty coffee, print/scan credits, prayer room, and member lounge access.',
-   'تشمل جميع العضويات دخولاً على مدار الساعة للطابق، إنترنت ألياف ضوئية فائقة السرعة، قهوة مختصة غير محدودة، رصيد طباعة ومسح ضوئي، دخول المصلى واستراحة الأعضاء.',
+  ('what-is-included', 'general',
+   'What is included when I book a meeting room?',
+   'ما الذي تشمله قاعة الاجتماعات عند الحجز؟',
+   'Every meeting room booking includes a screen, Wi-Fi, water and coffee, and room setup.',
+   'يشمل كل حجز لقاعة اجتماعات شاشة عرض وإنترنت ومياه وقهوة وتجهيز القاعة.',
    true, 1),
-  ('non-members-can-book', 'bookings',
-   'Can non-members book meeting rooms and community space?',
-   'هل يمكن لغير الأعضاء حجز قاعات الاجتماعات والقاعة المجتمعية؟',
-   'Yes! Meeting rooms and the community hall are open to both members and visitors at transparent rates.',
-   'نعم! قاعات الاجتماعات والقاعة المجتمعية متاحة للأعضاء والزوار بأسعار واضحة ومحددة.',
+  ('office-sizes', 'general',
+   'What sizes are the private offices?',
+   'ما هي مساحات المكاتب الخاصة؟',
+   'There are 25 private offices on the second floor, from 8.2 to 21.5 sqm, holding 1 to 8 desks. Pricing is on request.',
+   'يوجد ٢٥ مكتباً خاصاً في الطابق الثاني، من ٨٫٢ إلى ٢١٫٥ متر مربع، تتسع من مكتب واحد إلى ثمانية. السعر عند الطلب.',
    true, 2)
 on conflict (slug) do update set
   category = excluded.category, question = excluded.question,

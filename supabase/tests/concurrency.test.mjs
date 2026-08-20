@@ -61,8 +61,8 @@ async function setup() {
   // A current office assignment is what gives the company its contracted seats.
   await admin.query(
     `insert into public.office_assignments (resource_id, company_id, term, desk_count)
-     select r.id, $1, daterange(current_date - 10, current_date + 350, '[)'), 10
-     from public.resources r where r.slug = 'office-04' limit 1`, [COMPANY]);
+     select r.id, $1, daterange(current_date - 10, current_date + 350, '[)'), 8
+     from public.resources r where r.slug = 'office-01' limit 1`, [COMPANY]);
   await admin.query(
     `insert into public.company_members
        (company_id, profile_id, role, status, can_book_rooms, can_view_invoices,
@@ -72,7 +72,7 @@ async function setup() {
   await admin.query('commit');
 
   const { rows } = await admin.query(
-    `select id from public.resources where slug = 'ventures'`);
+    `select id from public.resources where slug = 'meeting-room-small'`);
   return rows[0].id;
 }
 
@@ -187,7 +187,7 @@ try {
   // Eight bookings of 1 hour each, on distinct non-overlapping slots so the
   // exclusion constraint never fires. Only 4 hours of credit exist.
   const { rows: [{ id: vcId }] } = await admin.query(
-    `select id from public.resources where slug = 'vc'`);
+    `select id from public.resources where slug = 'meeting-room-large'`);
 
   const gate2 = new pg.Client({ connectionString: CONN });
   await gate2.connect();

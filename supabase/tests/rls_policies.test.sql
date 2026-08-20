@@ -87,14 +87,14 @@ insert into public.companies (id, name, status) values
 -- the seat-cap trigger refuses to add employees at all.
 insert into public.office_assignments (resource_id, company_id, term, desk_count)
 select r.id, 'aaaaaaaa-0000-0000-0000-000000000001',
-       daterange(current_date - 30, current_date + 335, '[)'), 10
-from public.resources r where r.slug = 'office-17'
+       daterange(current_date - 30, current_date + 335, '[)'), 8
+from public.resources r where r.slug = 'office-01'
 limit 1;
 
 insert into public.office_assignments (resource_id, company_id, term, desk_count)
 select r.id, 'bbbbbbbb-0000-0000-0000-000000000002',
        daterange(current_date - 30, current_date + 335, '[)'), 6
-from public.resources r where r.slug = 'office-11'
+from public.resources r where r.slug = 'office-02'
 limit 1;
 
 insert into public.company_members
@@ -127,7 +127,7 @@ join (values
   ('bbbbbbbb-0000-0000-0000-000000000002'::uuid,
    tstzrange(now() + interval '3 days', now() + interval '3 days 2 hours'))
 ) as c(company_id, rng) on true
-where r.slug = 'ventures';
+where r.slug = 'meeting-room-small';
 
 insert into public.repair_requests (company_id, reported_by, branch_id, category, title)
 select c.company_id, c.reporter, b.id, 'hvac', c.title
@@ -257,17 +257,114 @@ select pg_temp.check_eq(
 
 -- Belt and braces: assert the flag itself, so a future migration that
 -- recreates a view without it is caught even if the data happens to align.
+--
+-- company_directory and directory_people are the two deliberate exceptions.
+-- They run as owner BECAUSE a row-level policy would have to expose whole
+-- rows - cr_number, billing_email, a colleague's phone, an office door code -
+-- to publish a directory. Their column list is the disclosure boundary, and
+-- the assertions below check that boundary directly.
 select pg_temp.check_eq(
-  (select count(*)::int
+  (select coalesce(string_agg(c.relname, ', ' order by c.relname), 'none')
      from pg_class c
      join pg_namespace n on n.oid = c.relnamespace
     where n.nspname = 'public'
       and c.relkind = 'v'
+      and c.relname not in ('company_directory', 'directory_people')
       and not coalesce(
             (select option_value::boolean
                from pg_options_to_table(c.reloptions)
               where option_name = 'security_invoker'), false)),
-  0, 'every public view is declared security_invoker');
+  'none', 'every view except the two directory views is security_invoker');
+
+-- The directory must not carry commercially or personally sensitive columns.
+select pg_temp.check_eq(
+  (select coalesce(string_agg(column_name, ', '), 'none')
+     from information_schema.columns
+    where table_schema = 'public' and table_name = 'company_directory'
+      and column_name in ('cr_number','vat_number','billing_email','primary_contact_id')),
+  'none', 'company_directory exposes no CR number, VAT number or billing email');
+
+select pg_temp.check_eq(
+  (select coalesce(string_agg(column_name, ', '), 'none')
+     from information_schema.columns
+    where table_schema = 'public' and table_name = 'directory_people'
+      and column_name in ('email','phone')),
+  'none', 'directory_people exposes no email or phone');
+
+select pg_temp.check_eq(
+  (select coalesce(string_agg(column_name, ', '), 'none')
+     from information_schema.columns
+    where table_schema = 'public' and table_name = 'company_directory'
+      and column_name = 'door_keycode'),
+  'none', 'company_directory exposes no door keycode');
+
+-- ===========================================================================
+-- 2c. The company directory
+--
+-- The deliberate rule: every member sees every LISTED company and its offices,
+-- but sees an individual PERSON only if that person opted in. Company-scoped
+-- data (invoices, bookings, employees) stays invisible regardless.
+-- ===========================================================================
+select pg_temp.as_member('22222222-2222-2222-2222-222222222222');   -- Bob, Company X
+
+select pg_temp.check_eq(
+  (select count(*)::int from public.company_directory
+    where id = 'bbbbbbbb-0000-0000-0000-000000000002'),
+  1, 'Bob CAN see Company Y in the directory');
+
+select pg_temp.check_eq(
+  (select count(*)::int from public.companies
+    where id = 'bbbbbbbb-0000-0000-0000-000000000002'),
+  0, 'but still cannot read Company Y''s underlying row (CR number, billing email)');
+
+-- Nobody has opted in yet, so the people directory is empty even though three
+-- active members exist.
+select pg_temp.check_eq(
+  (select count(*)::int from public.directory_people),
+  0, 'no one appears in the people directory by default (opt-in)');
+
+-- Carol opts herself in. Clearing the JWT claim first makes this a
+-- server-side action; leaving Bob's claim set would (correctly) trip the
+-- guard trigger that stops one member changing another's consent.
+reset role;
+select set_config('request.jwt.claim.sub', '', true);
+update public.profiles set show_in_directory = true
+  where id = '33333333-3333-3333-3333-333333333333';
+set local role authenticated;
+select pg_temp.as_member('22222222-2222-2222-2222-222222222222');
+
+select pg_temp.check_eq(
+  (select count(*)::int from public.directory_people
+    where id = '33333333-3333-3333-3333-333333333333'),
+  1, 'Carol appears once she opts in');
+
+select pg_temp.check_eq(
+  (select count(*)::int from public.profiles
+    where id = '33333333-3333-3333-3333-333333333333'),
+  0, 'opting in does NOT expose Carol''s profile row itself');
+
+-- An unlisted company drops out of the directory entirely.
+reset role;
+select set_config('request.jwt.claim.sub', '', true);
+update public.companies set is_listed = false
+  where id = 'bbbbbbbb-0000-0000-0000-000000000002';
+set local role authenticated;
+select pg_temp.as_member('22222222-2222-2222-2222-222222222222');
+
+select pg_temp.check_eq(
+  (select count(*)::int from public.company_directory
+    where id = 'bbbbbbbb-0000-0000-0000-000000000002'),
+  0, 'an unlisted company disappears from the directory');
+select pg_temp.check_eq(
+  (select count(*)::int from public.directory_people
+    where company_id = 'bbbbbbbb-0000-0000-0000-000000000002'),
+  0, 'and so do its opted-in people');
+
+reset role;
+select set_config('request.jwt.claim.sub', '', true);
+update public.companies set is_listed = true
+  where id = 'bbbbbbbb-0000-0000-0000-000000000002';
+set local role authenticated;
 
 -- ===========================================================================
 -- 3. Privilege escalation attempts
@@ -302,7 +399,7 @@ select pg_temp.check_denied(
     select r.id, r.branch_id, 'aaaaaaaa-0000-0000-0000-000000000001',
            tstzrange(now() + interval '9 days', now() + interval '9 days 1 hour'),
            'confirmed'
-      from public.resources r where r.slug = 'lab'$$,
+      from public.resources r where r.slug = 'meeting-room-large'$$,
   'Bob cannot insert a booking directly, bypassing create_booking');
 
 -- Carol admins Company Y and must not reach into Company X.
@@ -407,10 +504,10 @@ select pg_temp.check_no_execute(
 -- Guest checkout still has to work, so these two stay reachable by anon.
 select pg_temp.check_eq(
   (public.price_booking(
-     (select id from public.resources where slug = 'ventures'),
+     (select id from public.resources where slug = 'meeting-room-small'),
      tstzrange('2026-09-01 10:00'::timestamptz, '2026-09-01 12:00'::timestamptz)
    ) ->> 'total')::numeric,
-  506.00::numeric, 'anon can still get a guest quote from price_booking');
+  575.00::numeric, 'anon can still get a guest quote from price_booking');
 
 -- An authenticated member must not reach the ledger writer either.
 reset role;
