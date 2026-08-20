@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { mapBranch, mapResource, mapEvent, mapFaq } from '@/lib/supabase/mappers';
+import { apiServerError } from '@/lib/api/errors';
+
+const GET_SCOPE = 'api/v1/public/homepage GET';
 
 /**
  * Aggregated homepage content.
@@ -60,15 +63,12 @@ export async function GET() {
       },
     });
   } catch (error) {
-    return NextResponse.json(
-      {
-        success: false,
-        error: {
-          code: 'SERVER_ERROR',
-          message: error.message || 'An unexpected error occurred',
-        },
-      },
-      { status: 500 }
-    );
+    // Never `error.message`. This is the route the leak was found on: the four
+    // queries above are the ONLY thing every signed-out visitor touches, so a
+    // revoked grant or a renamed column here turns the front page into a
+    // broadcast of table names and Postgres hints. `firstError` above is a
+    // PostgrestError forwarded verbatim by the old block. Detail to the log,
+    // generic sentence to the caller. See src/lib/api/errors.js.
+    return apiServerError(GET_SCOPE, error);
   }
 }

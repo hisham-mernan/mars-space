@@ -1,6 +1,9 @@
 import { NextResponse } from 'next/server';
 import { createClient } from '@/lib/supabase/server';
 import { mapFaq } from '@/lib/supabase/mappers';
+import { apiServerError } from '@/lib/api/errors';
+
+const GET_SCOPE = 'api/v1/public/faqs/featured GET';
 
 /**
  * Published FAQs. The route is named "featured" but always returned every FAQ;
@@ -25,9 +28,8 @@ export async function GET(request) {
 
     return NextResponse.json({ success: true, data: (data ?? []).map(mapFaq) });
   } catch (error) {
-    return NextResponse.json(
-      { success: false, error: { code: 'SERVER_ERROR', message: error.message || 'An unexpected error occurred' } },
-      { status: 500 }
-    );
+    // Anonymous route: `error.message` would hand a prober the table name and
+    // the grant state one failed request at a time. See src/lib/api/errors.js.
+    return apiServerError(GET_SCOPE, error);
   }
 }

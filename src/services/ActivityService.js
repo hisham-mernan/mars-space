@@ -61,12 +61,37 @@ export class ActivityService {
     });
   }
 
+  /**
+   * Append one entry to the universal timeline.
+   *
+   * NO CLOCK IS FORMATTED HERE, AND THAT IS THE FIX.
+   *
+   * This used to store `time: new Date().toLocaleTimeString([], {...})` — the
+   * PROCESS's local zone, with no timeZone option. On a developer's machine in
+   * Jeddah that is Riyadh time by luck; on Vercel, which runs in UTC, every
+   * entry was frozen into the row three hours behind the floor it describes.
+   * Mars Space is Asia/Riyadh, UTC+3, no DST, always.
+   *
+   * The fix is not a timeZone option. `public.audit_log.created_at` is a
+   * timestamptz defaulted to now(), so the instant is already stored, correctly,
+   * by Postgres; a second rendering of that same instant is derived state whose
+   * only possible future is to disagree with it. It already did: live row 29
+   * carries after->>'time' = '01:29 PM' against a created_at of 01:30 PM Riyadh,
+   * because the string was formatted a beat before the INSERT landed.
+   *
+   * So the display string is not written at all. The activities mapping renders
+   * `time` from created_at through riyadhClock() -> riyadhParts(), the single
+   * Asia/Riyadh implementation in the repository layer, which is the same path
+   * that already serves the rows written by database triggers and by the mobile
+   * app. Format is unchanged ('01:44 PM'), so the ERP dashboard's time pill
+   * renders exactly as before — but it now renders the instant, not the zone of
+   * whichever machine happened to write the row.
+   *
+   * A caller that genuinely has its own timestamp may still pass `time` in
+   * activityData and the mapper will prefer it; nothing in the app does.
+   */
   async logActivity(activityData) {
-    const now = new Date();
-    const timeFormatted = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
-    
     return activityRepository.create({
-      time: timeFormatted,
       desc: activityData.description,
       descAr: activityData.descriptionAr || activityData.description,
       ...activityData

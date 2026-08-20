@@ -42,8 +42,24 @@ export class SupportService {
       category: ticketData.category || 'General Support',
       priority: ticketData.priority || 'Medium',
       status: 'Open',
+      // The thread is rows in public.support_messages, not a column on this
+      // table. BaseRepository issues a single-table insert, so the mapping
+      // salvages messages[0].text into `description` and drops everything else
+      // (see the support_tickets mapping header).
+      //
+      // NO `time` IS SENT, for two reasons. It used to be
+      // `new Date().toLocaleTimeString([], {...})` — the PROCESS's local zone
+      // with no timeZone option, which is UTC on Vercel and so three hours
+      // behind Asia/Riyadh (UTC+3, no DST) on every ticket the product actually
+      // creates. And it was dead weight even when it was right: the field never
+      // reached Postgres, while the read path derives each message's `time` from
+      // support_messages.created_at through riyadhClock(). The instant belongs
+      // in a timestamptz column; the clock string belongs to the reader.
       messages: [
-        { sender: ticketData.customerName || 'Member', text: ticketData.description || ticketData.subject, time: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) }
+        {
+          sender: ticketData.customerName || 'Member',
+          text: ticketData.description || ticketData.subject
+        }
       ]
     });
 

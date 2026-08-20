@@ -1,7 +1,15 @@
 import { NextResponse } from 'next/server';
+import { requireStaff } from '@/lib/api/guards';
 import { workspaceService } from '@/services';
 
 export async function GET(request) {
+  // Staff gate. BaseRepository queries with the service-role client, which
+  // bypasses RLS, so this check is the only thing standing between a signed-in
+  // member and every row in the database. Outside the try block on purpose:
+  // inside it, the 401/403 would be swallowed and re-emitted as a 500.
+  const gate = await requireStaff();
+  if (!gate.ok) return gate.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const category = searchParams.get('category');
@@ -13,6 +21,13 @@ export async function GET(request) {
 }
 
 export async function POST(request) {
+  // Staff gate. BaseRepository queries with the service-role client, which
+  // bypasses RLS, so this check is the only thing standing between a signed-in
+  // member and every row in the database. Outside the try block on purpose:
+  // inside it, the 401/403 would be swallowed and re-emitted as a 500.
+  const gate = await requireStaff();
+  if (!gate.ok) return gate.response;
+
   try {
     const body = await request.json();
     const space = await workspaceService.createWorkspace(body, 'ERP Admin');
@@ -23,6 +38,13 @@ export async function POST(request) {
 }
 
 export async function PUT(request) {
+  // Staff gate. BaseRepository queries with the service-role client, which
+  // bypasses RLS, so this check is the only thing standing between a signed-in
+  // member and every row in the database. Outside the try block on purpose:
+  // inside it, the 401/403 would be swallowed and re-emitted as a 500.
+  const gate = await requireStaff();
+  if (!gate.ok) return gate.response;
+
   try {
     const body = await request.json();
     const { id, ...updates } = body;
@@ -34,6 +56,13 @@ export async function PUT(request) {
 }
 
 export async function DELETE(request) {
+  // Staff gate. BaseRepository queries with the service-role client, which
+  // bypasses RLS, so this check is the only thing standing between a signed-in
+  // member and every row in the database. Outside the try block on purpose:
+  // inside it, the 401/403 would be swallowed and re-emitted as a 500.
+  const gate = await requireStaff();
+  if (!gate.ok) return gate.response;
+
   try {
     const { searchParams } = new URL(request.url);
     const id = searchParams.get('id');

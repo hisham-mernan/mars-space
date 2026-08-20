@@ -5,6 +5,104 @@ import { useLanguage } from '@/context/LanguageContext';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
 
+/**
+ * `resources.floor` is free English text maintained in the back office
+ * ('Second floor', 'Floor 1') and there is no floor_ar column to read, so the
+ * Arabic page was printing the English string verbatim. Translate the values
+ * the floor actually uses and fall back to the raw string for anything new —
+ * an untranslated label is better than a missing one.
+ */
+const FLOOR_LABELS_AR = {
+  'ground floor': 'الطابق الأرضي',
+  'first floor': 'الطابق الأول',
+  'floor 1': 'الطابق الأول',
+  'second floor': 'الطابق الثاني',
+  'floor 2': 'الطابق الثاني',
+  'third floor': 'الطابق الثالث',
+  'floor 3': 'الطابق الثالث',
+};
+
+function floorLabel(floor, language) {
+  if (!floor) return null;
+  if (language !== 'ar') return floor;
+  return FLOOR_LABELS_AR[floor.trim().toLowerCase()] ?? floor;
+}
+
+function capacityLabel(capacity, language) {
+  if (capacity == null) return null;
+  if (language !== 'ar') return `${capacity} ${capacity === 1 ? 'Person' : 'People'}`;
+  // Arabic counts: singular, dual, plural (3-10), then the accusative singular.
+  if (capacity === 1) return 'شخص واحد';
+  if (capacity === 2) return 'شخصان';
+  if (capacity <= 10) return `${capacity} أشخاص`;
+  return `${capacity} شخصاً`;
+}
+
+/**
+ * size_sqm is null on most of the bookable rooms. Returning null here drops the
+ * whole segment, instead of rendering a unit with nothing in front of it.
+ */
+function sizeLabel(size, language) {
+  if (size == null) return null;
+  return language === 'ar' ? `${size} م²` : `${size} sqm`;
+}
+
+const RATE_UNIT_LABELS = {
+  ar: { hour: '/ساعة', day: '/يومياً', month: '/شهرياً' },
+  en: { hour: '/hour', day: '/day', month: '/month' },
+};
+
+function rateUnitLabel(unit, language) {
+  return RATE_UNIT_LABELS[language === 'ar' ? 'ar' : 'en'][unit] ?? '';
+}
+
+/** Shipped with the site, so it renders even if Storage is unreachable. */
+const FALLBACK_IMAGE = '/assets/photo-glass-offices.jpg';
+
+/**
+ * ---------------------------------------------------------------------------
+ * Why plain <img> and not next/image
+ * ---------------------------------------------------------------------------
+ * `hero_image` and `resource_photos.url` are absolute URLs on the Supabase
+ * Storage origin (https://xihjvfcjnkcjmgruxapu.supabase.co/storage/v1/...).
+ * They are absolute rather than relative because the mobile app shares this
+ * database and has no web origin to resolve a relative path against.
+ *
+ * next/image refuses an absolute external URL unless its host is listed in
+ * `images.remotePatterns` in next.config.mjs — it throws "hostname is not
+ * configured under images" at render. next.config.mjs currently declares no
+ * `images` block at all, and it is not a file this change owns, so adding the
+ * host there would collide with the agent that does own it.
+ *
+ * A plain <img> has no such requirement. What it gives up is Next's resizing
+ * and format negotiation, so the two things that actually cost the user are
+ * done by hand instead: `loading="lazy"` keeps ~116 images (29 cards x hero +
+ * 3 thumbnails) off the initial load, and a fixed aspect-ratio box reserves
+ * the space so nothing shifts as they arrive.
+ *
+ * If the Supabase host is later added to remotePatterns, these can become
+ * <Image> with `sizes` and `fill` and this comment can go.
+ */
+
+/**
+ * The hero is already on the card at full width, so a thumbnail repeating it
+ * reads as a duplicate rather than as a second view of the room. Gallery rows
+ * do overlap the hero in the seeded data, hence the filter.
+ */
+function galleryThumbs(room) {
+  const gallery = Array.isArray(room.gallery) ? room.gallery : [];
+  const hero = room.image;
+  const seen = new Set(hero ? [hero] : []);
+  const thumbs = [];
+  for (const url of gallery) {
+    if (!url || seen.has(url)) continue;
+    seen.add(url);
+    thumbs.push(url);
+    if (thumbs.length === 3) break;
+  }
+  return thumbs;
+}
+
 export default function SpacesListing() {
   const { t, language, mounted } = useLanguage();
   
@@ -18,28 +116,44 @@ export default function SpacesListing() {
 
   // Fetch workspaces from our API route
   useEffect(() => {
+    // Filters can be changed faster than the network answers. Without this
+    // guard a slow response for the previous filter can land after the current
+    // one and leave the grid showing rows that contradict the dropdowns.
+    let current = true;
+
     async function loadWorkspaces() {
       try {
+        // No `bookable` param on purpose: this page is the catalogue, so it
+        // lists everything the floor has — private offices are leased by the
+        // month (is_bookable = false) and belong here just as much as the
+        // rooms you can reserve by the hour. Only a booking flow should send
+        // bookable=true.
         let url = '/api/v1/public/workspaces';
         const params = [];
-        if (selectedCategory !== 'all') params.push(`category=${selectedCategory}`);
-        if (selectedBranch !== 'all') params.push(`branchId=${selectedBranch}`);
+        if (selectedCategory !== 'all') params.push(`category=${encodeURIComponent(selectedCategory)}`);
+        if (selectedBranch !== 'all') params.push(`branchId=${encodeURIComponent(selectedBranch)}`);
         if (params.length > 0) {
           url += '?' + params.join('&');
         }
         
         const res = await fetch(url);
         const json = await res.json();
-        if (json.success) {
-          setSpaces(json.data);
-        }
+        if (!current) return;
+        // On failure clear the grid rather than leaving the previous filter's
+        // rows sitting under the new selection.
+        setSpaces(json.success ? json.data : []);
       } catch (err) {
         console.error("Failed to load spaces:", err);
+        if (current) setSpaces([]);
       } finally {
-        setLoading(false);
+        if (current) setLoading(false);
       }
     }
     loadWorkspaces();
+
+    return () => {
+      current = false;
+    };
   }, [selectedCategory, selectedBranch]);
 
   if (!mounted) return null;
@@ -161,6 +275,9 @@ export default function SpacesListing() {
                   <option value="all">{language === 'ar' ? 'جميع الفئات' : 'All Categories'}</option>
                   <option value="private_office">{language === 'ar' ? 'مكاتب خاصة' : 'Private Offices'}</option>
                   <option value="meeting_room">{language === 'ar' ? 'قاعات اجتماعات' : 'Meeting Rooms'}</option>
+                  {/* Co-working desks are part of the catalogue too; without this option
+                      they appear under "All Categories" with no way to filter to them. */}
+                  <option value="hot_desk">{language === 'ar' ? 'مساحة العمل المشتركة' : 'Co-working'}</option>
                   <option value="community_hall">{language === 'ar' ? 'قاعة المجتمع' : 'Community Hall'}</option>
                 </select>
 
@@ -253,10 +370,12 @@ export default function SpacesListing() {
                 {filteredSpaces.map((room, idx) => {
                   const availabilityBadgeColor = room.status === 'Available' ? 'var(--copper-400)' : 'var(--text-muted-dark)';
                   const availabilityBadgeBorder = room.status === 'Available' ? '1px solid rgba(200, 107, 60, 0.45)' : '1px solid rgba(245, 245, 245, 0.18)';
-                  
+                  const displayName = (language === 'ar' ? room.nameAr : room.name) || room.name;
+                  const thumbs = galleryThumbs(room);
+
                   return (
                     <a
-                      key={idx}
+                      key={room.id ?? room.slug ?? idx}
                       href={`/spaces/${room.slug}`}
                       style={{
                         display: 'block',
@@ -268,10 +387,21 @@ export default function SpacesListing() {
                       }}
                       className="room-card"
                     >
-                      <div style={{ aspectRatio: '3/2', overflow: 'hidden', position: 'relative' }}>
+                      {/* Hero: resources.hero_image, an absolute Supabase Storage URL.
+                          The box holds its 3:2 shape before the bytes arrive, so a
+                          screenful of cards does not reflow as images load in. */}
+                      <div style={{ aspectRatio: '3/2', overflow: 'hidden', position: 'relative', background: 'var(--mars-void)' }}>
                         <img
-                          src={room.image || '/assets/photo-glass-offices.jpg'}
-                          alt={room.name}
+                          src={room.image || FALLBACK_IMAGE}
+                          alt={displayName}
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            // Guard against a loop if the local fallback is the one failing.
+                            if (e.currentTarget.dataset.fallback) return;
+                            e.currentTarget.dataset.fallback = '1';
+                            e.currentTarget.src = FALLBACK_IMAGE;
+                          }}
                           style={{
                             width: '100%',
                             height: '100%',
@@ -282,11 +412,40 @@ export default function SpacesListing() {
                           className="room-card-img"
                         />
                       </div>
-                      
+
+                      {/* Gallery: resource_photos, sorted by sort_order. Every resource
+                          carries three. They are alternate views of the same room, so
+                          alt="" keeps them out of the link's accessible name — the hero
+                          alt and the heading already name it once. */}
+                      {thumbs.length > 0 && (
+                        <div style={{ display: 'grid', gridTemplateColumns: `repeat(${thumbs.length}, 1fr)`, gap: '2px' }}>
+                          {thumbs.map((url) => (
+                            <div key={url} style={{ aspectRatio: '3/2', overflow: 'hidden', background: 'var(--mars-void)' }}>
+                              <img
+                                src={url}
+                                alt=""
+                                loading="lazy"
+                                decoding="async"
+                                onError={(e) => { e.currentTarget.parentElement.style.display = 'none'; }}
+                                style={{
+                                  width: '100%',
+                                  height: '100%',
+                                  objectFit: 'cover',
+                                  display: 'block',
+                                  // Held back from the hero so the card still reads
+                                  // as one main image with supporting views.
+                                  opacity: 0.72,
+                                }}
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      )}
+
                       <div style={{ padding: '24px' }}>
                         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
                           <h3 style={{ margin: 0, fontSize: '20px', fontWeight: 600 }}>
-                            {language === 'ar' ? room.nameAr : room.name}
+                            {displayName}
                           </h3>
                           <span style={{
                             fontSize: '11px',
@@ -305,12 +464,19 @@ export default function SpacesListing() {
                         </div>
                         
                         <div style={{ marginTop: '8px', fontSize: '14px', color: 'var(--text-muted-dark)', fontWeight: 500 }}>
-                          {room.capacity} {language === 'ar' ? 'أشخاص' : 'People'} · {room.floor} · {room.size} sqm
+                          {[
+                            capacityLabel(room.capacity, language),
+                            floorLabel(room.floor, language),
+                            sizeLabel(room.size, language),
+                          ].filter(Boolean).join(' · ')}
                         </div>
 
                         {/* Amenities preview list */}
                         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '16px' }}>
-                          {(language === 'ar' ? room.amenitiesAr : room.amenities || []).slice(0, 3).map((amenity, amIdx) => (
+                          {/* The `|| []` bound only the English arm before, so an Arabic
+                              row with no amenities_ar threw on .slice instead of
+                              rendering nothing. */}
+                          {((language === 'ar' ? room.amenitiesAr : room.amenities) || []).slice(0, 3).map((amenity, amIdx) => (
                             <span key={amIdx} style={{
                               fontSize: '12px',
                               background: 'var(--mars-void)',
@@ -333,14 +499,24 @@ export default function SpacesListing() {
                           borderTop: '1px solid rgba(245, 245, 245, 0.08)'
                         }}>
                           <div style={{ display: 'flex', alignItems: 'baseline', gap: '6px' }}>
-                            <span style={{ fontSize: '22px', fontWeight: 700, color: '#FFFFFF' }}>
-                              <bdi>{room.rate} SAR</bdi>
-                            </span>
-                            <span style={{ fontSize: '13px', color: 'var(--text-muted-dark)' }}>
-                              {room.category === 'private_office' 
-                                ? (language === 'ar' ? '/شهرياً' : '/month')
-                                : (language === 'ar' ? '/ساعة' : '/hour')}
-                            </span>
+                            {room.rate > 0 ? (
+                              <>
+                                <span style={{ fontSize: '22px', fontWeight: 700, color: '#FFFFFF' }}>
+                                  <bdi>{room.rate} SAR</bdi>
+                                </span>
+                                <span style={{ fontSize: '13px', color: 'var(--text-muted-dark)' }}>
+                                  {/* The unit comes from the row, not from the category: desks and
+                                      the majlis are day rates, not hourly ones. */}
+                                  {rateUnitLabel(room.rateUnit, language)}
+                                </span>
+                              </>
+                            ) : (
+                              /* Every private office is stored at rate 0 — they are priced per
+                                 lease, not per hour — so printing "0 SAR" would be a false price. */
+                              <span style={{ fontSize: '16px', fontWeight: 600, color: '#FFFFFF' }}>
+                                {language === 'ar' ? 'السعر عند الطلب' : 'Price on request'}
+                              </span>
+                            )}
                           </div>
                           
                           <span style={{ fontSize: '14px', fontWeight: 600, color: 'var(--copper-400)' }}>
