@@ -258,7 +258,8 @@ select pg_temp.check_eq(
 -- Belt and braces: assert the flag itself, so a future migration that
 -- recreates a view without it is caught even if the data happens to align.
 --
--- company_directory and directory_people are the two deliberate exceptions.
+-- company_directory, directory_people and community_schedule are the three
+-- deliberate exceptions.
 -- They run as owner BECAUSE a row-level policy would have to expose whole
 -- rows - cr_number, billing_email, a colleague's phone, an office door code -
 -- to publish a directory. Their column list is the disclosure boundary, and
@@ -269,12 +270,12 @@ select pg_temp.check_eq(
      join pg_namespace n on n.oid = c.relnamespace
     where n.nspname = 'public'
       and c.relkind = 'v'
-      and c.relname not in ('company_directory', 'directory_people')
+      and c.relname not in ('company_directory', 'directory_people', 'community_schedule')
       and not coalesce(
             (select option_value::boolean
                from pg_options_to_table(c.reloptions)
               where option_name = 'security_invoker'), false)),
-  'none', 'every view except the two directory views is security_invoker');
+  'none', 'every view except the three definer views is security_invoker');
 
 -- The directory must not carry commercially or personally sensitive columns.
 select pg_temp.check_eq(
